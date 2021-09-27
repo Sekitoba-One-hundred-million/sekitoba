@@ -13,6 +13,14 @@ dm.dl.file_set( "passing_data.pickle" )
 dm.dl.file_set( "horce_data_storage.pickle" )
 dm.dl.file_set( "corner_horce_body.pickle" )
 
+def use_corner_check( s ):
+    if s == 4:
+        return [ "1", "3" ]
+    elif s == 3:
+        return [ "2", "3" ]
+    else:
+        return [ "3" ]
+
 def main( update = False ):
     result = None
     
@@ -71,17 +79,14 @@ def main( update = False ):
                 if check == 4:
                     s = i
                     break
-        
+                
+        use_corner = use_corner_check( min( c, 4 ) )
         check_s = []
+        
         for i in range( s, len( rci_info ) - 1 ):
             if rci_info[i] == "s":
                 check_s.append( i )
 
-        s = 0
-
-        if len( check_s ) == 1:
-            s = 2
-                
         for kk in race_data[k].keys():
             horce_name = kk.replace( " ", "" )
             current_data, past_data = lib.race_check( horce_data[horce_name],
@@ -95,7 +100,7 @@ def main( update = False ):
             key_horce_num = str( int( cd.horce_number() ) )
             
             for i in range( 0, len( check_s ) ):
-                t = int( i * 2 + 1 + ( c % 2 ) + s )
+                t = use_corner[i]
                 try:
                     horce_body = corner_horce_body[race_id][str(t)][key_horce_num]
                 except:
