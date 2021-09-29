@@ -18,8 +18,14 @@ def use_corner_check( s ):
         return [ "1", "3" ]
     elif s == 3:
         return [ "2", "3" ]
-    else:
-        return [ "3" ]
+    
+    return [ "3" ]
+
+def start_check( s ):
+    if s == 0:
+        return 1
+    
+    return 0
 
 def main( update = False ):
     result = None
@@ -34,6 +40,9 @@ def main( update = False ):
 
     result["answer"] = []
     result["teacher"] = []
+    simu_data = {}
+    min_horce_body = 10000
+    max_horce_body = -1
 
     race_data = dm.dl.data_get( "race_data.pickle" )
     horce_data = dm.dl.data_get( "horce_data_storage.pickle" )
@@ -98,14 +107,42 @@ def main( update = False ):
                 continue
                 
             key_horce_num = str( int( cd.horce_number() ) )
+            t = []
             
             for i in range( 0, len( check_s ) ):
-                t = use_corner[i]
+                c = use_corner[i]
                 try:
-                    horce_body = corner_horce_body[race_id][str(t)][key_horce_num]
+                    horce_body = corner_horce_body[race_id][str(c)][key_horce_num]
                 except:
                     continue
 
-                result["answer"].append( horce_body )
+                dm.dn.append( t, float( key_place ), "場所" )
+                dm.dn.append( t, float( key_dist ), "距離" )
+                dm.dn.append( t, float( key_kind ), "芝かダート" )
+                dm.dn.append( t, float( key_baba ), "馬場" )
+                dm.dn.append( t, start_check( i ), "スタートか1or0" )
+                dm.dn.append( t, rci_dist[i], "直線の距離" )
+                dm.dn.append( t, lib.limb_search( passing_data[horce_name], pd ), "過去データからの予想脚質" )
+
+                min_horce_body = min( min_horce_body, horce_body )
+                max_horce_body = max( max_horce_body, horce_body )
                 
-        
+                if not year == "2020":
+                    result["answer"].append( horce_body )
+                    result["teacher"].append( t )
+                else:
+                    lib.dic_append( simu_data, race_id, [] )
+                    simu_data[race_id].append( t )
+
+    for i in range( 0, len( result["answer"] ) ):
+        result["answer"][i] = int( result["answer"][i] * 2 )
+
+    hm = { "min": min_horce_body, "max": max_horce_body }
+
+    print( len( result["answer"] ) , len( result["teacher"] ) )
+    #dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
+    #dm.pickle_upload( "straight_horce_body_minmax.pickle", hm )
+    #dm.pickle_upload( "straight_horce_body_simu_data.pickle", simu_data )
+
+    print( max_horce_body, min_horce_body )
+    return result
