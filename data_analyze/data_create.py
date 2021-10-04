@@ -96,6 +96,25 @@ def main( update = False ):
             if rci_info[i] == "s":
                 check_s.append( i )
 
+        race_limb = [0] * 9
+
+        for kk in race_data[k].keys():
+            horce_name = kk.replace( " ", "" )
+            current_data, past_data = lib.race_check( horce_data[horce_name],
+                                                          year, day, num, race_place_num )#今回と過去のデータに分ける
+            cd = lib.current_data( current_data )
+            pd = lib.past_data( past_data, current_data )
+                
+            if not cd.race_check():
+                continue
+            
+            try:
+                limb_math = lib.limb_search( passing_data[horce_name], pd )
+            except:
+                limb_math = 0
+
+            race_limb[limb_math] += 1
+
         for kk in race_data[k].keys():
             horce_name = kk.replace( " ", "" )
             current_data, past_data = lib.race_check( horce_data[horce_name],
@@ -116,6 +135,15 @@ def main( update = False ):
                 except:
                     continue
 
+                dm.dn.append( t, limb_teacher[0], "その他の馬の数" )
+                dm.dn.append( t, limb_teacher[1], "逃げaの馬の数" )
+                dm.dn.append( t, limb_teacher[2], "逃げbの馬の数" )
+                dm.dn.append( t, limb_teacher[3], "先行aの馬の数" )
+                dm.dn.append( t, limb_teacher[4], "先行bの馬の数" )
+                dm.dn.append( t, limb_teacher[5], "差しaの馬の数" )
+                dm.dn.append( t, limb_teacher[6], "差しbの馬の数" )
+                dm.dn.append( t, limb_teacher[7], "追いの馬の数" )
+                dm.dn.append( t, limb_teacher[8], "後方の馬の数" )
                 dm.dn.append( t, float( key_place ), "場所" )
                 dm.dn.append( t, float( key_dist ), "距離" )
                 dm.dn.append( t, float( key_kind ), "芝かダート" )
@@ -123,6 +151,7 @@ def main( update = False ):
                 dm.dn.append( t, start_check( i ), "スタートか1or0" )
                 dm.dn.append( t, rci_dist[i], "直線の距離" )
                 dm.dn.append( t, lib.limb_search( passing_data[horce_name], pd ), "過去データからの予想脚質" )
+                dm.dn.append( t, 0, "前の馬身(startは0))" )
 
                 min_horce_body = min( min_horce_body, horce_body )
                 max_horce_body = max( max_horce_body, horce_body )
