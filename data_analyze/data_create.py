@@ -31,7 +31,7 @@ def main( update = False ):
     result = None
     
     if not update:
-        result = dm.pickle_load( "straight_horce_body__learn_data.pickle" )
+        result = dm.pickle_load( "straight_horce_body_learn_data.pickle" )
 
     if result == None:
         result = {}
@@ -104,7 +104,7 @@ def main( update = False ):
                                                           year, day, num, race_place_num )#今回と過去のデータに分ける
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
-                
+            
             if not cd.race_check():
                 continue
             
@@ -124,26 +124,26 @@ def main( update = False ):
 
             if not cd.race_check():
                 continue
-                
+            
             key_horce_num = str( int( cd.horce_number() ) )
-            t = []
             
             for i in range( 0, len( check_s ) ):
+                t = []
                 c = use_corner[i]
                 try:
                     horce_body = corner_horce_body[race_id][str(c)][key_horce_num]
                 except:
                     continue
 
-                dm.dn.append( t, limb_teacher[0], "その他の馬の数" )
-                dm.dn.append( t, limb_teacher[1], "逃げaの馬の数" )
-                dm.dn.append( t, limb_teacher[2], "逃げbの馬の数" )
-                dm.dn.append( t, limb_teacher[3], "先行aの馬の数" )
-                dm.dn.append( t, limb_teacher[4], "先行bの馬の数" )
-                dm.dn.append( t, limb_teacher[5], "差しaの馬の数" )
-                dm.dn.append( t, limb_teacher[6], "差しbの馬の数" )
-                dm.dn.append( t, limb_teacher[7], "追いの馬の数" )
-                dm.dn.append( t, limb_teacher[8], "後方の馬の数" )
+                dm.dn.append( t, race_limb[0], "その他の馬の数" )
+                dm.dn.append( t, race_limb[1], "逃げaの馬の数" )
+                dm.dn.append( t, race_limb[2], "逃げbの馬の数" )
+                dm.dn.append( t, race_limb[3], "先行aの馬の数" )
+                dm.dn.append( t, race_limb[4], "先行bの馬の数" )
+                dm.dn.append( t, race_limb[5], "差しaの馬の数" )
+                dm.dn.append( t, race_limb[6], "差しbの馬の数" )
+                dm.dn.append( t, race_limb[7], "追いの馬の数" )
+                dm.dn.append( t, race_limb[8], "後方の馬の数" )
                 dm.dn.append( t, float( key_place ), "場所" )
                 dm.dn.append( t, float( key_dist ), "距離" )
                 dm.dn.append( t, float( key_kind ), "芝かダート" )
@@ -155,23 +155,21 @@ def main( update = False ):
 
                 min_horce_body = min( min_horce_body, horce_body )
                 max_horce_body = max( max_horce_body, horce_body )
+                result["answer"].append( horce_body )
+                result["teacher"].append( t )
                 
-                if not year == "2020":
-                    result["answer"].append( horce_body )
-                    result["teacher"].append( t )
-                else:
+                if year == "2020":
                     lib.dic_append( simu_data, race_id, [] )
                     simu_data[race_id].append( t )
 
     for i in range( 0, len( result["answer"] ) ):
-        result["answer"][i] = int( result["answer"][i] * 2 )
+        result["answer"][i] = min( int( result["answer"][i] * 2 ), 200 )
 
     hm = { "min": min_horce_body, "max": max_horce_body }
 
     print( len( result["answer"] ) , len( result["teacher"] ) )
-    #dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
+    dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
     #dm.pickle_upload( "straight_horce_body_minmax.pickle", hm )
     #dm.pickle_upload( "straight_horce_body_simu_data.pickle", simu_data )
 
-    print( max_horce_body, min_horce_body )
     return result
