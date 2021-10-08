@@ -30,7 +30,7 @@ def main( data ):
     learn_data, a_units = data_check( data )
     n_units = len( data["teacher"][0] )
     print( a_units, n_units )
-    model = nn.HorceBodyNN( n_units, a_units + 1 )
+    model = nn.CornerHorceBodyNN( n_units, a_units + 1 )
     model = nn.main( learn_data, model )
 
     return model

@@ -10,10 +10,10 @@ from tqdm import tqdm
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
 
-class HorceBodyNN( Chain ):
+class CornerHorceBodyNN( Chain ):
 
     def __init__( self, n, a ):
-        super( HorceBodyNN, self ).__init__(
+        super( CornerHorceBodyNN, self ).__init__(
             l1 = L.Linear( n, n ),
             l2 = L.Linear( n, n ),
             l3 = L.Linear( n, n ),
@@ -114,7 +114,7 @@ def main( data, model, GPU = False ):
         xp = np
 
     N = len( teacher_data )
-    epoch = 500
+    epoch = 50
     batch_size = 2048
     print( N )
     print( type( test_teacher ) )
@@ -144,6 +144,6 @@ def main( data, model, GPU = False ):
         if GPU:
             model.to_gpu( gpu_device )    
 
-    dm.model_upload( "suzuka_test_model.pickle", model )
+    dm.model_upload( "chb_test_model.pickle", model )
     
     return model
