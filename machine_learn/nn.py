@@ -10,10 +10,10 @@ from tqdm import tqdm
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
 
-class HorceBodyNN( Chain ):
+class StraightHorceBodyNN( Chain ):
 
     def __init__( self, n, a ):
-        super( HorceBodyNN, self ).__init__(
+        super( StraightHorceBodyNN, self ).__init__(
             l1 = L.Linear( n, n ),
             l2 = L.Linear( n, n ),
             l3 = L.Linear( n, n ),
