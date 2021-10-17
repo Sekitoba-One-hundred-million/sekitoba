@@ -27,6 +27,27 @@ def start_check( s ):
     
     return 0
 
+def learn_corner_check( rci_info ):
+    result = []
+    c = 0
+    use_corner = use_corner_check( min( rci_info.count( "c" ), 4 ) )
+    
+    for i in range( 0, len( rci_info ) - 1 ):   
+        check = rci_info.count( "c", i, len( rci_info ) )
+
+        if rci_info[i] == "s" and rci_info[i+1] == "c":
+            instance = {}
+            instance["count"] = i
+            instance["corner"] = None
+
+            if check <= 4:
+                instance["corner"] = use_corner[c]
+                c += 1
+            
+            result.append( instance )
+
+    return result
+
 def main( update = False ):
     result = None
     
@@ -77,25 +98,7 @@ def main( update = False ):
             
         rci_dist = race_cource_info[key_place][key_kind][info_key_dist]["dist"]
         rci_info = race_cource_info[key_place][key_kind][info_key_dist]["info"]
-        s = 0
-        check = -1
-        c = rci_info.count( "c" )
-
-        if 4 < c:
-            for i in range( 0, len( rci_info ) ):
-                check = rci_info.count( "c", i, len( rci_info ) )
-
-                if check == 4:
-                    s = i
-                    break
-                
-        use_corner = use_corner_check( min( c, 4 ) )
-        check_s = []
-        
-        for i in range( s, len( rci_info ) - 1 ):
-            if rci_info[i] == "s":
-                check_s.append( i )
-
+        use_learn_corner = learn_corner_check( rci_info )
         race_limb = [0] * 9
 
         for kk in race_data[k].keys():
@@ -127,13 +130,14 @@ def main( update = False ):
             
             key_horce_num = str( int( cd.horce_number() ) )
             
-            for i in range( 0, len( check_s ) ):
+            for i in range( 0, len( use_learn_corner ) ):
                 t = []
-                c = use_corner[i]
+                u = use_learn_corner[i]["count"]
+                c = use_learn_corner[i]["corner"]
                 try:
                     horce_body = corner_horce_body[race_id][str(c)][key_horce_num]
                 except:
-                    continue
+                    horce_body = 0
 
                 dm.dn.append( t, race_limb[0], "その他の馬の数" )
                 dm.dn.append( t, race_limb[1], "逃げaの馬の数" )
@@ -153,14 +157,16 @@ def main( update = False ):
                 dm.dn.append( t, lib.limb_search( passing_data[horce_name], pd ), "過去データからの予想脚質" )
                 dm.dn.append( t, 0, "前の馬身(startは0))" )
 
-                min_horce_body = min( min_horce_body, horce_body )
-                max_horce_body = max( max_horce_body, horce_body )
-                result["answer"].append( horce_body )
-                result["teacher"].append( t )
+                if not use_learn_corner[i]["corner"] == None:
+                    min_horce_body = min( min_horce_body, horce_body )
+                    max_horce_body = max( max_horce_body, horce_body )
+                    result["answer"].append( horce_body )
+                    result["teacher"].append( t )
                 
                 if year == "2020":
-                    lib.dic_append( simu_data, race_id, [] )
-                    simu_data[race_id].append( t )
+                    lib.dic_append( simu_data, race_id, {} )
+                    lib.dic_append( simu_data[race_id], key_horce_num, [] )
+                    simu_data[race_id][key_horce_num].append( t )
 
     for i in range( 0, len( result["answer"] ) ):
         result["answer"][i] = min( int( result["answer"][i] * 2 ), 200 )
@@ -168,7 +174,7 @@ def main( update = False ):
     hm = { "min": min_horce_body, "max": max_horce_body }
 
     print( len( result["answer"] ) , len( result["teacher"] ) )
-    dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
+    #dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
     #dm.pickle_upload( "straight_horce_body_minmax.pickle", hm )
     #dm.pickle_upload( "straight_horce_body_simu_data.pickle", simu_data )
 
