@@ -29,7 +29,8 @@ def data_check( data ):
 def main( data ):
     learn_data, a_units = data_check( data )
     n_units = len( data["teacher"][0] )
-    print( a_units, n_units )
+    print( "入力層:{}".format( n_units ) )
+    print( "出力層:{}".format( a_units ) )
     model = nn.StraightHorceBodyNN( n_units, a_units + 1 )
     model = nn.main( learn_data, model )
 

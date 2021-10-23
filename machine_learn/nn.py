@@ -90,7 +90,7 @@ def test( test_teacher, test_answer, model ):
             count += 1
 
     diff_check /= len( test_teacher )
-    diff_check /= 20
+    diff_check /= 2
 
     return count / len( test_teacher ) * 100, diff_check
     
@@ -117,7 +117,6 @@ def main( data, model, GPU = False ):
     epoch = 500
     batch_size = 2048
     print( N )
-    print( type( test_teacher ) )
     teacher_data = Variable( xp.array( teacher_data, dtype = xp.float32 ) )
     answer_data = Variable( xp.array( answer_data, dtype = xp.int32 ) )
     
@@ -137,7 +136,7 @@ def main( data, model, GPU = False ):
             optimizer.update()
 
         answer_rate, diff_minute = test( test_teacher, test_answer, model )
-        print( "学習:{}回 正答率:{}% 誤差タイム:{}秒 loss:{}".format( e + 1, answer_rate, diff_minute, all_loss / int( N / batch_size ) ) )
+        print( "学習:{}回 正答率:{}% 誤差:{}馬身 loss:{}".format( e + 1, answer_rate, diff_minute, all_loss / int( N / batch_size ) ) )
 
         model.to_cpu()
 
