@@ -3,7 +3,7 @@ from tqdm import tqdm
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
 from data_analyze.train_index_get import train_index_get
-from data_analyze.parent_data_get import parent_data_get
+from data_analyze import parent_data_get
 
 dm.dl.file_set( "race_cource_info.pickle" )
 dm.dl.file_set( "race_cource_wrap.pickle" )
@@ -15,6 +15,7 @@ dm.dl.file_set( "passing_data.pickle" )
 dm.dl.file_set( "horce_data_storage.pickle" )
 dm.dl.file_set( "corner_horce_body.pickle" )
 dm.dl.file_set( "baba_index_data.pickle" )
+dm.dl.file_set( "parent_id_data.pickle" )
 
 def use_corner_check( s ):
     if s == 4:
@@ -77,8 +78,9 @@ def main( update = False ):
     race_cource_info = dm.dl.data_get( "race_cource_info.pickle" )
     corner_horce_body = dm.dl.data_get( "corner_horce_body.pickle" )
     baba_index_data = dm.dl.data_get( "baba_index_data.pickle" )
+    parent_id_data = dm.dl.data_get( "parent_id_data.pickle" )
+    
     train_index = train_index_get()
-    parent_data = parent_data_get()
 
     for k in tqdm( race_data.keys() ):
         race_id = lib.id_get( k )
@@ -106,13 +108,14 @@ def main( update = False ):
         rci_info = race_cource_info[key_place][key_kind][info_key_dist]["info"]
         use_learn_corner = learn_corner_check( rci_info )
         race_limb = [0] * 9
+        popular_limb = -1
         train_index_list = train_index.main( race_data[k], horce_data, race_id )
         count = -1
 
         for kk in race_data[k].keys():
-            horce_name = kk.replace( " ", "" )
-            current_data, past_data = lib.race_check( horce_data[horce_name],
-                                                          year, day, num, race_place_num )#今回と過去のデータに分ける
+            horce_id = kk
+            current_data, past_data = lib.race_check( horce_data[horce_id],
+                                                     year, day, num, race_place_num )#今回と過去のデータに分ける
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
             
@@ -120,15 +123,18 @@ def main( update = False ):
                 continue
             
             try:
-                limb_math = lib.limb_search( passing_data[horce_name], pd )
+                limb_math = lib.limb_search( passing_data[horce_id], pd )
             except:
                 limb_math = 0
 
+            if cd.popular() == 1:
+                popular_limb = limb_math
+                
             race_limb[limb_math] += 1
 
         for kk in race_data[k].keys():
-            horce_name = kk.replace( " ", "" )
-            current_data, past_data = lib.race_check( horce_data[horce_name],
+            horce_id = kk
+            current_data, past_data = lib.race_check( horce_data[horce_id],
                                                      year, day, num, race_place_num )#今回と過去のデータに分ける
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
@@ -136,15 +142,12 @@ def main( update = False ):
             if not cd.race_check():
                 continue
 
-            pad = parent_data.main( horce_name, cd )
+            #pad = parent_data.main( horce_name, cd )
             key_horce_num = str( int( cd.horce_number() ) )
             before_horce_body = 0
             count += 1
             
             for i in range( 0, len( use_learn_corner ) ):
-                if not i == 0:
-                    continue
-                    
                 t_instance = []
                 change_data = []
                 u = use_learn_corner[i]["count"]
@@ -159,7 +162,11 @@ def main( update = False ):
                 except:
                     before_horce_body = 0
 
-                speed, up_speed, pace_speed = pd.speed_index( baba_index_data[horce_name] )
+                father_id = parent_id_data[horce_id]["father"]
+                mother_id = parent_id_data[horce_id]["mother"]
+                speed, up_speed, pace_speed = pd.speed_index( baba_index_data[horce_id] )
+                father_data = parent_data_get.main( horce_data, passing_data, father_id )
+                mother_data = parent_data_get.main( horce_data, passing_data, mother_id )
                 
                 dm.dn.append( t_instance, race_limb[0], "その他の馬の数" )
                 dm.dn.append( t_instance, race_limb[1], "逃げaの馬の数" )
@@ -170,10 +177,12 @@ def main( update = False ):
                 dm.dn.append( t_instance, race_limb[6], "差しbの馬の数" )
                 dm.dn.append( t_instance, race_limb[7], "追いの馬の数" )
                 dm.dn.append( t_instance, race_limb[8], "後方の馬の数" )
+                dm.dn.append( t_instance, popular_limb, "一番人気の馬の脚質" )
                 dm.dn.append( t_instance, float( key_place ), "場所" )
                 dm.dn.append( t_instance, float( key_dist ), "距離" )
                 dm.dn.append( t_instance, float( key_kind ), "芝かダート" )
                 dm.dn.append( t_instance, float( key_baba ), "馬場" )
+                dm.dn.append( t_instance, cd.popular(), "人気" )
                 dm.dn.append( t_instance, cd.id_weight(), "馬体重の増減" )
                 dm.dn.append( t_instance, cd.burden_weight(), "斤量" )
                 dm.dn.append( t_instance, cd.horce_number(), "馬番" )
@@ -182,7 +191,7 @@ def main( update = False ):
                 dm.dn.append( t_instance, sum( rci_dist[0:u] ), "今まで走った距離" )
                 dm.dn.append( t_instance, float( key_dist ) - sum( rci_dist[0:u] ), "残りの距離" )
                 dm.dn.append( t_instance, rci_dist[u], "直線の距離" )
-                dm.dn.append( t_instance, lib.limb_search( passing_data[horce_name], pd ), "過去データからの予想脚質" )
+                dm.dn.append( t_instance, lib.limb_search( passing_data[horce_id], pd ), "過去データからの予想脚質" )
                 dm.dn.append( t_instance, max_check( speed ), "最大のスピード指数" )
                 dm.dn.append( t_instance, max_check( up_speed ), "最大の上り3Fのスピード指数" )
                 dm.dn.append( t_instance, max_check( pace_speed ), "最大のペース指数" )
@@ -201,18 +210,18 @@ def main( update = False ):
                 dm.dn.append( t_instance, train_index_list[count]["a"], "調教ペースの傾き" )
                 dm.dn.append( t_instance, train_index_list[count]["b"], "調教ペースの切片" )
                 dm.dn.append( t_instance, train_index_list[count]["time"], "調教ペースの指数タイム" )
-                dm.dn.append( t_instance, pad["father"]["dist"] , "父親の適正距離との差" )
-                dm.dn.append( t_instance, pad["father"]["race_kind"] , "父親の適正のレースの種類との差" )
-                dm.dn.append( t_instance, pad["father"]["rank"] , "父親の平均順位" )
-                dm.dn.append( t_instance, pad["father"]["diff"] , "父親の平均着差" )
-                dm.dn.append( t_instance, pad["father"]["up_time"] , "父親の平均上り3Fのタイム" )                
-                dm.dn.append( t_instance, pad["mother"]["dist"] , "母親の適正距離との差" )
-                dm.dn.append( t_instance, pad["mother"]["race_kind"] , "母親の適正のレースの種類との差" )
-                dm.dn.append( t_instance, pad["mother"]["rank"] , "母親の平均順位" )
-                dm.dn.append( t_instance, pad["mother"]["diff"] , "母親の平均着差" )
-                dm.dn.append( t_instance, pad["mother"]["up_time"] , "母親の平均上り3Fのタイム" )
-
+                #dm.dn.append( t_instance, father_data["rank"], "父親の平均順位" )
+                #dm.dn.append( t_instance, father_data["two_rate"], "父親の連対率" )
+                #dm.dn.append( t_instance, father_data["three_rate"], "父親の副賞率" )
+                dm.dn.append( t_instance, father_data["average_speed"], "父親の平均速度" )
+                dm.dn.append( t_instance, father_data["limb"], "父親の脚質" )
+                #dm.dn.append( t_instance, mother_data["rank"], "母親の平均順位" )
+                #dm.dn.append( t_instance, mother_data["two_rate"], "母親の連対率" )
+                #dm.dn.append( t_instance, mother_data["three_rate"], "母親の副賞率" )
+                dm.dn.append( t_instance, mother_data["average_speed"], "母親の平均速度" )
+                dm.dn.append( t_instance, mother_data["limb"], "母親の脚質" )                
                 dm.dn.append( change_data, before_horce_body, "前の馬身(startは0))" )
+                #dm.dn.append( change_data, sum( current_wrap[0:u] ), "全体の秒数" )
 
                 if year == "2020":
                     lib.dic_append( simu_data, race_id, {} )
