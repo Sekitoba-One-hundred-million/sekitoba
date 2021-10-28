@@ -139,6 +139,4 @@ def main( data, model, GPU = False ):
         print( "学習:{}回 正答率:{}% 誤差タイム:{}秒 loss:{}".format( e + 1, answer_rate, diff_minute, all_loss / int( N / batch_size ) ) )
 
 
-    dm.model_upload( "suzuka_test_model.pickle", model )
-    
     return model

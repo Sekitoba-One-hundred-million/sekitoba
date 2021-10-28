@@ -35,5 +35,6 @@ def main( data, GPU = False ):
     
     model = nn.StrightNN( n_units, a_units + 1 )
     model = nn.main( learn_data, model, GPU )
-    dm.model_upload( "stright_horce_model.pickle", model )
+    dm.model_upload( "stright_horce_model.pth", model )
+    
     return model
