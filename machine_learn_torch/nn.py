@@ -10,10 +10,10 @@ from tqdm import tqdm
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
 
-class StrightNN( nn.Module ):
+class CornerNN( nn.Module ):
 
     def __init__( self, n, a ):
-        super( StrightNN, self ).__init__()
+        super( CornerNN, self ).__init__()
         self.l1 = nn.Linear( n, n )
         self.l2 = nn.Linear( n, n )
         self.l3 = nn.Linear( n, n )

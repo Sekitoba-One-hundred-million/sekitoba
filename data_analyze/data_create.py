@@ -243,8 +243,8 @@ def main( update = False ):
     hm = { "min": min_horce_body, "max": max_horce_body }
 
     print( len( result["answer"] ) , len( result["teacher"] ) )
-    dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
+    dm.pickle_upload( "corner_horce_body_learn_data.pickle", result )
     #dm.pickle_upload( "straight_horce_body_minmax.pickle", hm )
-    #dm.pickle_upload( "straight_horce_body_simu_data.pickle", simu_data )
+    dm.pickle_upload( "corner_horce_body_simu_data.pickle", simu_data )
     dm.dl.data_clear()
     return result
