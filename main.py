@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from data_analyze import data_create
-from machine_learn import learn
+from machine_learn_torch import learn
 
 def main():
     parser = ArgumentParser()
