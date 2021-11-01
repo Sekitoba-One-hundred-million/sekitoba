@@ -10,10 +10,10 @@ from tqdm import tqdm
 import sekitoba_data_manage as dm
 import sekitoba_library as lib
 
-class StrightNN( nn.Module ):
+class LastStrightNN( nn.Module ):
 
     def __init__( self, n, a ):
-        super( StrightNN, self ).__init__()
+        super( LastStrightNN, self ).__init__()
         self.l1 = nn.Linear( n, n )
         self.l2 = nn.Linear( n, n )
         self.l3 = nn.Linear( n, n )
@@ -76,7 +76,9 @@ class StrightNN( nn.Module ):
         return h30
 
 def test( test_teacher, test_answer, model ):
+    model.eval()
     predict_answer = model.forward( torch.tensor(np.array( test_teacher, dtype = np.float32 ) ) ).detach().numpy()
+    model.train()    
     pa = np.argmax( np.array( predict_answer ), axis = 1 )
     count = 0
     diff_check = 0
@@ -88,7 +90,7 @@ def test( test_teacher, test_answer, model ):
             count += 1
 
     diff_check /= len( test_teacher )
-    diff_check /= 20
+    diff_check /= 10
 
     return count / len( test_teacher ) * 100, diff_check
     
@@ -113,7 +115,7 @@ def main( data, model, GPU = False ):
     xp = np
 
     N = len( teacher_data )
-    epoch = 20
+    epoch = 50
     batch_size = 2048
     teacher_data = torch.from_numpy( xp.array( teacher_data, dtype = xp.float32 ) ).to( device )
     answer_data = torch.from_numpy( xp.array( answer_data, dtype = xp.int32 ) ).to( device )

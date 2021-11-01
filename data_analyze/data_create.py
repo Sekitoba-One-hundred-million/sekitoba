@@ -56,7 +56,7 @@ def main( update = False ):
     result = None
     
     if not update:
-        result = dm.pickle_load( "straight_horce_body_learn_data.pickle" )
+        result = dm.pickle_load( "last_straight_learn_data.pickle" )
 
     if result == None:
         result = {}
@@ -147,104 +147,91 @@ def main( update = False ):
             before_horce_body = 0
             count += 1
             
-            for i in range( 0, len( use_learn_corner ) ):
-                t_instance = []
-                change_data = []
-                u = use_learn_corner[i]["count"]
-                c = use_learn_corner[i]["corner"]
-                try:
-                    horce_body = corner_horce_body[race_id][c][key_horce_num]
-                except:
-                    horce_body = 0
+            t_instance = []
+            change_data = []
 
-                try:
-                    before_horce_body = corner_horce_body[race_id][str(int(c)-1)][key_horce_num]
-                except:
-                    before_horce_body = 0
+            try:
+                before_horce_body = corner_horce_body[race_id]["4"][key_horce_num]
+            except:
+                before_horce_body = 0
 
-                father_id = parent_id_data[horce_id]["father"]
-                mother_id = parent_id_data[horce_id]["mother"]
-                speed, up_speed, pace_speed = pd.speed_index( baba_index_data[horce_id] )
-                father_data = parent_data_get.main( horce_data, passing_data, father_id )
-                mother_data = parent_data_get.main( horce_data, passing_data, mother_id )
+            father_id = parent_id_data[horce_id]["father"]
+            mother_id = parent_id_data[horce_id]["mother"]
+            speed, up_speed, pace_speed = pd.speed_index( baba_index_data[horce_id] )
+            father_data = parent_data_get.main( horce_data, passing_data, father_id )
+            mother_data = parent_data_get.main( horce_data, passing_data, mother_id )
                 
-                dm.dn.append( t_instance, race_limb[0], "その他の馬の数" )
-                dm.dn.append( t_instance, race_limb[1], "逃げaの馬の数" )
-                dm.dn.append( t_instance, race_limb[2], "逃げbの馬の数" )
-                dm.dn.append( t_instance, race_limb[3], "先行aの馬の数" )
-                dm.dn.append( t_instance, race_limb[4], "先行bの馬の数" )
-                dm.dn.append( t_instance, race_limb[5], "差しaの馬の数" )
-                dm.dn.append( t_instance, race_limb[6], "差しbの馬の数" )
-                dm.dn.append( t_instance, race_limb[7], "追いの馬の数" )
-                dm.dn.append( t_instance, race_limb[8], "後方の馬の数" )
-                dm.dn.append( t_instance, popular_limb, "一番人気の馬の脚質" )
-                dm.dn.append( t_instance, float( key_place ), "場所" )
-                dm.dn.append( t_instance, float( key_dist ), "距離" )
-                dm.dn.append( t_instance, float( key_kind ), "芝かダート" )
-                dm.dn.append( t_instance, float( key_baba ), "馬場" )
-                dm.dn.append( t_instance, cd.popular(), "人気" )
-                dm.dn.append( t_instance, cd.id_weight(), "馬体重の増減" )
-                dm.dn.append( t_instance, cd.burden_weight(), "斤量" )
-                dm.dn.append( t_instance, cd.horce_number(), "馬番" )
-                dm.dn.append( t_instance, cd.flame_number(), "枠番" )
-                dm.dn.append( t_instance, cd.all_horce_num(), "馬の頭数" )
-                dm.dn.append( t_instance, sum( rci_dist[0:u] ), "今まで走った距離" )
-                dm.dn.append( t_instance, float( key_dist ) - sum( rci_dist[0:u] ), "残りの距離" )
-                dm.dn.append( t_instance, rci_dist[u], "直線の距離" )
-                dm.dn.append( t_instance, lib.limb_search( passing_data[horce_id], pd ), "過去データからの予想脚質" )
-                dm.dn.append( t_instance, max_check( speed ), "最大のスピード指数" )
-                dm.dn.append( t_instance, max_check( up_speed ), "最大の上り3Fのスピード指数" )
-                dm.dn.append( t_instance, max_check( pace_speed ), "最大のペース指数" )
-                dm.dn.append( t_instance, pd.three_average(), "過去3レースの平均順位" )
-                dm.dn.append( t_instance, pd.dist_rank_average(), "過去同じ距離の種類での平均順位" )
-                dm.dn.append( t_instance, pd.racekind_rank_average(), "過去同じレース状況での平均順位" )
-                dm.dn.append( t_instance, pd.baba_rank_average(), "過去同じ馬場状態での平均順位" )
-                dm.dn.append( t_instance, pd.jockey_rank_average(), "過去同じ騎手での平均順位" )
-                dm.dn.append( t_instance, pd.three_average(), "複勝率" )
-                dm.dn.append( t_instance, pd.two_rate(), "連対率" )
-                dm.dn.append( t_instance, pd.get_money(), "獲得賞金" )
-                dm.dn.append( t_instance, pd.best_weight(), "ベスト体重と現在の体重の差" )
-                dm.dn.append( t_instance, pd.race_interval(), "中週" )
-                dm.dn.append( t_instance, pd.average_speed(), "平均速度" )
-                dm.dn.append( t_instance, pd.pace_up_check(), "ペースと上りの関係" )
-                dm.dn.append( t_instance, train_index_list[count]["a"], "調教ペースの傾き" )
-                dm.dn.append( t_instance, train_index_list[count]["b"], "調教ペースの切片" )
-                dm.dn.append( t_instance, train_index_list[count]["time"], "調教ペースの指数タイム" )
-                #dm.dn.append( t_instance, father_data["rank"], "父親の平均順位" )
-                #dm.dn.append( t_instance, father_data["two_rate"], "父親の連対率" )
-                #dm.dn.append( t_instance, father_data["three_rate"], "父親の副賞率" )
-                dm.dn.append( t_instance, father_data["average_speed"], "父親の平均速度" )
-                dm.dn.append( t_instance, father_data["limb"], "父親の脚質" )
-                #dm.dn.append( t_instance, mother_data["rank"], "母親の平均順位" )
-                #dm.dn.append( t_instance, mother_data["two_rate"], "母親の連対率" )
-                #dm.dn.append( t_instance, mother_data["three_rate"], "母親の副賞率" )
-                dm.dn.append( t_instance, mother_data["average_speed"], "母親の平均速度" )
-                dm.dn.append( t_instance, mother_data["limb"], "母親の脚質" )                
-                dm.dn.append( change_data, before_horce_body, "前の馬身(startは0))" )
-                #dm.dn.append( change_data, sum( current_wrap[0:u] ), "全体の秒数" )
+            dm.dn.append( t_instance, race_limb[0], "その他の馬の数" )
+            dm.dn.append( t_instance, race_limb[1], "逃げaの馬の数" )
+            dm.dn.append( t_instance, race_limb[2], "逃げbの馬の数" )
+            dm.dn.append( t_instance, race_limb[3], "先行aの馬の数" )
+            dm.dn.append( t_instance, race_limb[4], "先行bの馬の数" )
+            dm.dn.append( t_instance, race_limb[5], "差しaの馬の数" )
+            dm.dn.append( t_instance, race_limb[6], "差しbの馬の数" )
+            dm.dn.append( t_instance, race_limb[7], "追いの馬の数" )
+            dm.dn.append( t_instance, race_limb[8], "後方の馬の数" )
+            dm.dn.append( t_instance, popular_limb, "一番人気の馬の脚質" )
+            dm.dn.append( t_instance, float( key_place ), "場所" )
+            dm.dn.append( t_instance, float( key_dist ), "距離" )
+            dm.dn.append( t_instance, float( key_kind ), "芝かダート" )
+            dm.dn.append( t_instance, float( key_baba ), "馬場" )
+            dm.dn.append( t_instance, cd.popular(), "人気" )
+            dm.dn.append( t_instance, cd.id_weight(), "馬体重の増減" )
+            dm.dn.append( t_instance, cd.burden_weight(), "斤量" )
+            dm.dn.append( t_instance, cd.horce_number(), "馬番" )
+            dm.dn.append( t_instance, cd.flame_number(), "枠番" )
+            dm.dn.append( t_instance, cd.all_horce_num(), "馬の頭数" )
+            dm.dn.append( t_instance, float( key_dist ) - rci_dist[-1], "今まで走った距離" )
+            dm.dn.append( t_instance, rci_dist[-1], "直線の距離" )
+            dm.dn.append( t_instance, lib.limb_search( passing_data[horce_id], pd ), "過去データからの予想脚質" )
+            dm.dn.append( t_instance, max_check( speed ), "最大のスピード指数" )
+            dm.dn.append( t_instance, max_check( up_speed ), "最大の上り3Fのスピード指数" )
+            dm.dn.append( t_instance, max_check( pace_speed ), "最大のペース指数" )
+            dm.dn.append( t_instance, pd.three_average(), "過去3レースの平均順位" )
+            dm.dn.append( t_instance, pd.dist_rank_average(), "過去同じ距離の種類での平均順位" )
+            dm.dn.append( t_instance, pd.racekind_rank_average(), "過去同じレース状況での平均順位" )
+            dm.dn.append( t_instance, pd.baba_rank_average(), "過去同じ馬場状態での平均順位" )
+            dm.dn.append( t_instance, pd.jockey_rank_average(), "過去同じ騎手での平均順位" )
+            dm.dn.append( t_instance, pd.three_average(), "複勝率" )
+            dm.dn.append( t_instance, pd.two_rate(), "連対率" )
+            dm.dn.append( t_instance, pd.get_money(), "獲得賞金" )
+            dm.dn.append( t_instance, pd.best_weight(), "ベスト体重と現在の体重の差" )
+            dm.dn.append( t_instance, pd.race_interval(), "中週" )
+            dm.dn.append( t_instance, pd.average_speed(), "平均速度" )
+            dm.dn.append( t_instance, pd.pace_up_check(), "ペースと上りの関係" )
+            dm.dn.append( t_instance, train_index_list[count]["a"], "調教ペースの傾き" )
+            dm.dn.append( t_instance, train_index_list[count]["b"], "調教ペースの切片" )
+            dm.dn.append( t_instance, train_index_list[count]["time"], "調教ペースの指数タイム" )
+            dm.dn.append( t_instance, father_data["rank"], "父親の平均順位" )
+            dm.dn.append( t_instance, father_data["two_rate"], "父親の連対率" )
+            dm.dn.append( t_instance, father_data["three_rate"], "父親の副賞率" )
+            dm.dn.append( t_instance, father_data["average_speed"], "父親の平均速度" )
+            dm.dn.append( t_instance, father_data["limb"], "父親の脚質" )
+            dm.dn.append( t_instance, mother_data["rank"], "母親の平均順位" )
+            dm.dn.append( t_instance, mother_data["two_rate"], "母親の連対率" )
+            dm.dn.append( t_instance, mother_data["three_rate"], "母親の副賞率" )
+            dm.dn.append( t_instance, mother_data["average_speed"], "母親の平均速度" )
+            dm.dn.append( t_instance, mother_data["limb"], "母親の脚質" )                
+            dm.dn.append( change_data, before_horce_body, "前の馬身(startは0))" )
 
-                if year == "2020":
-                    lib.dic_append( simu_data, race_id, {} )
-                    lib.dic_append( simu_data[race_id], key_horce_num, { "data": [], "change": [] } )
-                    simu_data[race_id][key_horce_num]["data"].append( t_instance )
-                    simu_data[race_id][key_horce_num]["change"].append( change_data )
+            if year == "2020":
+                lib.dic_append( simu_data, race_id, {} )
+                simu_data[race_id][key_horce_num] = {}
+                simu_data[race_id][key_horce_num]["answer"] = { "rank": cd.rank(), "odds": cd.odds() }
+                simu_data[race_id][key_horce_num]["data"] = t_instance
+                simu_data[race_id][key_horce_num]["change"] = change_data
 
-                if not c == None:
-                    t_instance.extend( change_data )
-                    min_horce_body = min( min_horce_body, horce_body )
-                    max_horce_body = max( max_horce_body, horce_body )
-                    result["answer"].append( horce_body )
-                    result["teacher"].append( t_instance )
+            t_instance.extend( change_data )
+            result["answer"].append( cd.diff() )
+            result["teacher"].append( t_instance )
                 
                     
     for i in range( 0, len( result["answer"] ) ):
-        result["answer"][i] = min( int( result["answer"][i] * 2 ), 30 )
-
-    hm = { "min": min_horce_body, "max": max_horce_body }
+        result["answer"][i] = min( max( int( result["answer"][i] * 10 + 10 ), 0 ), 50 )
 
     print( len( result["answer"] ) , len( result["teacher"] ) )
-    dm.pickle_upload( "straight_horce_body_learn_data.pickle", result )
+    dm.pickle_upload( "last_straight_learn_data.pickle", result )
     #dm.pickle_upload( "straight_horce_body_minmax.pickle", hm )
-    #dm.pickle_upload( "straight_horce_body_simu_data.pickle", simu_data )
+    dm.pickle_upload( "last_straight_simu_data.pickle", simu_data )
     dm.dl.data_clear()
     return result
