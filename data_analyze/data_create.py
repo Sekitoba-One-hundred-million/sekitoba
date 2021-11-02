@@ -230,11 +230,10 @@ def main( update = False ):
                     simu_data[race_id][key_horce_num]["change"].append( change_data )
 
                 if not c == None:
-                    t_instance.extend( change_data )
                     min_horce_body = min( min_horce_body, horce_body )
                     max_horce_body = max( max_horce_body, horce_body )
                     result["answer"].append( horce_body )
-                    result["teacher"].append( t_instance )
+                    result["teacher"].append( t_instance + change_data )
                 
                     
     for i in range( 0, len( result["answer"] ) ):
