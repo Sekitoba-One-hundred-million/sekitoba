@@ -221,9 +221,8 @@ def main( update = False ):
                 simu_data[race_id][key_horce_num]["data"] = t_instance
                 simu_data[race_id][key_horce_num]["change"] = change_data
 
-            t_instance.extend( change_data )
             result["answer"].append( cd.diff() )
-            result["teacher"].append( t_instance )
+            result["teacher"].append( t_instance + change_data )
                 
                     
     for i in range( 0, len( result["answer"] ) ):
