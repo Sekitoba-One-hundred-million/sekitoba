@@ -1,0 +1,12 @@
+before_data_collect/__pycache__
+config/__pycache__
+config/passward.txt
+data_analyze/__pycache__
+data_manage/__pycache__
+data_check/__pycache__
+driver_data_collect/__pycache__
+http_data_collect/__pycache__
+predict_and_buy/__pycache__
+slack_lib/__pycache__
+storage/
+today_data_get/__pycache__
