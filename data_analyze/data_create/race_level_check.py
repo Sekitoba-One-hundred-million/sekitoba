@@ -1,0 +1,8 @@
+from data_manage.storage import Storage
+from data_analyze.high_level import HighLevel
+from config import name
+
+high_level = HighLevel()
+
+def race_level_check( horce_id, storage: Storage, data ):
+    data[horce_id][name.race_level_check] = high_level.score_get( storage, horce_id )
