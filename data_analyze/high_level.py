@@ -9,15 +9,15 @@ from data_manage.storage import Storage
 from config import name
 import http_data_collect
 
-dm.dl.file_set( name.race_day )
-dm.dl.file_set( name.race_data )
-dm.dl.file_set( name.race_money_data )
+dm.dl.file_set( "race_day.pickle" )
+dm.dl.file_set( "race_data.pickle" )
+dm.dl.file_set( "race_money_data.pickle" )
 
 class HighLevel:
     def __init__( self ):
-        self.race_day = dm.dl.data_get( name.race_day )
-        self.race_data = dm.dl.data_get( name.race_data )
-        self.race_money_data = dm.dl.data_get( name.race_money_data )
+        self.race_day = dm.dl.data_get( "race_day.pickle" )
+        self.race_data = dm.dl.data_get( "race_data.pickle" )
+        self.race_money_data = dm.dl.data_get( "race_money_data.pickle" )
 
     def day_check( self, ymd, past_ymd ):
         if past_ymd["y"] < ymd["y"]:

@@ -24,8 +24,14 @@ def main( storage: Storage, usres_score_data: UsersData ):
         
         for horce_id in storage.horce_id_list:
             score = 0
-            for data_name in usres_score_data.data[horce_id].keys():
-                score += users_score_function.function[data_name]( usres_score_data.data[horce_id][data_name] ) * users_score_rate[buy_kind][data_name]
+            for data_name in users_score_function.function.keys():
+                score_key = data_name.replace( "_minus", "" )
+
+                try:
+                    score += users_score_function.function[data_name]( usres_score_data.data[horce_id][score_key] ) * users_score_rate[buy_kind][data_name]
+                except:
+                    logger.error( "users_score_create not found data {}".format( score_key ) )
+                    continue
 
             score = int( int( score / 5 ) * 5 )
             logger.info( "users_score race_id:{} horce_num:{} score:{}".format( storage.race_id, \

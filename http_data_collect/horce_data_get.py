@@ -118,7 +118,6 @@ def main( storage: Storage ):
         storage.past_data[horce_id] = lib.past_data( past_horce_data_get( soup ), [] )
         data_check( storage, horce_id )
         
-
     # parent horce data get
     for horce_id in storage.horce_id_list:
         for fm in storage.data[horce_id]["parent_id"]:

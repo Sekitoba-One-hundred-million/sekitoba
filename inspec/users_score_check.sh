@@ -16,4 +16,20 @@ for name in `cat ../config/score_data_name.txt`; do
     fi
 done
 
+
+for file in `ls ../data_analyze/data_create/`; do
+    check=0
+    for name in `cat ../config/score_data_name.txt`; do
+        check_name=${file%.*}
+        if [ $name == $check_name ]; then
+            check=1
+            break
+        fi
+    done
+
+    if [ $check -eq 0 ]; then
+        echo not need $file
+    fi
+done
+
 exit $ok

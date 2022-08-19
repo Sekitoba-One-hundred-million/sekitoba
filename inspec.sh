@@ -1,3 +1,5 @@
+cd ./inspec
+
 # users scoreを作成するためのファイルがあるか確認する
 sh users_score_check.sh
 

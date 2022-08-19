@@ -1,11 +1,12 @@
 from bs4 import BeautifulSoup
 import sekitoba_library as lib
-#import sekitoba_data_manage as dm
+import sekitoba_data_manage as dm
 
 #from data_manage.storage import Storage
 #import data_analyze
 #from predict_and_buy import auto_buy
-from http_data_collect import base_race_collect
+#from http_data_collect import base_race_collect
+from predict_and_buy import predict_and_buy
 
 #dm.dl.prod_on()
 
@@ -24,8 +25,8 @@ if __name__ == "__main__":
     #        users_data.race_interval( horce_id )
     #    break
     #auto_buy.one_buy( [ { "horce_num": 3, "money": 2 }, { "horce_num": 6, "money": 1 } ] )
-    base_url = "https://race.netkeiba.com/race/shutuba.html?race_id=202201020201"
-    base_url = "https://race.netkeiba.com/race/shutuba.html?race_id=202201020201"
-    r, _ = lib.request( base_url )
-    soup = BeautifulSoup( r.content, "html.parser" )
-
+    race_id = "202204030302"
+    key="https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
+    stock_data = dm.pickle_load( "stock_data.pickle", prod = True )
+    usres_data_dict = dm.pickle_load( "prod_users_score_data.pickle", prod = True )
+    predict_and_buy.main( stock_data[key], usres_data_dict[race_id] )

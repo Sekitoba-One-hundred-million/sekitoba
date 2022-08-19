@@ -150,7 +150,7 @@ def main():
     stock_data: dict[ str, Storage ] = stock_data_create( today_data_list )
     http_data_check( stock_data )
     users_score_data = data_analyze.main( stock_data )
-    
+    print( "finish" )
     for today_data in today_data_list:
         url = today_data.url
         race_id = lib.id_get( url )

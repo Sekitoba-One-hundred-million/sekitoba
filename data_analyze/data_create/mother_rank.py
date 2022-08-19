@@ -1,3 +1,4 @@
+import sekitoba_library as lib
 from data_manage.storage import Storage
 from config import name
 

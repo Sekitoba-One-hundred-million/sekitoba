@@ -19,7 +19,7 @@ class UsersScoreFunction:
         self.function[data_name.weight_minus] = self.weight_minus
         self.function[data_name.before_id_weight] = self.before_id_weight
         self.function[data_name.omega] = self.omega
-        self.function[data_name.before_speed_minus] = self.before_speed_minus
+        #self.function[data_name.before_speed_minus] = self.before_speed_minus
         self.function[data_name.popular] = self.popular
         self.function[data_name.popular_minus] = self.popular_minus
         self.function[data_name.trainer_rank] = self.trainer_rank
@@ -38,7 +38,7 @@ class UsersScoreFunction:
         self.function[data_name.before_continue_not_three_rank_minus] = self.before_continue_not_three_rank_minus
         self.function[data_name.horce_sex] = self.horce_sex
         self.function[data_name.horce_sex_month] = self.horce_sex_month
-        self.function[data_name.dist_kind_count_minus] = self.dist_kind_count_minus
+        #self.function[data_name.dist_kind_count_minus] = self.dist_kind_count_minus
         self.function[data_name.before_popular] = self.before_popular
         self.function[data_name.before_last_passing_rank] = self.before_last_passing_rank
         self.function[data_name.before_last_passing_rank_minus] = self.before_last_passing_rank_minus
@@ -52,8 +52,8 @@ class UsersScoreFunction:
         self.function[data_name.popular_rank] = self.popular_rank
         self.function[data_name.train_score] = self.train_score
         
-        use_data_write( list( self.function.keys() ) )
-        print( "data count: {}".format( len( self.function ) ) )
+        #use_data_write( list( self.function.keys() ) )
+        #print( "data count: {}".format( len( self.function ) ) )
 
     def before_rank( self, score ):
         score = int( score )
