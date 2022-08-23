@@ -25,6 +25,10 @@ for file in `ls ../data_analyze/data_create/`; do
             check=1
             break
         fi
+
+        if [ $check_name == "__init__" ]; then
+            check=1
+        fi
     done
 
     if [ $check -eq 0 ]; then

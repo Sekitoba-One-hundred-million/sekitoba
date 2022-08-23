@@ -14,6 +14,6 @@ def main( storage: Storage ):
     base_race_collect.main( storage )
     horce_data_get.main( storage )
     train_data_collect.main( storage )
-    jockey_data_collect.main( storage )
-    trainer_data_collect.main( storage )
+    #jockey_data_collect.main( storage )
+    #trainer_data_collect.main( storage )
     logger.info( "finish race_id:{} http_data_collect".format( storage.race_id ) )

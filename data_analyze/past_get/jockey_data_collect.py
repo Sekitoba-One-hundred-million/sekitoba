@@ -5,7 +5,8 @@ from sekitoba_logger import logger
 import sekitoba_library as lib
 from data_manage.storage import Storage
 
-def joceky_data_collect( base_url ):
+def joceky_data_collect( jockey_id ):
+    base_url = "https://db.netkeiba.com/?pid=jockey_detail&id=" + jockey_id + "&page="
     result = {}
     count = 1
     before_year = int( datetime.date.today().year ) - 1
@@ -69,7 +70,8 @@ def joceky_data_collect( base_url ):
     
     return result
 
-def jockey_year_rank( url ):
+def jockey_year_rank( jockey_id ):
+    url = "https://db.netkeiba.com/jockey/result/" + jockey_id
     result = {}
     r,_  = lib.request( url )
     soup = BeautifulSoup( r.content, "html.parser" )

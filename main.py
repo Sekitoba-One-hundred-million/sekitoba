@@ -1,5 +1,8 @@
 import datetime
 import time
+import sys
+from mpi4py import MPI
+
 from today_data_get import TodayData
 from data_manage.storage import Storage
 
@@ -16,6 +19,11 @@ import sekitoba_data_manage as dm
 from sekitoba_logger import logger
 
 dm.dl.prod_on()
+
+comm = MPI.COMM_WORLD   #COMM_WORLDは全体
+size = comm.Get_size()  #サイズ（指定されたプロセス（全体）数）
+rank = comm.Get_rank()  #ランク（何番目のプロセスか。プロセスID）
+name = MPI.Get_processor_name() #プロセスが動いているノードのホスト名
 
 def race_wait( today_data: TodayData ):
     dt_now = datetime.datetime.now()
@@ -151,6 +159,10 @@ def main():
     http_data_check( stock_data )
     users_score_data = data_analyze.main( stock_data )
     print( "finish" )
+
+    if not rank == 0:
+        sys.exit( 0 )
+    
     for today_data in today_data_list:
         url = today_data.url
         race_id = lib.id_get( url )
@@ -158,7 +170,6 @@ def main():
             
         if race_wait( today_data ):
             logger.info( "{} {}R users score create start".format( today_data.place, today_data.num ) )
-            print( url )
             print( "{} {}R users score create start".format( today_data.place, today_data.num ) )
             before_data_collect.main( stock_data[url] )
             users_score_data[race_id].after_users_data_analyze( stock_data[url] )

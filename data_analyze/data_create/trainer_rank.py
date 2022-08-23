@@ -1,19 +1,18 @@
 import sekitoba_library as lib
+from data_analyze.common_past_data import CommonPastData
 from data_manage.storage import Storage
 from config import name
 
-def trainer_rank( horce_id, storage: Storage, data ):
+def trainer_rank( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
     data[horce_id][name.trainer_rank] = -1
     dist = lib.dist_check( storage.dist )
     kind = storage.race_kind
     baba = storage.baba
         
     try:
-        trainer_data = storage.data[horce_id]["trainer"]
+        trainer_id = storage.data[horce_id]["trainer_id"]
+        trainer_data = common_past_data.trainer_data[trainer_id]
     except:
-        return
-
-    if trainer_data == None:
         return
 
     rank_data = 0

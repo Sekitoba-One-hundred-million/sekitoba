@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
+from data_analyze.common_past_data import CommonPastData
 from sekitoba_data_create.before_data import BeforeData
 from data_manage.storage import Storage
 from config import name
 
 before_data = BeforeData()
 
-def before_pace( horce_id, storage: Storage, data, past_race_data ):
+def before_pace( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
     storage.data[horce_id][name.before_pace] = -100
     before_cd = storage.past_data[horce_id].before_cd()
 
@@ -15,7 +16,7 @@ def before_pace( horce_id, storage: Storage, data, past_race_data ):
         return
 
     try:
-        before_wrap = past_race_data[before_cd.race_id()]
+        before_wrap = common_past_data.wrap[before_cd.race_id()]
     except:
         before_wrap = {}
         

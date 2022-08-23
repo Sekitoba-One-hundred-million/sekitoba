@@ -1,2 +1,5 @@
 from data_analyze.past_get.race_money_get import race_money_get
 from data_analyze.past_get.wrap_get import wrap_get
+from data_analyze.past_get.jockey_data_collect import joceky_data_collect
+from data_analyze.past_get.jockey_data_collect import jockey_year_rank
+from data_analyze.past_get.trainer_data_collect import trainer_data_collect

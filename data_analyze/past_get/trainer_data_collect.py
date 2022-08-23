@@ -5,7 +5,8 @@ import sekitoba_library as lib
 from sekitoba_logger import logger
 from data_manage.storage import Storage
 
-def trainer_data_collect( base_url ):
+def trainer_data_collect( jockey_id ):
+    base_url = "https://db.netkeiba.com/?pid=trainer_detail&id=" + jockey_id + "&page="
     result = {}
     count = 1
     before_year = int( datetime.date.today().year ) - 1
@@ -77,12 +78,3 @@ def data_check( storage: Storage, horce_id ):
         logger.info( "{} race_id:{} horce_num:{} data_count:{}".format( first_name, storage.race_id, horce_num, data_count ) )
     else:
         logger.warning( "{} race_id:{} horce_num:{} data_count:{}".format( first_name, storage.race_id, horce_num, data_count ) )
-
-def main( storage: Storage ):
-    base_url = "https://db.netkeiba.com/?pid=trainer_detail&id="
-    
-    for horce_id in storage.horce_id_list:
-        trainer_id = storage.data[horce_id]["trainer_id"]
-        url = base_url + trainer_id + "&page="
-        storage.data[horce_id]["trainer"] = trainer_data_collect( url )
-
