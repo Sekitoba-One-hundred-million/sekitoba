@@ -29,6 +29,10 @@ for file in `ls ../data_analyze/data_create/`; do
         if [ $check_name == "__init__" ]; then
             check=1
         fi
+
+        if [ $check_name == "__pycache__" ]; then
+            check=1
+        fi
     done
 
     if [ $check -eq 0 ]; then

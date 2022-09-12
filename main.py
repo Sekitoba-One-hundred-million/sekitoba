@@ -3,6 +3,12 @@ import time
 import sys
 from mpi4py import MPI
 
+import sekitoba_library as lib
+import sekitoba_data_manage as dm
+from sekitoba_logger import logger
+
+dm.dl.prod_on()
+
 from today_data_get import TodayData
 from data_manage.storage import Storage
 
@@ -13,12 +19,6 @@ import driver_data_collect
 import before_data_collect
 import data_analyze
 import predict_and_buy
-
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
-from sekitoba_logger import logger
-
-dm.dl.prod_on()
 
 comm = MPI.COMM_WORLD   #COMM_WORLDは全体
 size = comm.Get_size()  #サイズ（指定されたプロセス（全体）数）
@@ -96,6 +96,17 @@ def stock_data_create( today_data_list ) -> dict[Storage]:
 
     if stock_data == None:
         stock_data: dict[Storage] = {}
+        
+    # 今回のレースで使用しないデータが入っている場合は削除
+    use_key_list = []
+    delete_key_list = list( stock_data.keys() )
+    
+    for i in range( 0, len( today_data_list ) ):
+        use_key_list.append( today_data_list[i].url )
+
+    for dk in delete_key_list:
+        if not dk in use_key_list:
+            stock_data.pop( dk, None )
 
     for i in range( 0, len( today_data_list ) ):
         print( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].num ) )
@@ -154,14 +165,29 @@ def http_data_check( stock_data: dict[ str, Storage ] ):
 
 def main():
     test = False#test_check()
-    today_data_list = today_data_get.main( test = test )
-    stock_data: dict[ str, Storage ] = stock_data_create( today_data_list )
-    http_data_check( stock_data )
+
+    if rank == 0:
+        today_data_list = today_data_get.main( test = test )
+        stock_data: dict[ str, Storage ] = stock_data_create( today_data_list )
+        http_data_check( stock_data )
+
+        for i in range( 1, size ):
+            comm.send( True, dest = i, tag = 0 )
+    else:
+        check = comm.recv( source = 0, tag = 0 )
+
+        if check:
+            stock_data = dm.pickle_load( "stock_data.pickle", prod = True )
+        else:
+            sys.exit( 1 )
+        
     users_score_data = data_analyze.main( stock_data )
-    print( "finish" )
 
     if not rank == 0:
+        print( "finish rank:{}".format( rank ) )
         sys.exit( 0 )
+
+    print( "race start!" )
     
     for today_data in today_data_list:
         url = today_data.url
@@ -174,6 +200,6 @@ def main():
             before_data_collect.main( stock_data[url] )
             users_score_data[race_id].after_users_data_analyze( stock_data[url] )
             predict_and_buy.main( stock_data[url], users_score_data[race_id] )
-    
+        
 if __name__ == "__main__":
     main()

@@ -19,7 +19,8 @@ def foot_used( horce_id, storage: Storage, data, common_past_data: CommonPastDat
         except:
             continue
 
-    race_type.set_data( race_rank_data, foot_used_data )
+    race_type.set_race_rank_data( race_rank_data )
+    race_type.set_foot_used_data( foot_used_data )
     data[horce_id][name.foot_used] = race_type.foot_used_score_get( None, \
                                                                    storage.past_data[horce_id], \
                                                                    prod_race_rank = lib.money_class_get( storage.race_money ) )

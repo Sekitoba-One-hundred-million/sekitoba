@@ -2,6 +2,7 @@ before_data_collect/__pycache__
 config/__pycache__
 config/passward.txt
 data_analyze/__pycache__
+data_analyze/data_create/__pycache__
 data_manage/__pycache__
 data_check/__pycache__
 driver_data_collect/__pycache__

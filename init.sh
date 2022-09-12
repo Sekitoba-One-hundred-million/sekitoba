@@ -1,4 +1,4 @@
-commit_id="87138e867de49f2ad78bbc08ca6d3c3613ffda69"
+commit_id="eb069a565e4a8467adb62423a6396a414626c90c"
 volume="/Volumes/Gilgamesh"
 
 git clone git@github.com:Sekitoba-One-hundred-million/recovery_analyze.git
@@ -7,7 +7,7 @@ git checkout $commit_id
 
 echo
 echo copy score_data_name.txt
-cp score_data_name.txt ../config/
+cp score_data_name.txt ../config/score_data_name.txt
 
 score_func="score_func.py"
 
@@ -36,3 +36,6 @@ rm -rf recovery_analyze
 users_rate="users_score_rate.pickle"
 echo copy ${users_rate}.${commit_id}
 cp ${volume}/sekitoba-data/${users_rate}.${commit_id} ${volume}/sekitoba-prod/${users_rate}
+
+echo name prepare
+sh config/name_prepare.sh

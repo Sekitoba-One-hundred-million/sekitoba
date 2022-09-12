@@ -7,9 +7,9 @@ from data_analyze.data_create.before_id_weight import before_id_weight
 from data_analyze.data_create.before_last_passing_rank import before_last_passing_rank
 from data_analyze.data_create.before_popular import before_popular
 from data_analyze.data_create.before_rank import before_rank
-#from data_analyze.data_create.before_speed import before_speed
+from data_analyze.data_create.before_speed import before_speed
 from data_analyze.data_create.burden_weight import burden_weight
-#from data_analyze.data_create.dist_kind_count import dist_kind_count
+from data_analyze.data_create.dist_kind_count import dist_kind_count
 from data_analyze.data_create.horce_sex import horce_sex
 from data_analyze.data_create.horce_sex_month import horce_sex_month
 from data_analyze.data_create.before_diff import before_diff
@@ -18,15 +18,18 @@ from data_analyze.data_create.jockey_year_rank import jockey_year_rank
 from data_analyze.data_create.limb import limb
 from data_analyze.data_create.limb_horce_number import limb_horce_number
 from data_analyze.data_create.match_rank import match_rank
+from data_analyze.data_create.my_limb_count import my_limb_count
 from data_analyze.data_create.mother_rank import mother_rank
 from data_analyze.data_create.omega import omega
 from data_analyze.data_create.popular import popular
+from data_analyze.data_create.race_deployment import race_deployment
 from data_analyze.data_create.race_interval import race_interval
 from data_analyze.data_create.race_level_check import race_level_check
 from data_analyze.data_create.speed_index import speed_index
 from data_analyze.data_create.straight_slope import straight_slope
 from data_analyze.data_create.trainer_rank import trainer_rank
 from data_analyze.data_create.weather import weather
+from data_analyze.data_create.weight import weight
 from data_analyze.data_create.foot_used import foot_used
 from data_analyze.data_create.money import money
 from data_analyze.data_create.horce_num import horce_num
@@ -35,5 +38,6 @@ from data_analyze.data_create.before_pace import before_pace
 from data_analyze.data_create.place import place
 from data_analyze.data_create.popular_rank import popular_rank
 from data_analyze.data_create.train_score import train_score
+from data_analyze.data_create.up3_standard_value import up3_standard_value
 
 race_tyep = RaceType()
