@@ -47,7 +47,6 @@ class UsersScoreFunction:
         self.function[data_name.money] = self.money
         self.function[data_name.horce_num] = self.horce_num
         self.function[data_name.baba] = self.baba
-        self.function[data_name.before_pace] = self.before_pace
         self.function[data_name.place] = self.place
         self.function[data_name.popular_rank] = self.popular_rank
         self.function[data_name.train_score] = self.train_score
@@ -56,6 +55,8 @@ class UsersScoreFunction:
         self.function[data_name.up3_standard_value_minus] = self.up3_standard_value_minus
         self.function[data_name.my_limb_count] = self.my_limb_count
         self.function[data_name.my_limb_count_minus] = self.my_limb_count_minus
+        self.function[data_name.true_skill] = self.true_skill
+        self.function[data_name.true_skill_minus] = self.true_skill_minus
         
     def before_rank( self, score ):
         score = int( score )
@@ -392,14 +393,6 @@ class UsersScoreFunction:
 
         return 0
 
-    def before_pace( self, score ):
-        score = int( score )
-
-        if score == 2:
-            return 5
-
-        return 0
-
     def place( self, score ):
         score = int( score )
 
@@ -463,3 +456,22 @@ class UsersScoreFunction:
             return -5
 
         return 0
+
+    def true_skill( self, score ):
+        score = int( score )
+
+        if 36 <= score:
+            return 10
+
+        if 31 <= score:
+            return 5
+
+        return 0
+
+    def true_skill_minus( self, score ):
+        score = int( score )
+
+        if score <= 22:
+            return -5
+
+        return 0    

@@ -28,13 +28,13 @@ from data_analyze.data_create.race_level_check import race_level_check
 from data_analyze.data_create.speed_index import speed_index
 from data_analyze.data_create.straight_slope import straight_slope
 from data_analyze.data_create.trainer_rank import trainer_rank
+from data_analyze.data_create.true_skill import true_skill
 from data_analyze.data_create.weather import weather
 from data_analyze.data_create.weight import weight
 from data_analyze.data_create.foot_used import foot_used
 from data_analyze.data_create.money import money
 from data_analyze.data_create.horce_num import horce_num
 from data_analyze.data_create.baba import baba
-from data_analyze.data_create.before_pace import before_pace
 from data_analyze.data_create.place import place
 from data_analyze.data_create.popular_rank import popular_rank
 from data_analyze.data_create.train_score import train_score

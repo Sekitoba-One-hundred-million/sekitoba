@@ -108,9 +108,6 @@ class HighLevel:
             past_race_data[past_race_id]["ymd"] = { "y": int( year ), "m": self.race_day[past_race_id]["month"], "d": self.race_day[past_race_id]["day"] }
             past_race_data[past_race_id]["race_money"] = copy.deepcopy( self.race_money_data[past_race_id] )
 
-        #dm.pickle_upload( name.race_day, self.race_day, prod = True )
-        #dm.pickle_upload( name.race_data, self.race_data, prod = True )
-        #dm.pickle_upload( name.race_money_data, self.race_money_data, prod = True )
         return past_race_data
 
     def horce_data_get( self, past_race_data ):
@@ -139,7 +136,6 @@ class HighLevel:
             
             for horce_id in past_race_data[race_id]["horce_id"].keys():
                 next_race_data[race_id][horce_id] = lib.next_race( horce_data[horce_id], past_race_data[race_id]["ymd"] )
-                #print( next_race_data[race_id][horce_id] )
         
         for past_cd in pd.past_cd_list():
             past_race_id = past_cd.race_id()

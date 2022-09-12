@@ -54,3 +54,4 @@ class UsersData:
             data_create.race_deployment( horce_id, storage, self.data, common_past_data )
             data_create.up3_standard_value( horce_id, storage, self.data )
             data_create.my_limb_count( horce_id, storage, self.data )
+            data_create.true_skill( horce_id, storage, self.data, common_past_data )

@@ -1,4 +1,4 @@
-commit_id="eb069a565e4a8467adb62423a6396a414626c90c"
+commit_id="c65eed1695ebd96ecca6d09c191f7277bff113d3"
 volume="/Volumes/Gilgamesh"
 
 git clone git@github.com:Sekitoba-One-hundred-million/recovery_analyze.git
@@ -31,11 +31,6 @@ done < score.py
 mv $score_func predict_and_buy/$score_func
 rm score.py
 rm -rf recovery_analyze
-
-# users_score_rate.pickleを対象のcommitから取ってくる
-users_rate="users_score_rate.pickle"
-echo copy ${users_rate}.${commit_id}
-cp ${volume}/sekitoba-data/${users_rate}.${commit_id} ${volume}/sekitoba-prod/${users_rate}
 
 echo name prepare
 sh config/name_prepare.sh

@@ -9,15 +9,13 @@ from slack_lib import slack
 from predict_and_buy import score_func
 from predict_and_buy import auto_buy
 
-dm.dl.file_set( "users_score_rate.pickle" )
-buy_score_check = { "one": 25, "quinella": 65 }
+buy_score_check = { "one": 55 }
 
 users_score_function = score_func.UsersScoreFunction()
 users_score_function.set_function()
 
 def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: UsersData ):
     score_list = []
-    users_score_rate = dm.dl.data_get( "users_score_rate.pickle" )
 
     for horce_id in horce_id_list:
         score = 0
@@ -25,7 +23,7 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
             score_key = data_name.replace( "_minus", "" )
 
             try:
-                score += users_score_function.function[data_name]( usres_score_data.data[horce_id][score_key] ) * users_score_rate[buy_kind][data_name]
+                score += users_score_function.function[data_name]( usres_score_data.data[horce_id][score_key] )
             except:
                 logger.error( "{} users_score_create not found data {}".format( buy_kind, score_key ) )
                 continue

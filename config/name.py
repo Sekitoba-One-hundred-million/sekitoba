@@ -66,8 +66,6 @@ class Name:
         self.horce_num_minus = "horce_num_minus"
         self.baba = "baba"
         self.baba_minus = "baba_minus"
-        self.before_pace = "before_pace"
-        self.before_pace_minus = "before_pace_minus"
         self.place = "place"
         self.place_minus = "place_minus"
         self.popular_rank = "popular_rank"
@@ -80,6 +78,8 @@ class Name:
         self.up3_standard_value_minus = "up3_standard_value_minus"
         self.my_limb_count = "my_limb_count"
         self.my_limb_count_minus = "my_limb_count_minus"
+        self.true_skill = "true_skill"
+        self.true_skill_minus = "true_skill_minus"
         self.stock_name = self.stock_name_create()
 
     def stock_name_create( self ):
