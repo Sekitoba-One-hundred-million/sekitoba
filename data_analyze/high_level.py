@@ -12,13 +12,15 @@ import http_data_collect
 dm.dl.file_set( "race_day.pickle" )
 dm.dl.file_set( "race_data.pickle" )
 dm.dl.file_set( "race_money_data.pickle" )
+dm.dl.file_set( "horce_data_storage.pickle" )
 
 class HighLevel:
     def __init__( self ):
         self.race_day = dm.dl.data_get( "race_day.pickle" )
         self.race_data = dm.dl.data_get( "race_data.pickle" )
         self.race_money_data = dm.dl.data_get( "race_money_data.pickle" )
-
+        self.horce_data = dm.dl.data_get( "horce_data_storage.pickle" )
+        
     def day_check( self, ymd, past_ymd ):
         if past_ymd["y"] < ymd["y"]:
             return True
@@ -94,40 +96,27 @@ class HighLevel:
         for past_race_id in past_race_id_list:
             year = past_race_id[0:4]
             past_race_data[past_race_id] = {}
+            race_data_key = lib.race_data_key_get( past_race_id )
 
-            if not past_race_id in self.race_day.keys():
+            if not past_race_id in self.race_day:
                 self.race_day[past_race_id] = self.race_day_get( past_race_id )
 
-            if not past_race_id in self.race_data.keys():
-                self.race_data[past_race_id] = self.race_horce_id_get( past_race_id )
+            if not race_data_key in self.race_data:
+                self.race_data[race_data_key] = self.race_horce_id_get( past_race_id )
 
-            if not past_race_id in self.race_money_data.keys():
+            if not past_race_id in self.race_money_data:
                 self.race_money_data[past_race_id] = self.race_money_get( past_race_id )
                 
-            past_race_data[past_race_id]["horce_id"] = copy.deepcopy( self.race_data[past_race_id] )
+            past_race_data[past_race_id]["horce_id"] = copy.deepcopy( self.race_data[race_data_key] )
             past_race_data[past_race_id]["ymd"] = { "y": int( year ), "m": self.race_day[past_race_id]["month"], "d": self.race_day[past_race_id]["day"] }
             past_race_data[past_race_id]["race_money"] = copy.deepcopy( self.race_money_data[past_race_id] )
 
         return past_race_data
 
-    def horce_data_get( self, past_race_data ):
-        result = {}
-        base_url = "https://db.netkeiba.com/horse/"
-        
-        for race_id in past_race_data.keys():
-            for horce_id in past_race_data[race_id]["horce_id"].keys():
-                url = base_url + horce_id
-                r, _ = lib.request( url )
-                soup = BeautifulSoup( r.content, "html.parser" )
-                result[horce_id] = http_data_collect.horce_data_get.past_horce_data_get( soup )
-
-        return result
-
     def score_get( self, storage: Storage, horce_id ):
         result = 1000
         pd = storage.past_data[horce_id]
         past_race_data = self.past_race_data_get( pd.race_id_get() )
-        horce_data = self.horce_data_get( past_race_data )
         next_race_data: dict[ str, dict[ str, lib.current_data ] ] = {}
         current_race_rank = lib.money_class_get( storage.race_money )
 
@@ -135,7 +124,7 @@ class HighLevel:
             next_race_data[race_id] = {}
             
             for horce_id in past_race_data[race_id]["horce_id"].keys():
-                next_race_data[race_id][horce_id] = lib.next_race( horce_data[horce_id], past_race_data[race_id]["ymd"] )
+                next_race_data[race_id][horce_id] = lib.next_race( self.horce_data[horce_id], past_race_data[race_id]["ymd"] )
         
         for past_cd in pd.past_cd_list():
             past_race_id = past_cd.race_id()

@@ -3,4 +3,6 @@ from data_manage.storage import Storage
 from config import name
 
 def limb( horce_id, storage: Storage, data ):
-    data[horce_id][name.limb] = lib.limb_search( storage.past_data[horce_id] )
+    limb_math = lib.limb_search( storage.past_data[horce_id] )
+    data[horce_id][name.limb+".users"] = limb_math
+    data[horce_id][name.limb+".rank"] = limb_math

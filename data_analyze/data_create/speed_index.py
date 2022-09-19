@@ -15,5 +15,5 @@ def speed_index( horce_id, storage: Storage, data ):
             my_speed_index = speed_inedx
 
     speed_index_list = sorted( speed_index_list, reverse = True )
-    data[horce_id][name.speed_index] = speed_index_list.index( my_speed_index )
-
+    data[horce_id][name.speed_index+".users"] = speed_index_list.index( my_speed_index )
+    data[horce_id][name.speed_index+".rank"] = speed_index_list.index( my_speed_index )

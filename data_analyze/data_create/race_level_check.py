@@ -5,4 +5,6 @@ from config import name
 high_level = HighLevel()
 
 def race_level_check( horce_id, storage: Storage, data ):
-    data[horce_id][name.race_level_check] = high_level.score_get( storage, horce_id )
+    high_level_score = high_level.score_get( storage, horce_id )
+    data[horce_id][name.race_level_check+".users"] = high_level_score
+    data[horce_id][name.race_level_check+".rank"] = high_level_score

@@ -10,6 +10,7 @@ from data_analyze.data_create.before_rank import before_rank
 from data_analyze.data_create.before_speed import before_speed
 from data_analyze.data_create.burden_weight import burden_weight
 from data_analyze.data_create.dist_kind_count import dist_kind_count
+from data_analyze.data_create.father_rank import father_rank
 from data_analyze.data_create.horce_sex import horce_sex
 from data_analyze.data_create.horce_sex_month import horce_sex_month
 from data_analyze.data_create.before_diff import before_diff

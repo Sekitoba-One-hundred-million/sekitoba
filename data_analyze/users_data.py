@@ -8,13 +8,24 @@ from config import name
 class UsersData:
     def __init__( self ):
         self.data = {}
+        common_past_data = CommonPastData()
 
     def after_users_data_analyze( self, storage: Storage ):
+        common_past_data = CommonPastData()
+        
         for horce_id in storage.horce_id_list:
             data_create.weight( horce_id, storage, self.data )
             data_create.popular( horce_id, storage, self.data )
-    
-    def before_users_data_analyze( self, storage: Storage, common_past_data: CommonPastData ):
+            data_create.weather( horce_id, storage, self.data )
+            data_create.baba( horce_id, storage, self.data )
+            data_create.father_rank( horce_id, storage, self.data )
+            data_create.mother_rank( horce_id, storage, self.data )
+            data_create.jockey_rank( horce_id, storage, self.data, common_past_data )
+            data_create.trainer_rank( horce_id, storage, self.data, common_past_data )
+            
+    def before_users_data_analyze( self, storage: Storage ):
+        common_past_data = CommonPastData()
+        
         for horce_id in storage.horce_id_list:
             lib.dic_append( self.data, horce_id, {} )
             data_create.before_rank( horce_id, storage, self.data )
@@ -29,12 +40,9 @@ class UsersData:
             data_create.omega( horce_id, storage, self.data )
             data_create.before_speed( horce_id, storage, self.data )
             data_create.trainer_rank( horce_id, storage, self.data, common_past_data )
-            data_create.jockey_rank( horce_id, storage, self.data, common_past_data )
             data_create.before_diff( horce_id, storage, self.data )
             data_create.limb_horce_number( horce_id, storage, self.data )
-            data_create.mother_rank( horce_id, storage, self.data )
             data_create.match_rank( horce_id, storage, self.data )
-            data_create.weather( horce_id, storage, self.data )
             data_create.burden_weight( horce_id, storage, self.data )
             data_create.before_continue_not_three_rank( horce_id, storage, self.data )
             data_create.horce_sex( horce_id, storage, self.data )
@@ -46,9 +54,7 @@ class UsersData:
             data_create.jockey_year_rank( horce_id, storage, self.data, common_past_data )
             data_create.money( horce_id, storage, self.data )
             data_create.horce_num( horce_id, storage, self.data )
-            data_create.baba( horce_id, storage, self.data )
             data_create.place( horce_id, storage, self.data )
-            data_create.before_pace( horce_id, storage, self.data, common_past_data )
             data_create.popular_rank( horce_id, storage, self.data )
             data_create.train_score( horce_id, storage, self.data )
             data_create.race_deployment( horce_id, storage, self.data, common_past_data )

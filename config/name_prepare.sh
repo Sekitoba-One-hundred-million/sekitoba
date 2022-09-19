@@ -1,6 +1,7 @@
 dir='config'
 write_file_name="$dir/name.py"
 score_file="score_data_name.txt"
+rank_score_file="rank_score_data.txt"
 prod_dir="/Volumes/Gilgamesh/sekitoba-prod"
 space="    "
 
@@ -17,6 +18,14 @@ for name in $name_list; do
     minus_name=${name}_minus
     echo "$self$name = \"$name\"" >> $write_file_name
     echo "$self$minus_name = \"$minus_name\"" >> $write_file_name
+done
+
+rank_name_list=`cat $dir/$rank_score_file`
+
+for name in $rank_name_list; do
+    if ! printf '%s\n' "${name_list[@]}" | grep -qx "$name"; then
+        echo "$self$name = \"$name\"" >> $write_file_name
+    fi
 done
 
 echo "${self}stock_name = self.stock_name_create()" >> $write_file_name

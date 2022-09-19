@@ -17,11 +17,8 @@ name = MPI.Get_processor_name() #プロセスが動いているノードのホ�
 USERS_DATA_FILE_NAME = "users_data_instance.pickle"
 PROD_USERS_SCORE_DATA = "prod_users_score_data.pickle"
 
-def main( stock_data: dict[ str, Storage] ):    
+def main( stock_data: dict[ str, Storage] ):
     if rank == 0:
-        common_past_data = CommonPastData()
-        common_past_data.data_collect( stock_data )
-        common_past_data.data_upload()
         users_data_dict: dict[ str, UsersData ] = dm.pickle_load( PROD_USERS_SCORE_DATA, prod = True )
 
         if users_data_dict == None:
@@ -58,9 +55,6 @@ def main( stock_data: dict[ str, Storage] ):
         
         stock_key_list = comm.recv( source = 0, tag = 0 )
 
-        # 既にcommon_past_dataの取得は終わっている
-        common_past_data = CommonPastData()
-        
         # 今回のレースで使用しないデータが入っている場合は削除
         delete_key_list = list( users_data_instance.keys() )
         check_key_list = []
@@ -80,7 +74,7 @@ def main( stock_data: dict[ str, Storage] ):
                 continue
 
             users_data_instance[race_id] = UsersData()
-            users_data_instance[race_id].before_users_data_analyze( stock_data[k], common_past_data )
+            users_data_instance[race_id].before_users_data_analyze( stock_data[k] )
             dm.pickle_upload( file_name, users_data_instance, prod = True )
 
             for horce_id in users_data_instance[race_id].data.keys():

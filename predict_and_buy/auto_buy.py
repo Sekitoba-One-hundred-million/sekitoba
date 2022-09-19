@@ -1,4 +1,5 @@
 import sekitoba_library as lib
+from sekitoba_logger import logger
 
 import config
 from today_data_get.data_get import TodayData
@@ -30,6 +31,35 @@ def login( driver ):
     driver.find_element_by_class_name( "buttonModern" ).click()
     
     return driver
+
+def money_get( driver ):
+    money = 0
+    html = driver.page_source.encode('utf-8')
+    soup = BeautifulSoup( html, "html.parser" )
+    td_tag = soup.findAll( "td" )
+
+    for td in td_tag:
+        class_name = td.get( "class" )
+
+        if not class_name == None and \
+          len( class_name ) == 3 and \
+          class_name[0] == "text-lg" and \
+          class_name[1] == "text-right" and \
+          class_name[2] == "ng-binding":
+            str_money = td.text
+            money = ""
+
+            for sm in str_money:
+                if str.isdecimal( sm ):
+                    money += sm
+
+            if len( money ) == 0:
+                return None
+
+            money = int( money )
+            money = int( money / 100 )
+
+    return money
 
 def place_button_num_get( soup, place ):
     place_num = 0
@@ -69,16 +99,27 @@ def quinella_button_num_get( driver ):
     return num
 
 def one_buy( buy_data_list, today_data: TodayData ):
-    money = 1#int( 100 * len( result["number"] ) )
+    have_money = None
     driver = webdriver.Chrome()
-    driver = login( driver )
-    time.sleep( 5 )
 
-    try:
-        driver.find_element_by_xpath( '//*[@id="main"]/ui-view/div[2]/div[2]/button' ).click()
+    for i in range( 0, 5 ):
+        driver = login( driver )
         time.sleep( 5 )
-    except:
-        time.sleep( 1 )
+
+        try:
+            driver.find_element_by_xpath( '//*[@id="main"]/ui-view/div[2]/div[2]/button' ).click()
+            time.sleep( 5 )
+        except:
+            time.sleep( 1 )
+
+        have_money = money_get( driver )
+
+        if not have_money == None:
+            break
+
+    if have_money == None:
+        logger.fatal( "not get have_money" )
+        return
 
     # 通常投票ボタン
     driver.find_element_by_css_selector( ".btn.btn-default.btn-lg.btn-block.btn-size" ).click()
@@ -109,6 +150,9 @@ def one_buy( buy_data_list, today_data: TodayData ):
     money_table = { "7": "21", "8": "22", "9": "23", "4": "31", "5": "32", "6": "33", "1": "41", "2": "42", "3": "43", "0": "51" }
 
     for buy_data in buy_data_list:
+        bet_money = max( int( buy_data["rate"] * have_money * 0.25 ), 1 )
+        buy_data["money"] = int( bet_money )
+        
         #馬の選択
         horce_xpath = '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/div/div/span/bet-basic-win-basic/table/tbody/tr[' + str( buy_data["horce_num"] ) + ']/td[2]/label'
         driver.find_element_by_xpath( horce_xpath ).click()
@@ -119,19 +163,19 @@ def one_buy( buy_data_list, today_data: TodayData ):
         time.sleep( 1 )
 
         #電卓操作で金額の入力
-        for m in str( buy_data["money"] ):
+        for m in str( bet_money ):
             money_xpath = '/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[1]/ten-key/div/div/div[2]/div[{}]/button[{}]'.format( money_table[m][0], money_table[m][1] )
             driver.find_element_by_xpath( money_xpath ).click()
             time.sleep( 1 )
 
-            math_set_xpath = '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[1]/ten-key/div/div/div[2]/button'
-            driver.find_element_by_xpath( math_set_xpath ).click()
+        math_set_xpath = '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[1]/ten-key/div/div/div[2]/button'
+        driver.find_element_by_xpath( math_set_xpath ).click()
 
         time.sleep( 1 )
         set_xpath ='/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[4]/button[2]'
         driver.find_element_by_xpath( set_xpath ).click()
 
-        all_money += int( buy_data["money"] * 100 )
+        all_money += int( bet_money * 100 )
         time.sleep( 2 )
 
     finish_button = driver.find_element_by_xpath( '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[4]/button[3]' )
@@ -220,8 +264,8 @@ def quinella_buy( buy_data_list, today_data: TodayData ):
             driver.find_element_by_xpath( money_xpath ).click()
             time.sleep( 1 )
 
-            math_set_xpath = '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[1]/ten-key/div/div/div[2]/button'
-            driver.find_element_by_xpath( math_set_xpath ).click()
+        math_set_xpath = '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[1]/ten-key/div/div/div[2]/button'
+        driver.find_element_by_xpath( math_set_xpath ).click()
 
         time.sleep( 1 )
         set_xpath ='/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[4]/button[2]'
@@ -246,4 +290,3 @@ def quinella_buy( buy_data_list, today_data: TodayData ):
 
     time.sleep( 5 )
     driver.quit()
-

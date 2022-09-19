@@ -8,4 +8,6 @@ race_type = RaceType()
 
 def race_deployment( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
     race_type.set_wrap_data( common_past_data.wrap )
-    data[horce_id][name.race_deployment] = race_type.deploypent( storage.past_data[horce_id] )
+    dep_score = race_type.deploypent( storage.past_data[horce_id] )
+    data[horce_id][name.race_deployment+".users"] = dep_score
+    data[horce_id][name.race_deployment+".rank"] = dep_score

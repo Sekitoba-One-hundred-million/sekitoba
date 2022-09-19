@@ -1,4 +1,5 @@
 import time
+import math
 
 import sekitoba_data_manage as dm
 from sekitoba_logger import logger
@@ -8,6 +9,7 @@ from data_analyze.users_data import UsersData
 from slack_lib import slack
 from predict_and_buy import score_func
 from predict_and_buy import auto_buy
+from predict_and_buy.rank_score import RankScore
 
 buy_score_check = { "one": 55 }
 
@@ -21,6 +23,7 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
         score = 0
         for data_name in users_score_function.function.keys():
             score_key = data_name.replace( "_minus", "" )
+            score_key += ".users"
 
             try:
                 score += users_score_function.function[data_name]( usres_score_data.data[horce_id][score_key] )
@@ -33,23 +36,44 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
 
     return score_list
 
-def one_buy( storage: Storage, usres_score_data: UsersData ):
+def rank_rate_create( horce_id_list: list, users_score_data: UsersData ):
+    rank_score_dict = {}
+    all_score = 0
+    rank_score = RankScore()
+    
+    for horce_id in horce_id_list:
+        rs = math.exp( rank_score.rank_score_create( users_score_data, horce_id ) )
+        all_score += rs
+        rank_score_dict[horce_id] = rs
+
+    for horce_id in horce_id_list:
+        rank_score_dict[horce_id] /= all_score
+
+    return rank_score_dict
+
+def one_buy( storage: Storage, users_score_data: UsersData ):
     buy_kind = "one"
     buy_data = []
-    score_list = score_list_create( buy_kind, storage.horce_id_list, usres_score_data )
-
-    for score_data in score_list:
-        horce_id = score_data["horce_id"]
+    users_score_list = score_list_create( buy_kind, storage.horce_id_list, users_score_data )
+    rank_rate_dict = rank_rate_create( storage.horce_id_list, users_score_data )
+    
+    for us in users_score_list:
+        horce_id = us["horce_id"]
         horce_num = storage.data[horce_id]["horce_num"]
-        score = score_data["score"]
+        users_score = us["score"]
         logger.info( "users_score kind:{} race_id:{} horce_num:{} score:{}".format( buy_kind, \
                                                                                    storage.race_id, \
                                                                                    horce_num, \
-                                                                                   score ) )
+                                                                                   users_score ) )
         
-        if buy_score_check[buy_kind] <= score:
-            buy_data.append( { "horce_num": horce_num, "money": 2 } )
+        if users_score < buy_score_check[buy_kind]:
+            continue
 
+        odds = storage.data[horce_id]["odds"]
+        ex_rate = ( odds * rank_rate_dict[horce_id] ) * 0.01
+        buy_data.append( { "horce_num": horce_num, "rate": ex_rate } )
+        print( horce_num, ex_rate, rank_rate_dict[horce_id], users_score )
+        
     if len( buy_data ) == 0:
         return
 

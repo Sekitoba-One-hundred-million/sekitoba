@@ -80,6 +80,7 @@ class Name:
         self.my_limb_count_minus = "my_limb_count_minus"
         self.true_skill = "true_skill"
         self.true_skill_minus = "true_skill_minus"
+        self.father_rank = "father_rank"
         self.stock_name = self.stock_name_create()
 
     def stock_name_create( self ):

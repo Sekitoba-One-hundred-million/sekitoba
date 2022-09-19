@@ -4,7 +4,8 @@ from data_manage.storage import Storage
 from config import name
 
 def trainer_rank( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
-    data[horce_id][name.trainer_rank] = -1
+    data[horce_id][name.trainer_rank+".users"] = -1
+    data[horce_id][name.trainer_rank+".rank"] = -1
     dist = lib.dist_check( storage.dist )
     kind = storage.race_kind
     baba = storage.baba
@@ -43,4 +44,5 @@ def trainer_rank( horce_id, storage: Storage, data, common_past_data: CommonPast
     if not count == 0:
         rank_data /= count
 
-    data[horce_id][name.trainer_rank] = rank_data
+    data[horce_id][name.trainer_rank+".users"] = int( rank_data )
+    data[horce_id][name.trainer_rank+".rank"] = rank_data

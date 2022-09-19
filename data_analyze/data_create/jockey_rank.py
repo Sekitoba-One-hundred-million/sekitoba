@@ -43,4 +43,5 @@ def jockey_rank( horce_id, storage: Storage, data, common_past_data: CommonPastD
     if not count == 0:
         rank_data /= count
 
-    data[horce_id][name.jockey_rank] = int( rank_data )
+    data[horce_id][name.jockey_rank+".users"] = int( rank_data )
+    data[horce_id][name.jockey_rank+".rank"] = rank_data

@@ -160,12 +160,13 @@ def dist_race_kind_get( soup ):
         
         if not class_name == None and class_name[0] == "RaceData01":
             span_tag = div.findAll( "span" )
-            if not len( span_tag ) == 3:
-                break
 
-            str_dist = lib.text_replace( span_tag[0].text )
-            dist = int( lib.str_math_pull( str_dist ) )
-            _, race_kind = lib.dist( str_dist )
+            try:
+                str_dist = lib.text_replace( span_tag[0].text )
+                dist = int( lib.str_math_pull( str_dist ) )
+                _, race_kind = lib.dist( str_dist )
+            except:
+                continue
 
     return dist, race_kind
 
@@ -186,6 +187,26 @@ def weather_get( soup ):
             break
 
     return weather
+
+def baba_get( soup ):
+    baba = None
+    div_tag = soup.findAll( "div" )
+
+    for div in div_tag:
+        class_name = div.get( "class" )
+        
+        if not class_name == None and class_name[0] == "RaceData01":
+            span_tag = div.findAll( "span" )
+            
+            try:
+                str_baba = span_tag[2].text[-1]
+            except:
+                continue
+            
+            baba = int( lib.baba( str_baba ) )
+            break
+
+    return baba
 
 def race_money_get( soup ):
     money = None
@@ -240,6 +261,7 @@ def main( storage: Storage, before = False ):
     storage.dist, storage.race_kind = dist_race_kind_get( soup )
     #storage.place = int( storage.place_num )
     storage.weather = weather_get( soup )
+    storage.baba = baba_get( soup )
     storage.race_money = race_money_get( soup )
     tr_tag = soup.findAll( "tr" )
 
@@ -253,6 +275,8 @@ def main( storage: Storage, before = False ):
             if before:
                 storage.data[horce_id]["id_weight"] = id_weight_get( td_tag )
                 storage.data[horce_id]["weight"] = weight_get( td_tag )
+                storage.weather = weather_get( soup )
+                storage.baba = baba_get( soup )
                 data_check( storage, horce_id, check_data_name = [ "id_weight", "weight" ] )
             else:
                 storage.horce_id_list.append( horce_id )

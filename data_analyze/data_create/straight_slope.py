@@ -22,7 +22,9 @@ def straight_slope( horce_id, storage: Storage, data, common_past_data: CommonPa
 
     race_type.set_race_rank_data( race_rank_data )
     race_type.set_foot_used_data( foot_used_data )
-    data[horce_id][name.straight_slope] = race_type.stright_slope( None, \
-                                                                  storage.past_data[horce_id], \
-                                                                  prod_race_rank = lib.money_class_get( storage.race_money ), \
-                                                                  prod_current_slope = current_slope )
+    slope_score = race_type.stright_slope( None, \
+                                          storage.past_data[horce_id], \
+                                          prod_race_rank = lib.money_class_get( storage.race_money ), \
+                                          prod_current_slope = current_slope )
+    data[horce_id][name.straight_slope+".users"] = slope_score
+    data[horce_id][name.straight_slope+".rank"] = slope_score

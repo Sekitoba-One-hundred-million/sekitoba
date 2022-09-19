@@ -182,7 +182,7 @@ def main():
             sys.exit( 1 )
         
     users_score_data = data_analyze.main( stock_data )
-
+    
     if not rank == 0:
         print( "finish rank:{}".format( rank ) )
         sys.exit( 0 )
@@ -193,7 +193,7 @@ def main():
         url = today_data.url
         race_id = lib.id_get( url )
         stock_data[url].today_data = today_data
-            
+
         if race_wait( today_data ):
             logger.info( "{} {}R users score create start".format( today_data.place, today_data.num ) )
             print( "{} {}R users score create start".format( today_data.place, today_data.num ) )

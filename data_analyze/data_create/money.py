@@ -7,6 +7,7 @@ def money( horce_id, storage: Storage, data ):
     if not money == 0:
         money += 100
 
-    money /= 200
-    money = min( money, 30 )
-    data[horce_id][name.money] = money
+    users_money = money / 200
+    rank_money = money
+    data[horce_id][name.money+".users"] = users_money
+    data[horce_id][name.money+".rank"] = rank_money
