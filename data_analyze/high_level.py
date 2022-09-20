@@ -115,40 +115,37 @@ class HighLevel:
 
     def score_get( self, storage: Storage, horce_id ):
         result = 1000
-        pd = storage.past_data[horce_id]
+        pd = storage.past_data[horce_id]        
         past_race_data = self.past_race_data_get( pd.race_id_get() )
         next_race_data: dict[ str, dict[ str, lib.current_data ] ] = {}
         current_race_rank = lib.money_class_get( storage.race_money )
 
-        for race_id in past_race_data.keys():
-            next_race_data[race_id] = {}
+        for past_race_id in past_race_data.keys():
+            next_race_data[past_race_id] = {}
             
-            for horce_id in past_race_data[race_id]["horce_id"].keys():
-                next_race_data[race_id][horce_id] = lib.next_race( self.horce_data[horce_id], past_race_data[race_id]["ymd"] )
-        
+            for next_horce_id in past_race_data[past_race_id]["horce_id"].keys():
+
+                if next_horce_id == horce_id:
+                    continue
+                
+                next_race_data[past_race_id][next_horce_id] = lib.next_race( self.horce_data[next_horce_id], past_race_data[past_race_id]["ymd"] )
+                        
         for past_cd in pd.past_cd_list():
             past_race_id = past_cd.race_id()
             past_day = past_cd.birthday()
             past_rank = past_cd.rank()
-            ymd = past_race_data[past_race_id]["ymd"]
             high_level = False
             past_race_rank = lib.money_class_get( past_race_data[past_race_id]["race_money"] )
 
             if past_race_rank < current_race_rank:
                 continue
             
-            for horce_id in next_race_data[race_id].keys():
-                next_cd = next_race_data[race_id][horce_id]
+            for next_horce_id in next_race_data[past_race_id].keys():
+                next_cd = next_race_data[past_race_id][next_horce_id]
 
                 if next_cd == None:
                     continue
-                
-                birthday = next_cd.ymd()
-                past_ymd = { "y": int( birthday[0] ), "m": int( birthday[1] ), "d": int( birthday[2] ) }
-
-                if not self.day_check( ymd, past_ymd ):
-                    continue
-
+                                    
                 if next_cd.rank() == 1:
                     high_level = True
                     break

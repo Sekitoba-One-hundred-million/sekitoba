@@ -77,9 +77,11 @@ def main( stock_data: dict[ str, Storage] ):
             users_data_instance[race_id].before_users_data_analyze( stock_data[k] )
             dm.pickle_upload( file_name, users_data_instance, prod = True )
 
+            logger_data = ""
             for horce_id in users_data_instance[race_id].data.keys():
                 for name in users_data_instance[race_id].data[horce_id].keys():
-                    logger.info( "id:{} name:{} data:{}".format( horce_id, name, users_data_instance[race_id].data[horce_id][name] ) )
-
+                    logger_data += "id:{} name:{} data:{}\n".format( horce_id, name, users_data_instance[race_id].data[horce_id][name] )
+            logger.info( logger_data )
+ 
         comm.send( file_name, dest = 0, tag = 0 )
         return None
