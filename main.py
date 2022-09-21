@@ -1,7 +1,6 @@
 import datetime
 import time
 import sys
-from mpi4py import MPI
 
 import sekitoba_library as lib
 import sekitoba_data_manage as dm
@@ -19,11 +18,6 @@ import driver_data_collect
 import before_data_collect
 import data_analyze
 import predict_and_buy
-
-comm = MPI.COMM_WORLD   #COMM_WORLDは全体
-size = comm.Get_size()  #サイズ（指定されたプロセス（全体）数）
-rank = comm.Get_rank()  #ランク（何番目のプロセスか。プロセスID）
-name = MPI.Get_processor_name() #プロセスが動いているノードのホスト名
 
 def race_wait( today_data: TodayData ):
     dt_now = datetime.datetime.now()
@@ -129,24 +123,6 @@ def stock_data_create( today_data_list ) -> dict[Storage]:
     logger.info( "stock finish" )
     return stock_data
 
-def test_check():
-    result = None
-
-    while 1:
-        test = input( "test start (y/n): " )
-
-        if test == "y":
-            result = True
-            break
-        elif test == "n":
-            result = False
-            break
-        else:
-            print( "Your enter is {}".format( test ) )
-            print( "Please enter y or n" )
-
-    return result
-
 def http_data_check( stock_data: dict[ str, Storage ] ):
     count = 0
     
@@ -164,29 +140,11 @@ def http_data_check( stock_data: dict[ str, Storage ] ):
             break
 
 def main():
-    test = False#test_check()
-
-    if rank == 0:
-        today_data_list = today_data_get.main( test = test )
-        stock_data: dict[ str, Storage ] = stock_data_create( today_data_list )
-        http_data_check( stock_data )
-
-        for i in range( 1, size ):
-            comm.send( True, dest = i, tag = 0 )
-    else:
-        check = comm.recv( source = 0, tag = 0 )
-
-        if check:
-            stock_data = dm.pickle_load( "stock_data.pickle", prod = True )
-        else:
-            sys.exit( 1 )
+    today_data_list = today_data_get.main()
+    stock_data: dict[ str, Storage ] = stock_data_create( today_data_list )
+    http_data_check( stock_data )
         
     users_score_data = data_analyze.main( stock_data )
-    
-    if not rank == 0:
-        print( "finish rank:{}".format( rank ) )
-        sys.exit( 0 )
-
     print( "race start!" )
     
     for today_data in today_data_list:

@@ -123,27 +123,22 @@ def wait( race_day ):
         for i in tqdm( range( 0, int( total_seconds ) + 5 ) ):
             time.sleep( 1 )
 
-def main( test = False ) -> list[TodayData]: 
+def main() -> list[TodayData]: 
     data_set = []
     result = []
 
-    if test:
-        data_set.append( today_data_list_collect( "2022", "5", "28", "東京", "2", "11" ) )
-        data_set.append( today_data_list_collect( "2022", "5", "28", "中京", "1", "7" ) )
-        data_set.append( today_data_list_collect( "2022", "5", "28", "新潟", "1", "7" ) )
-    else:
-        #wait( race_day )
-        year = "2022"
-        month = "9"
-        day = "19"
+    #wait( race_day )
+    year = "2022"
+    month = "9"
+    day = "19"
 
-        #race_place = race_place_get.main()
-        #for i in range( 0, len( race_place ) ):
-        #        data_set.append( today_data_list_collect( year, race_place[i]["place"], \
-        #                                            race_place[i]["number"], race_place[i]["day"] ) )
-        #data_set.append( today_data_list_collect( year, month, day, "新潟", "3", "8" ) )
-        data_set.append( today_data_list_collect( year, month, day, "中山", "4", "5" ) )
-        data_set.append( today_data_list_collect( year, month, day, "中京", "5", "5" ) )
+    #race_place = race_place_get.main()
+    #for i in range( 0, len( race_place ) ):
+    #        data_set.append( today_data_list_collect( year, race_place[i]["place"], \
+    #                                            race_place[i]["number"], race_place[i]["day"] ) )
+    #data_set.append( today_data_list_collect( year, month, day, "新潟", "3", "8" ) )
+    data_set.append( today_data_list_collect( year, month, day, "中山", "4", "5" ) )
+    data_set.append( today_data_list_collect( year, month, day, "中京", "5", "5" ) )
         
     count = np.zeros( len( data_set ), dtype=np.int32 )
 
