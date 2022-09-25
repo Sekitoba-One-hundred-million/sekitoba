@@ -80,6 +80,10 @@ class Name:
         self.my_limb_count_minus = "my_limb_count_minus"
         self.true_skill = "true_skill"
         self.true_skill_minus = "true_skill_minus"
+        self.true_skill_index = "true_skill_index"
+        self.true_skill_index_minus = "true_skill_index_minus"
+        self.father_blood_type = "father_blood_type"
+        self.father_blood_type_minus = "father_blood_type_minus"
         self.father_rank = "father_rank"
         self.stock_name = self.stock_name_create()
 

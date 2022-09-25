@@ -10,6 +10,7 @@ from data_analyze.data_create.before_rank import before_rank
 from data_analyze.data_create.before_speed import before_speed
 from data_analyze.data_create.burden_weight import burden_weight
 from data_analyze.data_create.dist_kind_count import dist_kind_count
+from data_analyze.data_create.father_blood_type import father_blood_type
 from data_analyze.data_create.father_rank import father_rank
 from data_analyze.data_create.horce_sex import horce_sex
 from data_analyze.data_create.horce_sex_month import horce_sex_month
@@ -30,6 +31,7 @@ from data_analyze.data_create.speed_index import speed_index
 from data_analyze.data_create.straight_slope import straight_slope
 from data_analyze.data_create.trainer_rank import trainer_rank
 from data_analyze.data_create.true_skill import true_skill
+from data_analyze.data_create.true_skill_index import true_skill_index
 from data_analyze.data_create.weather import weather
 from data_analyze.data_create.weight import weight
 from data_analyze.data_create.foot_used import foot_used

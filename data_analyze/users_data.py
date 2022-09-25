@@ -20,8 +20,6 @@ class UsersData:
             data_create.baba( horce_id, storage, self.data )
             data_create.father_rank( horce_id, storage, self.data )
             data_create.mother_rank( horce_id, storage, self.data )
-            data_create.jockey_rank( horce_id, storage, self.data, common_past_data )
-            data_create.trainer_rank( horce_id, storage, self.data, common_past_data )
             
     def before_users_data_analyze( self, storage: Storage ):
         common_past_data = CommonPastData()
@@ -51,6 +49,7 @@ class UsersData:
             data_create.before_popular( horce_id, storage, self.data )
             data_create.before_last_passing_rank( horce_id, storage, self.data )
             data_create.before_first_passing_rank( horce_id, storage, self.data )
+            data_create.jockey_rank( horce_id, storage, self.data, common_past_data )
             data_create.jockey_year_rank( horce_id, storage, self.data, common_past_data )
             data_create.money( horce_id, storage, self.data )
             data_create.horce_num( horce_id, storage, self.data )
@@ -61,3 +60,5 @@ class UsersData:
             data_create.up3_standard_value( horce_id, storage, self.data )
             data_create.my_limb_count( horce_id, storage, self.data )
             data_create.true_skill( horce_id, storage, self.data, common_past_data )
+            data_create.true_skill_index( horce_id, storage, self.data, common_past_data )
+            data_create.father_blood_type( horce_id, storage, self.data )

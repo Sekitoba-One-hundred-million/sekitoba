@@ -28,17 +28,8 @@ def jockey_rank( horce_id, storage: Storage, data, common_past_data: CommonPastD
             except:
                 continue
                 
-            if dist == check_dist:
-                rank_data += rank
-                count += 1
-                
-            if baba == check_baba:
-                rank_data += rank
-                count += 1
-                    
-            if kind == check_kind:
-                rank_data += rank
-                count += 1
+            rank_data += rank
+            count += 1
 
     if not count == 0:
         rank_data /= count

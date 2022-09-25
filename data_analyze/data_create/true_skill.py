@@ -18,5 +18,4 @@ def true_skill( horce_id, storage: Storage, data, common_past_data: CommonPastDa
         data[horce_id][name.true_skill+".rank"] = common_past_data.true_skill_data[before_race_id][horce_id]
     except:
         data[horce_id][name.true_skill+".users"] = 25
-        data[horce_id][name.true_skill+".rank"] = 25
-        
+        data[horce_id][name.true_skill+".rank"] = 25        
