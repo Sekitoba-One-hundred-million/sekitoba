@@ -15,7 +15,6 @@ class UsersData:
         
         for horce_id in storage.horce_id_list:
             data_create.weight( horce_id, storage, self.data )
-            data_create.popular( horce_id, storage, self.data )
             data_create.weather( horce_id, storage, self.data )
             data_create.baba( horce_id, storage, self.data )
             data_create.father_rank( horce_id, storage, self.data )
@@ -59,6 +58,7 @@ class UsersData:
             data_create.race_deployment( horce_id, storage, self.data, common_past_data )
             data_create.up3_standard_value( horce_id, storage, self.data )
             data_create.my_limb_count( horce_id, storage, self.data )
-            data_create.true_skill( horce_id, storage, self.data, common_past_data )
-            data_create.true_skill_index( horce_id, storage, self.data, common_past_data )
+            data_create.horce_true_skill( horce_id, storage, self.data, common_past_data )
+            data_create.jockey_true_skill( horce_id, storage, self.data, common_past_data )
+            data_create.horce_jockey_true_skill_index( horce_id, storage, self.data, common_past_data )
             data_create.father_blood_type( horce_id, storage, self.data )

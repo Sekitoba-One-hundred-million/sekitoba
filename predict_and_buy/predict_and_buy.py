@@ -146,6 +146,8 @@ def quinella_buy( storage: Storage, usres_score_data: UsersData ):
             slack.send_message( buy_str_data )
 
 def main( storage: Storage, usres_score_data: UsersData ):
+    race_id = storage.race_id
+        
     try:
         one_buy( storage, usres_score_data )
     except Exception as err:

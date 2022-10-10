@@ -1,5 +1,5 @@
-recovery_commit_id="08071bf7bb2cfc617237a2951cdc354dbe6042e9"
-rank_commit_id="93976c61be743eef638450cd364c6cbb0cbf3a6d"
+recovery_commit_id="23001170308cd748b1ff464a5f4daf26d0847e58"
+rank_commit_id="d21e6b8ee978839d8e4d32f872ca7ed238f40137"
 volume="/Volumes/Gilgamesh"
 
 git clone git@github.com:Sekitoba-One-hundred-million/recovery_analyze.git

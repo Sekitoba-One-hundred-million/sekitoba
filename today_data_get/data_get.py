@@ -129,16 +129,16 @@ def main() -> list[TodayData]:
 
     #wait( race_day )
     year = "2022"
-    month = "9"
-    day = "25"
+    month = "10"
+    day = "10"
 
     #race_place = race_place_get.main()
     #for i in range( 0, len( race_place ) ):
     #        data_set.append( today_data_list_collect( year, race_place[i]["place"], \
     #                                            race_place[i]["number"], race_place[i]["day"] ) )
     #data_set.append( today_data_list_collect( year, month, day, "新潟", "3", "8" ) )
-    data_set.append( today_data_list_collect( year, month, day, "中山", "4", "7" ) )
-    data_set.append( today_data_list_collect( year, month, day, "中京", "5", "7" ) )
+    data_set.append( today_data_list_collect( year, month, day, "東京", "4", "3" ) )
+    data_set.append( today_data_list_collect( year, month, day, "阪神", "4", "3" ) )
         
     count = np.zeros( len( data_set ), dtype=np.int32 )
 
