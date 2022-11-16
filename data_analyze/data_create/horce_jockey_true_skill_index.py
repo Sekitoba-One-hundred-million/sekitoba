@@ -18,7 +18,8 @@ def horce_jockey_true_skill_index( horce_id, storage: Storage, data, common_past
         except:
             true_skill_list.append( 25 )
             continue
-            
+
+    true_skill_list = sorted( true_skill_list, reverse = True )
     if my_true_skill == None:
         data[horce_id][name.horce_jockey_true_skill_index+".users"] = -1
         data[horce_id][name.horce_jockey_true_skill_index+".rank"] = -1

@@ -127,8 +127,11 @@ class HighLevel:
 
                 if next_horce_id == horce_id:
                     continue
-                
-                next_race_data[past_race_id][next_horce_id] = lib.next_race( self.horce_data[next_horce_id], past_race_data[past_race_id]["ymd"] )
+
+                try:
+                    next_race_data[past_race_id][next_horce_id] = lib.next_race( self.horce_data[next_horce_id], past_race_data[past_race_id]["ymd"] )
+                except:
+                    continue
                         
         for past_cd in pd.past_cd_list():
             past_race_id = past_cd.race_id()

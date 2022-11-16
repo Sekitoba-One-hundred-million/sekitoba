@@ -113,10 +113,10 @@ def one_buy( buy_data_list, today_data: TodayData ):
             time.sleep( 1 )
 
         have_money = money_get( driver )
-
+        
         if not have_money == None:
             break
-
+        
     if have_money == None:
         logger.fatal( "not get have_money" )
         return
