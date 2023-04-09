@@ -62,3 +62,7 @@ class UsersData:
             data_create.jockey_true_skill( horce_id, storage, self.data, common_past_data )
             data_create.horce_jockey_true_skill_index( horce_id, storage, self.data, common_past_data )
             data_create.father_blood_type( horce_id, storage, self.data )
+            data_create.diff_load_weight( horce_id, storage, self.data )
+            data_create.straight_flame( horce_id, storage, self.data, common_past_data )
+            data_create.race_num( horce_id, storage, self.data )
+            data_create.race_money( horce_id, storage, self.data )

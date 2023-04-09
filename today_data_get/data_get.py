@@ -127,19 +127,19 @@ def main() -> list[TodayData]:
     data_set = []
     result = []
 
-    #wait( race_day )
-    year = "2022"
-    month = "11"
-    day = "13"
+    dt_now = datetime.datetime.now()
+    year = str( int( dt_now.year ) )
+    month = str( int( dt_now.month ) )
+    day = str( int( dt_now.day ) )
+    print( year, month, day )
 
     #race_place = race_place_get.main()
     #for i in range( 0, len( race_place ) ):
     #        data_set.append( today_data_list_collect( year, race_place[i]["place"], \
     #                                            race_place[i]["number"], race_place[i]["day"] ) )
-    data_set.append( today_data_list_collect( year, month, day, "福島", "3", "4" ) )
-    data_set.append( today_data_list_collect( year, month, day, "東京", "5", "4" ) )
-    data_set.append( today_data_list_collect( year, month, day, "阪神", "5", "4" ) )
-        
+    data_set.append( today_data_list_collect( year, month, day, "中山", "3", "6" ) )
+    data_set.append( today_data_list_collect( year, month, day, "阪神", "2", "6" ) )
+    data_set.append( today_data_list_collect( year, month, day, "福島", "1", "2" ) )
     count = np.zeros( len( data_set ), dtype=np.int32 )
 
     while 1:

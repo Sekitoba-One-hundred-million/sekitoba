@@ -7,7 +7,7 @@ import sekitoba_library as lib
 def main():
     result = []
     url = "https://race.netkeiba.com/top/"
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome( '/Users/kansei/Downloads/chromedriver_mac64/chromedriver' )
 
     driver, _ = lib.driver_request( driver, url )        
     time.sleep( 5 )

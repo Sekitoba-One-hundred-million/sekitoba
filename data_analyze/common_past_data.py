@@ -10,6 +10,8 @@ JOCKEY_DATA = "prod_jockey_data.pickle"
 JOCKEY_YEAR_RANK_DATA = "jockey_year_rank_data.pickle"
 TRAINER_DATA = "prod_trainer_data.pickle"
 TRUE_SKILL_DATA = "true_skill_data.pickle"
+TRUE_SKILL_DATA = "true_skill_data.pickle"
+RACE_COURCE_INFO = "race_cource_info.pickle"
 
 dm.dl.file_set( WRAP_DATA )
 dm.dl.file_set( RACE_MONEY_DATA )
@@ -17,6 +19,7 @@ dm.dl.file_set( JOCKEY_DATA )
 dm.dl.file_set( JOCKEY_YEAR_RANK_DATA )
 dm.dl.file_set( TRAINER_DATA )
 dm.dl.file_set( TRUE_SKILL_DATA )
+dm.dl.file_set( RACE_COURCE_INFO )
 
 class CommonPastData:
     def __init__( self ):
@@ -26,3 +29,4 @@ class CommonPastData:
         self.jockey_year_rank_data = dm.dl.data_get( JOCKEY_YEAR_RANK_DATA )
         self.trainer_data = dm.dl.data_get( TRAINER_DATA )
         self.true_skill_data = dm.dl.data_get( TRUE_SKILL_DATA )
+        self.race_cource_info = dm.dl.data_get( RACE_COURCE_INFO )

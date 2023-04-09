@@ -28,7 +28,7 @@ def past_horce_data_get( soup ):
 
             if len( data_list ) == 22:
                 horce_data.append( data_list )
-    
+                
     return horce_data
 
 def time_index_get( soup ):

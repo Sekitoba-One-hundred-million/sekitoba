@@ -84,6 +84,14 @@ class Name:
         self.jockey_true_skill_minus = "jockey_true_skill_minus"
         self.horce_jockey_true_skill_index = "horce_jockey_true_skill_index"
         self.horce_jockey_true_skill_index_minus = "horce_jockey_true_skill_index_minus"
+        self.diff_load_weight = "diff_load_weight"
+        self.diff_load_weight_minus = "diff_load_weight_minus"
+        self.straight_flame = "straight_flame"
+        self.straight_flame_minus = "straight_flame_minus"
+        self.race_num = "race_num"
+        self.race_num_minus = "race_num_minus"
+        self.race_money = "race_money"
+        self.race_money_minus = "race_money_minus"
         self.father_rank = "father_rank"
         self.stock_name = self.stock_name_create()
 

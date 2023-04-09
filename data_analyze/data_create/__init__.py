@@ -9,6 +9,7 @@ from data_analyze.data_create.before_popular import before_popular
 from data_analyze.data_create.before_rank import before_rank
 from data_analyze.data_create.before_speed import before_speed
 from data_analyze.data_create.burden_weight import burden_weight
+from data_analyze.data_create.diff_load_weight import diff_load_weight
 from data_analyze.data_create.dist_kind_count import dist_kind_count
 from data_analyze.data_create.father_blood_type import father_blood_type
 from data_analyze.data_create.father_rank import father_rank
@@ -24,9 +25,12 @@ from data_analyze.data_create.my_limb_count import my_limb_count
 from data_analyze.data_create.mother_rank import mother_rank
 from data_analyze.data_create.omega import omega
 from data_analyze.data_create.race_deployment import race_deployment
+from data_analyze.data_create.race_num import race_num
+from data_analyze.data_create.race_money import race_money
 from data_analyze.data_create.race_interval import race_interval
 from data_analyze.data_create.race_level_check import race_level_check
 from data_analyze.data_create.speed_index import speed_index
+from data_analyze.data_create.straight_flame import straight_flame
 from data_analyze.data_create.straight_slope import straight_slope
 from data_analyze.data_create.trainer_rank import trainer_rank
 from data_analyze.data_create.horce_true_skill import horce_true_skill

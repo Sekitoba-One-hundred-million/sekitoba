@@ -19,6 +19,9 @@ import before_data_collect
 import data_analyze
 import predict_and_buy
 
+lib.name.set_name( "rank" )
+dm.dl.file_set( lib.name.model_name() )
+
 def race_wait( today_data: TodayData ):
     dt_now = datetime.datetime.now()
     diff_hour = today_data.hour - dt_now.hour
@@ -70,15 +73,15 @@ def day_search( test = False ):
                 break
             
         for i in range( 0, 2 ):                            
-            try:
+           try:
                 result.append( datetime.datetime( int( now_time.year ), int( now_time.month ), \
                                                   int( now_time.day ) + add_day + i - count ) )
-            except:
-                try:
-                    result.append( datetime.datetime( int( now_time.year ), \
-                                                      int( now_time.month ) + 1, add_day + i - count ) )
-                except:
-                    result.append( datetime.datetime( int( now_time.year ) + 1, 1, add_day + i - count ) )
+           except:
+               try:
+                   result.append( datetime.datetime( int( now_time.year ), \
+                                                    int( now_time.month ) + 1, add_day + i - count ) )
+               except:
+                   result.append( datetime.datetime( int( now_time.year ) + 1, 1, add_day + i - count ) )
         
     return result
 
@@ -158,6 +161,9 @@ def main():
             before_data_collect.main( stock_data[url] )
             users_score_data[race_id].after_users_data_analyze( stock_data[url] )
             predict_and_buy.main( stock_data[url], users_score_data[race_id] )
+
+    time.sleep( 1800 )
+    
         
 if __name__ == "__main__":
     main()

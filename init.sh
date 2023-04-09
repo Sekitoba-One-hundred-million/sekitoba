@@ -1,4 +1,4 @@
-recovery_commit_id="23001170308cd748b1ff464a5f4daf26d0847e58"
+recovery_commit_id="17eaa0ea7a236f228375022fc30d3faf40021953"
 rank_commit_id="d21e6b8ee978839d8e4d32f872ca7ed238f40137"
 volume="/Volumes/Gilgamesh"
 

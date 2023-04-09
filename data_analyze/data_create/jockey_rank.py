@@ -4,11 +4,13 @@ from data_manage.storage import Storage
 from config import name
 
 def jockey_rank( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
-    data[horce_id][name.jockey_rank] = -1
+    data[horce_id][name.jockey_rank+".users"] = -1
+    data[horce_id][name.jockey_rank+".rank"] = -1
+    
     dist = lib.dist_check( storage.dist )
     kind = storage.race_kind
     baba = storage.baba
-        
+    
     try:
         jockey_id = storage.data[horce_id]["jockey_id"]
         jockey_data = common_past_data.jockey_data[jockey_id]

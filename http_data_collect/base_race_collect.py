@@ -170,6 +170,20 @@ def dist_race_kind_get( soup ):
 
     return dist, race_kind
 
+def outside_get( soup ):
+    outside = False
+    div_tag = soup.findAll( "div" )
+
+    for div in div_tag:
+        class_name = div.get( "class" )
+        
+        if not class_name == None and class_name[0] == "RaceData01":
+            if "外" in div.text:
+                outside = True
+                break
+
+    return outside
+
 def weather_get( soup ):
     weather = None
     div_tag = soup.findAll( "div" )
@@ -259,6 +273,7 @@ def main( storage: Storage, before = False ):
     r, _ = lib.request( base_url )
     soup = BeautifulSoup( r.content, "html.parser" )
     storage.dist, storage.race_kind = dist_race_kind_get( soup )
+    storage.outside = outside_get( soup )
     #storage.place = int( storage.place_num )
     storage.weather = weather_get( soup )
     storage.baba = baba_get( soup )

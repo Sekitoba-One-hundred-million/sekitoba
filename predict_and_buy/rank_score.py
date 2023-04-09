@@ -5,9 +5,6 @@ import sekitoba_library as lib
 
 from data_analyze.users_data import UsersData
 
-lib.name.set_name( "rank" )
-dm.dl.file_set( lib.name.model_name() )
-
 class RankScore:
     def __init__( self ):
         self.rank_model = dm.dl.data_get( lib.name.model_name() )

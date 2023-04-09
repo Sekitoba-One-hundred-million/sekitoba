@@ -14,6 +14,7 @@ class Storage:
         self.all_horce_num = 0
         self.race_money = 0
         self.today_data: TodayData = None
+        self.outside = False
         self.horce_id_list = []
         self.data = {}
         self.past_data: dict[ str, lib.past_data ] = {}
