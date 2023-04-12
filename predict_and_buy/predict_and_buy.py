@@ -16,7 +16,7 @@ buy_score_check = { "one": 55 }
 users_score_function = score_func.UsersScoreFunction()
 users_score_function.set_function()
 
-def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: UsersData ):
+def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: UsersData, storage: Storage ):
     score_list = []
 
     for horce_id in horce_id_list:
@@ -26,7 +26,15 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
             score_key += ".users"
 
             try:
-                score += users_score_function.function[data_name]( usres_score_data.data[horce_id][score_key] )
+                recovery_data = usres_score_data.data[horce_id][score_key]
+                recovery_score = users_score_function.function[data_name]( recovery_data )
+                score += recovery_score
+                logger.info( "redovery_score race_id:{} horce_num:{} horce_id:{} score_key:{} score:{} data:{}".format( storage.race_id, \
+                                                                                                                       storage.data[horce_id]["horce_num"], \
+                                                                                                                       horce_id,
+                                                                                                                       score_key,
+                                                                                                                       recovery_score,
+                                                                                                                       recovery_data ) )
             except:
                 logger.error( "{} users_score_create not found data {}".format( buy_kind, score_key ) )
                 continue
@@ -54,9 +62,9 @@ def rank_rate_create( horce_id_list: list, users_score_data: UsersData ):
 def one_buy( storage: Storage, users_score_data: UsersData ):
     buy_kind = "one"
     buy_data = []
-    users_score_list = score_list_create( buy_kind, storage.horce_id_list, users_score_data )
+    users_score_list = score_list_create( buy_kind, storage.horce_id_list, users_score_data, storage )
     rank_rate_dict = rank_rate_create( storage.horce_id_list, users_score_data )
-    
+
     for us in users_score_list:
         horce_id = us["horce_id"]
         horce_num = storage.data[horce_id]["horce_num"]
