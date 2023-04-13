@@ -21,6 +21,8 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
 
     for horce_id in horce_id_list:
         score = 0
+        logger_str = ""
+        
         for data_name in users_score_function.function.keys():
             score_key = data_name.replace( "_minus", "" )
             score_key += ".users"
@@ -29,16 +31,17 @@ def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: Use
                 recovery_data = usres_score_data.data[horce_id][score_key]
                 recovery_score = users_score_function.function[data_name]( recovery_data )
                 score += recovery_score
-                logger.info( "redovery_score race_id:{} horce_num:{} horce_id:{} score_key:{} score:{} data:{}".format( storage.race_id, \
-                                                                                                                       storage.data[horce_id]["horce_num"], \
-                                                                                                                       horce_id,
-                                                                                                                       score_key,
-                                                                                                                       recovery_score,
-                                                                                                                       recovery_data ) )
+                logger_str + "redovery_score race_id:{} horce_num:{} horce_id:{} score_key:{} score:{} data:{}\n".format( storage.race_id, \
+                                                                                                                         storage.data[horce_id]["horce_num"], \
+                                                                                                                         horce_id, \
+                                                                                                                         score_key, \
+                                                                                                                         recovery_score, \
+                                                                                                                         recovery_data )
             except:
                 logger.error( "{} users_score_create not found data {}".format( buy_kind, score_key ) )
                 continue
 
+        logger.info( logger_str )
         score = int( int( score / 5 ) * 5 )
         score_list.append( { "score": score, "horce_id": horce_id } )
 

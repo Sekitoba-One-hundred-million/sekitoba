@@ -18,11 +18,4 @@ def main( stock_data: dict[ str, Storage] ):
         users_data_dict[race_id] = UsersData()
         users_data_dict[race_id].before_users_data_analyze( stock_data[k] )
 
-        logger_data = ""
-        for horce_id in users_data_dict[race_id].data.keys():
-            for name in users_data_dict[race_id].data[horce_id].keys():
-                logger_data += "id:{} name:{} data:{}\n".format( horce_id, name, users_data_dict[race_id].data[horce_id][name] )
-                
-        logger.info( logger_data )
-
     return users_data_dict
