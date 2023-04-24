@@ -25,7 +25,11 @@ class UsersData:
         
         for horce_id in storage.horce_id_list:
             lib.dic_append( self.data, horce_id, {} )
+            data_create.all_horce_num( horce_id, storage, self.data )
             data_create.before_rank( horce_id, storage, self.data )
+            data_create.dist_kind( horce_id, storage, self.data )
+            data_create.horce_true_skill_index( horce_id, storage, self.data, common_past_data )
+            data_create.jockey_true_skill_index( horce_id, storage, self.data, common_past_data )
             data_create.race_level_check( horce_id, storage, self.data )
             data_create.straight_slope( horce_id, storage, self.data, common_past_data )
             data_create.foot_used( horce_id, storage, self.data, common_past_data )

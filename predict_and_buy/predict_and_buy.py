@@ -14,7 +14,7 @@ from predict_and_buy.rank_score import RankScore
 buy_score_check = { "one": 55 }
 
 users_score_function = score_func.UsersScoreFunction()
-users_score_function.set_function()
+users_score_function.set_function( write = False )
 
 def score_list_create( buy_kind: str, horce_id_list: list, usres_score_data: UsersData, storage: Storage ):
     score_list = []

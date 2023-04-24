@@ -6,9 +6,9 @@ from data_manage.storage import Storage
 
 WRAP_DATA = "wrap_data.pickle"
 RACE_MONEY_DATA = "race_money_data.pickle"
-JOCKEY_DATA = "prod_jockey_data.pickle"
+JOCKEY_DATA = "jockey_analyze_data.pickle"
 JOCKEY_YEAR_RANK_DATA = "jockey_year_rank_data.pickle"
-TRAINER_DATA = "prod_trainer_data.pickle"
+TRAINER_DATA = "trainer_analyze_data.pickle"
 TRUE_SKILL_DATA = "true_skill_data.pickle"
 TRUE_SKILL_DATA = "true_skill_data.pickle"
 RACE_COURCE_INFO = "race_cource_info.pickle"

@@ -1,2 +1,6 @@
+#!/bin/bash -x
+
+./init.sh
+./inspec.sh
+
 python main.py
-./data_update.sh

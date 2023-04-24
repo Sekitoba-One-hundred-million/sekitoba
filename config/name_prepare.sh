@@ -1,3 +1,5 @@
+#!/bin/bash
+
 dir='config'
 write_file_name="$dir/name.py"
 score_file="score_data_name.txt"

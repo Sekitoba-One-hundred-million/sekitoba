@@ -6,35 +6,31 @@ from config import name
 def jockey_rank( horce_id, storage: Storage, data, common_past_data: CommonPastData ):
     data[horce_id][name.jockey_rank+".users"] = -1
     data[horce_id][name.jockey_rank+".rank"] = -1
-    
+
+    before_year = str( int( int( storage.race_id[0:4] ) - 1 ) )
     dist = lib.dist_check( storage.dist )
     kind = storage.race_kind
     baba = storage.baba
+    key_dict = { "baba": str( baba ), "dist": str( dist ), "kind": str( kind ) }
     
     try:
         jockey_id = storage.data[horce_id]["jockey_id"]
-        jockey_data = common_past_data.jockey_data[jockey_id]
+        jockey_data = common_past_data.jockey_data[jockey_id][before_year]
     except:
         return
 
-    rank_data = 0
+    rank = 0
     count = 0
 
-    for day in jockey_data.keys():
-        for race_num in jockey_data[day].keys():
-            check_dist, check_kind = lib.dist( jockey_data[day][race_num]["dist"] )
-            check_baba = lib.baba( jockey_data[day][race_num]["baba"] )
-
-            try:
-                rank = int( jockey_data[day][race_num]["rank"] )
-            except:
-                continue
-                
-            rank_data += rank
+    for check_key in key_dict.keys():
+        try:
+            rank += jockey_data[check_key][key_dict[check_key]]["rank"]
             count += 1
-
+        except:
+            continue
+            
     if not count == 0:
-        rank_data /= count
+        rank /= count
 
-    data[horce_id][name.jockey_rank+".users"] = int( rank_data )
-    data[horce_id][name.jockey_rank+".rank"] = rank_data
+    data[horce_id][name.jockey_rank+".users"] = int( rank )
+    data[horce_id][name.jockey_rank+".rank"] = rank

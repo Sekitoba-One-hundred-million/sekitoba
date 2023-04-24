@@ -137,9 +137,9 @@ def main() -> list[TodayData]:
     #for i in range( 0, len( race_place ) ):
     #        data_set.append( today_data_list_collect( year, race_place[i]["place"], \
     #                                            race_place[i]["number"], race_place[i]["day"] ) )
-    data_set.append( today_data_list_collect( year, month, day, "中山", "3", "8" ) )
-    data_set.append( today_data_list_collect( year, month, day, "阪神", "2", "8" ) )
-    data_set.append( today_data_list_collect( year, month, day, "福島", "1", "4" ) )
+    #data_set.append( today_data_list_collect( year, month, day, "中山", "3", "8" ) )
+    data_set.append( today_data_list_collect( year, month, day, "東京", "2", "2" ) )
+    data_set.append( today_data_list_collect( year, month, day, "福島", "1", "6" ) )
     count = np.zeros( len( data_set ), dtype=np.int32 )
 
     while 1:

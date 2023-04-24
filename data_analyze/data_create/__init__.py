@@ -1,5 +1,6 @@
 from sekitoba_data_create.race_type import RaceType
 
+from data_analyze.data_create.all_horce_num import all_horce_num
 from data_analyze.data_create.age import age
 from data_analyze.data_create.before_continue_not_three_rank import before_continue_not_three_rank
 from data_analyze.data_create.before_first_passing_rank import before_first_passing_rank
@@ -10,14 +11,17 @@ from data_analyze.data_create.before_rank import before_rank
 from data_analyze.data_create.before_speed import before_speed
 from data_analyze.data_create.burden_weight import burden_weight
 from data_analyze.data_create.diff_load_weight import diff_load_weight
+from data_analyze.data_create.dist_kind import dist_kind
 from data_analyze.data_create.dist_kind_count import dist_kind_count
 from data_analyze.data_create.father_blood_type import father_blood_type
 from data_analyze.data_create.father_rank import father_rank
 from data_analyze.data_create.horce_sex import horce_sex
 from data_analyze.data_create.horce_sex_month import horce_sex_month
+from data_analyze.data_create.horce_true_skill_index import horce_true_skill_index
 from data_analyze.data_create.before_diff import before_diff
 from data_analyze.data_create.jockey_rank import jockey_rank
 from data_analyze.data_create.jockey_year_rank import jockey_year_rank
+from data_analyze.data_create.jockey_true_skill_index import jockey_true_skill_index
 from data_analyze.data_create.limb import limb
 from data_analyze.data_create.limb_horce_number import limb_horce_number
 from data_analyze.data_create.match_rank import match_rank

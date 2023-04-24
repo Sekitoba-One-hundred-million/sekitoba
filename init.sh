@@ -1,51 +1,59 @@
-recovery_commit_id="ae0bc0ba3d0729dba17fc1d552270125326ef891"
-rank_commit_id="d21e6b8ee978839d8e4d32f872ca7ed238f40137"
+#!/bin/bash -x
+
+recovery_commit_id="389eafe079e79616eb9f017ff4d1c4175bf58e28"
+rank_commit_id="688c7446edfb644f52f07a1cd9091ec1c3400e54"
+score_func="predict_and_buy/score_func.py"
 volume="/Volumes/Gilgamesh"
 
-git clone git@github.com:Sekitoba-One-hundred-million/recovery_analyze.git
-cd recovery_analyze
-git checkout $recovery_commit_id
+git clone -q git@github.com:Sekitoba-One-hundred-million/recovery_analyze.git > /dev/null
 
-echo
-echo copy score_data_name.txt
+if [ ! $? -eq 0 ]; then
+    echo fail git clone recovery_analyze
+    exit 1
+fi
+
+cd recovery_analyze
+git checkout -q $recovery_commit_id > /dev/null
+
+if [ ! $? -eq 0 ]; then
+    echo fail git checkout recovery_analyze
+    echo commitid $recovery_commit_id
+    echo $git_log
+    exit 1
+fi
+
 cp score_data_name.txt ../config/score_data_name.txt
 
-score_func="score_func.py"
-
-# score_funcの用意 sekitobaに合う様に作り替える
-echo copy $score_func
-cp users_score/score.py ../
+rm ../$score_func
+touch ../$score_func
+echo 'from config import name as data_name\n' >> ../$score_func
+sed '1,3d' users_score/score.py >> ../$score_func
 
 cd ..
-touch $score_func
-count=0
-line_number=13
-
-echo 'from config import name as data_name\n' >> $score_func
-while IFS='' read -r score_file; do
-    count=$((count+1))
-    if [ $count -ge $line_number ]; then
-        echo "$score_file" >> $score_func
-    fi
-done < score.py
-
-mv $score_func predict_and_buy/$score_func
-rm score.py
 rm -rf recovery_analyze
 
-git clone git@github.com:Sekitoba-One-hundred-million/rank_learn.git
-cd rank_learn
-git checkout $rank_commit_id
+git clone -q git@github.com:Sekitoba-One-hundred-million/rank_learn.git
 
-echo
-echo copy rank_score_data.txt
+if [ ! $? -eq 0 ]; then
+    echo fail git clone rank_learn
+    exit 1
+fi
+
+cd rank_learn
+git checkout -q $rank_commit_id
+
+if [ ! $? -eq 0 ]; then
+    echo fail git checkout rank_learn
+    echo commitid $rank_commit_id
+    echo $git_log
+    exit 1
+fi
+
 cp common/rank_score_data.txt ../config/rank_score_data.txt
 
-echo copy rank_model.pickle.$rank_commit_id
 cp $volume/sekitoba-data/rank_model.pickle.$rank_commit_id $volume/sekitoba-prod/rank_model.pickle
 
 cd ..
 rm -rf rank_learn
 
-echo name prepare
-sh config/name_prepare.sh
+./config/name_prepare.sh

@@ -1,5 +1,4 @@
-import datetime
-
+import datetime\n
 class Name:
     def __init__( self ):
         self.before_rank = "before_rank"
@@ -92,7 +91,11 @@ class Name:
         self.race_num_minus = "race_num_minus"
         self.race_money = "race_money"
         self.race_money_minus = "race_money_minus"
+        self.all_horce_num = "all_horce_num"
+        self.dist_kind = "dist_kind"
         self.father_rank = "father_rank"
+        self.horce_true_skill_index = "horce_true_skill_index"
+        self.jockey_true_skill_index = "jockey_true_skill_index"
         self.stock_name = self.stock_name_create()
 
     def stock_name_create( self ):

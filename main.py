@@ -161,9 +161,6 @@ def main():
             before_data_collect.main( stock_data[url] )
             users_score_data[race_id].after_users_data_analyze( stock_data[url] )
             predict_and_buy.main( stock_data[url], users_score_data[race_id] )
-
-    time.sleep( 1800 )
-    
         
 if __name__ == "__main__":
     main()
