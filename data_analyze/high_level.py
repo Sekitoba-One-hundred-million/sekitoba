@@ -21,24 +21,6 @@ class HighLevel:
         self.race_money_data = dm.dl.data_get( "race_money_data.pickle" )
         self.horce_data = dm.dl.data_get( "horce_data_storage.pickle" )
         
-    def day_check( self, ymd, past_ymd ):
-        if past_ymd["y"] < ymd["y"]:
-            return True
-        elif ymd["y"] < past_ymd["y"]:
-            return False
-
-        if past_ymd["m"] < ymd["m"]:
-            return True
-        elif ymd["m"] < past_ymd["m"]:
-            return False
-
-        if past_ymd["d"] < ymd["d"]:
-            return True
-        elif ymd["d"] < past_ymd["d"]:
-            return False
-
-        return False
-
     def race_horce_id_get( self, race_id ):
         result = {}
         url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + race_id
@@ -115,45 +97,40 @@ class HighLevel:
 
     def score_get( self, storage: Storage, horce_id ):
         result = 1000
-        pd = storage.past_data[horce_id]        
+        pd: lib.past_data = storage.past_data[horce_id]
         past_race_data = self.past_race_data_get( pd.race_id_get() )
-        next_race_data: dict[ str, dict[ str, lib.current_data ] ] = {}
         current_race_rank = lib.money_class_get( storage.race_money )
-
-        for past_race_id in past_race_data.keys():
-            next_race_data[past_race_id] = {}
-            
-            for next_horce_id in past_race_data[past_race_id]["horce_id"].keys():
-
-                if next_horce_id == horce_id:
-                    continue
-
-                try:
-                    next_race_data[past_race_id][next_horce_id] = lib.next_race( self.horce_data[next_horce_id], past_race_data[past_race_id]["ymd"] )
-                except:
-                    continue
-                        
+        
         for past_cd in pd.past_cd_list():
-            past_race_id = past_cd.race_id()
-            past_day = past_cd.birthday()
-            past_rank = past_cd.rank()
+            if not past_cd.race_check():
+                continue
+
             high_level = False
+            past_race_id = past_cd.race_id()
             past_race_rank = lib.money_class_get( past_race_data[past_race_id]["race_money"] )
 
             if past_race_rank < current_race_rank:
                 continue
             
-            for next_horce_id in next_race_data[past_race_id].keys():
-                next_cd = next_race_data[past_race_id][next_horce_id]
-
-                if next_cd == None:
+            for next_horce_id in past_race_data[past_race_id]["horce_id"].keys():
+                if next_horce_id == horce_id:
                     continue
-                                    
+
+                next_cd: lib.current_data = None
+                
+                try:
+                    next_cd = lib.next_race( self.horce_data[next_horce_id], past_race_data[past_race_id]["ymd"] )
+                except:
+                    continue
+
+                if next_cd == None or not next_cd.race_check():
+                    continue
+
                 if next_cd.rank() == 1:
                     high_level = True
                     break
 
             if high_level:
-                result = min( result, past_rank )
+                result = min( result, past_cd.rank() )
 
         return result
