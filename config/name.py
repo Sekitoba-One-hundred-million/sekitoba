@@ -81,6 +81,8 @@ class Name:
         self.father_blood_type_minus = "father_blood_type_minus"
         self.jockey_true_skill = "jockey_true_skill"
         self.jockey_true_skill_minus = "jockey_true_skill_minus"
+        self.trainer_true_skill = "trainer_true_skill"
+        self.trainer_true_skill_minus = "trainer_true_skill_minus"
         self.horce_jockey_true_skill_index = "horce_jockey_true_skill_index"
         self.horce_jockey_true_skill_index_minus = "horce_jockey_true_skill_index_minus"
         self.diff_load_weight = "diff_load_weight"
@@ -96,6 +98,7 @@ class Name:
         self.father_rank = "father_rank"
         self.horce_true_skill_index = "horce_true_skill_index"
         self.jockey_true_skill_index = "jockey_true_skill_index"
+        self.trainer_true_skill_index = "trainer_true_skill_index"
         self.stock_name = self.stock_name_create()
 
     def stock_name_create( self ):

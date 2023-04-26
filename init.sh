@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
-recovery_commit_id="389eafe079e79616eb9f017ff4d1c4175bf58e28"
-rank_commit_id="688c7446edfb644f52f07a1cd9091ec1c3400e54"
+recovery_commit_id="564e1335d01f1fb1343e5073032425fec4e37131"
+rank_commit_id="d59f500987c121c30675f11d388ff097aa1402e3"
 score_func="predict_and_buy/score_func.py"
 volume="/Volumes/Gilgamesh"
 

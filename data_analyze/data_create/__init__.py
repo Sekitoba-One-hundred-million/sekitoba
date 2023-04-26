@@ -37,6 +37,8 @@ from data_analyze.data_create.speed_index import speed_index
 from data_analyze.data_create.straight_flame import straight_flame
 from data_analyze.data_create.straight_slope import straight_slope
 from data_analyze.data_create.trainer_rank import trainer_rank
+from data_analyze.data_create.trainer_true_skill import trainer_true_skill
+from data_analyze.data_create.trainer_true_skill_index import trainer_true_skill_index
 from data_analyze.data_create.horce_true_skill import horce_true_skill
 from data_analyze.data_create.jockey_true_skill import jockey_true_skill
 from data_analyze.data_create.horce_jockey_true_skill_index import horce_jockey_true_skill_index
