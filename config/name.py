@@ -1,4 +1,4 @@
-import datetime\n
+import datetime
 class Name:
     def __init__( self ):
         self.before_rank = "before_rank"

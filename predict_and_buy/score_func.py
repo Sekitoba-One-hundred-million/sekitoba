@@ -1,4 +1,4 @@
-from config import name as data_name\n
+from config import name as data_name
 
 class UsersScoreFunction:
     def __init__( self ):

@@ -26,7 +26,7 @@ cp score_data_name.txt ../config/score_data_name.txt
 
 rm ../$score_func
 touch ../$score_func
-echo 'from config import name as data_name\n' >> ../$score_func
+echo 'from config import name as data_name' >> ../$score_func
 sed '1,3d' users_score/score.py >> ../$score_func
 
 cd ..

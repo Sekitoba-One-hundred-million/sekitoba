@@ -9,7 +9,7 @@ space="    "
 
 rm -rf $write_file_name
 
-echo 'import datetime\n' >> $write_file_name
+echo 'import datetime' >> $write_file_name
 echo 'class Name:' >> $write_file_name
 echo '    def __init__( self ):' >> $write_file_name
 
