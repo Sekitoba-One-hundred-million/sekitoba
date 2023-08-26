@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
 from sekitoba_logger import logger
-from data_manage.storage import Storage
+from data_manage import Storage
+from data_manage import CurrentHorceData
 
 first_name = "http_data_collect/base_race_collect"
 data_name_list = [ "horce_num", "waku_num", "age", "burden_weight", "jockey_id", "trainer_id" ]
@@ -110,27 +111,6 @@ def trainer_id_get( td_tag ):
             break
             
     return trainer_id
-
-def id_weight_get( td_tag ):
-    id_weight = None
-    
-    for td in td_tag:
-        td_class_name = td.get( "class" )
-
-        if not td_class_name == None and td_class_name[0] == "Weight":
-            try:
-                text = td.find( "small" ).text
-                str_id_weight = lib.str_math_pull( lib.text_replace( text ) )
-                id_weight = int( lib.math_check( str_id_weight ) )
-
-                if "-" in text:
-                    id_weight *= -1
-            except:
-                id_weight == -1000
-            
-            break
-   
-    return id_weight
 
 def weight_get( td_tag ):
     weight = None
@@ -248,64 +228,45 @@ def race_money_get( soup ):
 
     return money
 
-def data_check( storage: Storage, horce_id, check_data_name = data_name_list ):
-    horce_num = storage.data[horce_id]["horce_num"]
-
-    for data_key in check_data_name:        
-        if not storage.data[horce_id][data_key] == None:
-            logger.info( "{} race_id:{} horce_num:{} {}:{}".format( first_name, storage.race_id, horce_num, data_key, storage.data[horce_id][data_key] ) )
-        else:
-            logger.warning( "{} fail race_id:{} horce_num:{} {}".format( first_name, storage.race_id, horce_num, data_key ) )
-
-def race_data_check( storage: Storage, soup ):
-    if storage.weather == 0:
-        logger.warning( "{} fail race_id:{} weather".format( first_name, storage.race_id ) )
-    else:
-        logger.info( "{} race_id:{} weather:{}".format( first_name, storage.race_id, storage.weather ) )
-
-    if storage.race_money == 0:
-        logger.warning( "{} fail race_id:{} money".format( first_name, storage.race_id ) )
-    else:
-        logger.info( "{} race_id:{} money:{}".format( first_name, storage.race_id, storage.race_money ) )    
-
 def main( storage: Storage, before = False ):
-    base_url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.race_id
-    r, _ = lib.request( base_url )
-    soup = BeautifulSoup( r.content, "html.parser" )
-    storage.dist, storage.race_kind = dist_race_kind_get( soup )
-    storage.outside = outside_get( soup )
-    #storage.place = int( storage.place_num )
-    storage.weather = weather_get( soup )
-    storage.baba = baba_get( soup )
-    storage.race_money = race_money_get( soup )
-    tr_tag = soup.findAll( "tr" )
+    url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.today_data.race_id
 
-    for tr in tr_tag:
-        tr_class_name = tr.get( "class" )
+    for i in range( 0, 10 ):
+        r, _ = lib.request( url )
+        soup = BeautifulSoup( r.content, "html.parser" )
 
-        if not tr_class_name == None and tr_class_name[0] == "HorseList":
-            td_tag = tr.findAll( "td" )
-            horce_id = horce_id_get( td_tag )
-            
-            if before:
-                storage.data[horce_id]["id_weight"] = id_weight_get( td_tag )
-                storage.data[horce_id]["weight"] = weight_get( td_tag )
-                storage.weather = weather_get( soup )
-                storage.baba = baba_get( soup )
-                data_check( storage, horce_id, check_data_name = [ "id_weight", "weight" ] )
-            else:
+        if not storage.before_data_check():
+            storage.dist, storage.race_kind = dist_race_kind_get( soup )
+            storage.outside = outside_get( soup )
+            storage.weather = weather_get( soup )
+            storage.baba = baba_get( soup )
+            storage.race_money = race_money_get( soup )
+
+        tr_tag = soup.findAll( "tr" )
+
+        for tr in tr_tag:
+            tr_class_name = tr.get( "class" )
+
+            if not tr_class_name == None and tr_class_name[0] == "HorseList":
+                td_tag = tr.findAll( "td" )
+                horce_id = horce_id_get( td_tag )
+                current_horce_data = CurrentHorceData()
+                current_horce_data.horce_num = horce_number_get( td_tag )
+                current_horce_data.waku_num = waku_number_get( td_tag )
+                current_horce_data.age = age_get( td_tag )
+                current_horce_data.sex = sex_get( td_tag )
+                current_horce_data.burden_weight = burden_weight_get( td_tag )
+                current_horce_data.jockey_id = joceky_id_get( td_tag )
+                current_horce_data.trainer_id = trainer_id_get( td_tag )
+                storage.current_horce_data[horce_id] = current_horce_data
                 storage.horce_id_list.append( horce_id )
-                storage.data[horce_id] = {}
-                storage.data[horce_id]["horce_num"] = horce_number_get( td_tag )
-                storage.data[horce_id]["waku_num"] = waku_number_get( td_tag )
-                storage.data[horce_id]["age"] = age_get( td_tag )
-                storage.data[horce_id]["sex"] = sex_get( td_tag )
-                storage.data[horce_id]["burden_weight"] = burden_weight_get( td_tag )
-                storage.data[horce_id]["jockey_id"] = joceky_id_get( td_tag )
-                storage.data[horce_id]["trainer_id"] = trainer_id_get( td_tag )
-                storage.data[horce_id]["odds"] = 0
-                storage.data[horce_id]["popular"] = 0
-                storage.data[horce_id]["id_weight"] = 0#id_weight_get( td_tag )
-                data_check( storage, horce_id )
                 
-    storage.all_horce_num = len( storage.horce_id_list )
+        storage.all_horce_num = len( storage.horce_id_list )
+        current_horce_data_check = False
+
+        for horce_id in storage.current_horce_data.keys():
+            current_horce_data_check = storage.current_horce_data[horce_id].before_data_check()
+
+        if storage.before_data_check() and \
+          current_horce_data_check:
+            break

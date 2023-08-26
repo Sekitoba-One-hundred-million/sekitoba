@@ -1,21 +1,39 @@
 import sekitoba_library as lib
 #from data_analyze.users_data import UsersData
-from today_data_get.data_get import TodayData
+from data_manage.today_data import TodayData
+from data_manage.train_data import TrainData
+from data_manage.current_horce_data import CurrentHorceData
 
 class Storage:
-    def __init__( self ):
-        self.race_id = ""
-        self.place_num = ""
-        self.weather = 0
-        self.dist = 0
-        self.baba = 0
-        self.race_kind = 0
-        self.place = 0
-        self.all_horce_num = 0
-        self.race_money = 0
-        self.today_data: TodayData = None
-        self.outside = False
+    def __init__( self, today_data ):
+        self.weather = None
+        self.dist = None
+        self.baba = None
+        self.race_kind = None
+        self.all_horce_num = None
+        self.race_money = None
+        self.outside = None
+        self.today_data: TodayData = today_data
         self.horce_id_list = []
-        self.data = {}
+        self.current_horce_data: dict[ str, CurrentHorceData ] = {}
+        self.train_data: dict[ str, TrainData ] = {}
         self.past_data: dict[ str, lib.past_data ] = {}
         #self.users_data: UsersData = None
+
+    def before_data_check( self ):
+        if self.weather == None:
+            return False
+        elif self.dist == None:
+            return False
+        elif self.baba == None:
+            return False
+        elif self.race_kind == None:
+            return False
+        elif self.all_horce_num == None or self.all_horce_num == 0:
+            return False
+        elif self.race_money == None:
+            return False
+        elif self.outside == None:
+            return False
+
+        return True

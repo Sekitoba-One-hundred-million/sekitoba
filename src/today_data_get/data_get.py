@@ -1,79 +1,9 @@
-import numpy as np
-from bs4 import BeautifulSoup
-from tqdm import tqdm
 import datetime
-import time
+from bs4 import BeautifulSoup
 
+from data_manage import TodayData
 from sekitoba_logger import logger
 import sekitoba_library as lib
-from today_data_get import race_place_get
-
-class TodayData:
-    def __init__( self, url ):
-        self.url = url
-        self.place = ""
-        self.year = ""
-        self.month = ""
-        self.day = ""
-        self.race_id = ""
-        self.hour = 0
-        self.minutue = 0
-        self.num = 0
-        self.timestamp = 0
-
-def today_url_list_create( year, place, number, day_num ):
-    result = []
-    base_url = "https://race.netkeiba.com/race/shutuba.html?race_id="
-    base_url += year
-    str_place_num = str( lib.place_num( place ) )
-    
-    if len( str_place_num ) == 1:
-        base_url += "0"
-        
-    base_url += str_place_num
-    base_url += "0" + number
-
-    if len( day_num ) == 1:
-        base_url += "0" + day_num
-    else:
-        base_url += day_num
-
-    for i in range( 1, 13 ):
-        url = base_url
-
-        if i < 10:
-            url += "0" + str( i )
-        else:
-            url += str( i )
-
-        result.append( url )
-
-    return result
-
-def url_time( url ):
-    bed_race = False
-    time_data = ""
-    r, _ = lib.request( url )
-    soup = BeautifulSoup( r.content, "html.parser" )
-    div_tag = soup.findAll( "div" )
-
-    for i in range( 0, len( div_tag ) ):
-        class_name = div_tag[i].get( "class" )
-
-        if not class_name == None \
-           and class_name[0] == "RaceData01":
-            text_data = div_tag[i].text.replace( "\n", "" )
-            text_data = text_data.replace( " ", "" )
-            split_text = text_data.split( "/" )
-            time_data = split_text[0].replace( "発走", "" )
-
-            if split_text[1][0] == "芝" \
-               or split_text[1][0] == "ダ":
-                bed_race = True
-                
-            break
-    
-    return time_data, bed_race    
 
 def race_base_id_get( soup ):
     race_id_list = []
@@ -104,6 +34,7 @@ def predict_race_id_get( today: datetime.datetime ):
     race_id_list = []
     driver = lib.driver_start()
     base_url = "https://race.netkeiba.com/top/?kaisai_date="
+    race_day = None
     days = 0
 
     if today.hour > 16:
@@ -122,7 +53,15 @@ def predict_race_id_get( today: datetime.datetime ):
         race_id_list = race_base_id_get( soup )
 
         if not len( race_id_list ) == 0:
+            race_day = check_day
             break
+
+        week_num = check_day.weekday()
+
+        # 土日なのに取得できていない場合は失敗なのでもう一回
+        if week_num == 5 or \
+          week_num == 6:
+            continue
         
         days += 1
 
@@ -135,5 +74,26 @@ def predict_race_id_get( today: datetime.datetime ):
     for i in range( 0, len( race_id_list ) ):
         race_id_list[i] = str_year + race_id_list[i]
 
-    return race_id_list
+    return race_id_list, race_day
 
+def today_data_list_create() -> list[TodayData]:
+    today_data_list = []
+    #race_id_list, race_day = predict_race_id_get( datetime.datetime.now() )
+    race_id_list, race_day = predict_race_id_get( datetime.datetime( 2023, 7, 9 ) )
+
+    for race_id in race_id_list:
+        today_data = TodayData( race_id, race_day )
+
+        # htmlがきちんと取得できない可能性があるので
+        for i in range( 0, 5 ):
+            today_data.race_time_get()
+
+            if today_data.race_timestamp == -1:
+                continue
+
+            if today_data.bet_race:
+                today_data_list.append( today_data )
+                
+            break
+
+    return sorted( today_data_list, key = lambda x: x.race_timestamp )

@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
 from sekitoba_logger import logger
-from data_manage.storage import Storage
+from data_manage import Storage
+from data_manage import CurrentHorceData
 
 def horce_id_get( td_tag ):
     horce_id = ""
@@ -18,8 +19,29 @@ def horce_id_get( td_tag ):
             
     return horce_id
 
+def id_weight_get( td_tag ):
+    id_weight = None
+    
+    for td in td_tag:
+        td_class_name = td.get( "class" )
+
+        if not td_class_name == None and td_class_name[0] == "Weight":
+            try:
+                text = td.find( "small" ).text
+                str_id_weight = lib.str_math_pull( lib.text_replace( text ) )
+                id_weight = int( lib.math_check( str_id_weight ) )
+
+                if "-" in text:
+                    id_weight *= -1
+            except:
+                id_weight == -1000
+            
+            break
+   
+    return id_weight
+
 def odds_get( td_tag ):
-    odds = 0
+    odds = None
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -32,7 +54,7 @@ def odds_get( td_tag ):
     return odds
 
 def popular_get( td_tag ):
-    popular = 0
+    popular = None
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -44,32 +66,45 @@ def popular_get( td_tag ):
 
     return popular
 
-def data_check( storage: Storage, horce_id ):
-    first_name = "driver_data_collect/race_data_get"
-    check_data_name = [ "odds", "popular" ]
-    horce_num = storage.data[horce_id]["horce_num"]
-    
-    for data_key in check_data_name:
-        if not storage.data[horce_id][data_key] == 0:
-            logger.info( "{} race_id:{} horce_num:{} {}:{}".format( first_name, storage.race_id, horce_num, data_key, storage.data[horce_id][data_key] ) )
-        else:
-            logger.warning( "{} fail race_id:{} horce_num:{} {}".format( first_name, storage.race_id, horce_num, data_key ) )
-
 def main( storage: Storage, driver ):
-    url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.race_id
-    driver, _ = lib.driver_request( driver, url )
-    time.sleep( 5 )
+    best_check_count = 0
+    best_data_dict = {}
+    url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.today_data.race_id
 
-    html = driver.page_source.encode('utf-8')
-    soup = BeautifulSoup( html, "html.parser" )
+    for i in range( 0, 10 ):
+        if best_check_count == storage.all_horce_num:
+            break
+        
+        instance_dict = {}
+        driver, _ = lib.driver_request( driver, url )
+        html = driver.page_source.encode('utf-8')
+        soup = BeautifulSoup( html, "html.parser" )
+        tr_tag = soup.findAll( "tr" )
 
-    tr_tag = soup.findAll( "tr" )
+        for tr in tr_tag:
+            tr_class_name = tr.get( "class" )
 
-    for tr in tr_tag:
-        tr_class_name = tr.get( "class" )
+            if not tr_class_name == None and tr_class_name[0] == "HorseList":
+                td_tag = tr.findAll( "td" )
+                horce_id = horce_id_get( td_tag )
+                instance_current_horce_data = CurrentHorceData()
+                instance_current_horce_data.odds = odds_get( td_tag )
+                instance_current_horce_data.popular = popular_get( td_tag )
+                instance_current_horce_data.id_weight = id_weight_get( td_tag )
+                print( horce_id, instance_current_horce_data.odds, instance_current_horce_data.popular, instance_current_horce_data.id_weight )
+                instance_dict[horce_id] = instance_current_horce_data
 
-        if not tr_class_name == None and tr_class_name[0] == "HorseList":
-            td_tag = tr.findAll( "td" )
-            horce_id = horce_id_get( td_tag )
-            storage.data[horce_id]["odds"] = odds_get( td_tag )
-            storage.data[horce_id]["popular"] = popular_get( td_tag )
+        check_count = 0
+        
+        for horce_id in instance_dict.keys():
+            if instance_dict[horce_id].just_before_data_check():
+                check_count += 1
+
+        print( check_count, storage.all_horce_num )
+        if best_check_count < check_count:
+            best_check_count = check_count
+
+            for horce_id in instance_dict.keys():
+                storage.current_horce_data[horce_id].odds = instance_dict[horce_id].odds
+                storage.current_horce_data[horce_id].popular = instance_dict[horce_id].popular
+                storage.current_horce_data[horce_id].id_weight = instance_dict[horce_id].id_weight

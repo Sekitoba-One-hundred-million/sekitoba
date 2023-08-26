@@ -26,40 +26,41 @@ def data_get( url, driver ):
                     horce_num = lib.text_replace( td_tag[1].text )
                     omega = int( lib.text_replace( td_tag[7].text ) )
                 except:
-                    continue
+                    omega = None
                 
                 result[horce_num] = omega
 
-    return result
-
-def data_check( storage: Storage ):
-    first_name = "driver_data_collect/omega_get"
-
-    for i in range( 1, storage.all_horce_num + 1 ):
-        key_horce_num = str( i )
-        if key_horce_num in storage.data["omega"].keys():
-            logger.info( "{} race_id:{} horce_num:{} omega:{}".format( first_name, storage.race_id, key_horce_num, storage.data["omega"][key_horce_num] ) )
-        else:
-            logger.warning( "{} race_id:{} horce_num:{}".format( first_name, storage.race_id, key_horce_num ) )
-            
+    return result            
         
 def main( storage: Storage, driver ):
+    best_check_count = 0
     base_url = "https://www.keibalab.jp/db/race/"
-    year = str( int( storage.today_data.year ) )
-    month = str( int( storage.today_data.month ) )
-    day = str( int( storage.today_data.day ) )
-    key_place_num = str( storage.place_num )
-    race_num = storage.race_id[10:12]
-
-    if len( month ) == 1:
-        month = "0" + month
-
-    if len( day ) == 1:
-        day = "0" + day
-
-    if len( key_place_num ) == 1:
-        key_place_num = "0" + key_place_num
-
+    year = str( int( storage.today_data.race_date.year ) )
+    month = lib.padding_str_math( str( int( storage.today_data.race_date.month ) ) )
+    day = lib.padding_str_math( str( int( storage.today_data.race_date.day ) ) )
+    key_place_num = lib.padding_str_math( str( storage.today_data.place_num ) )
+    race_num = lib.padding_str_math( str( storage.today_data.race_num ) )
     url = base_url + year + month + day + key_place_num + race_num + "/syutsuba.html"
-    storage.data["omega"] = data_get( url, driver )
-    data_check( storage )
+
+    for i in range( 0, 10 ):
+        if best_check_count == storage.all_horce_num:
+            break
+        
+        check_count = 0
+        omega_data = data_get( url, driver )
+
+        for horce_num in omega_data.keys():
+            if not omega_data[horce_num] == None:
+                check_count += 1
+
+        if check_count < best_check_count:
+            continue
+
+        best_check_count = check_count
+        print( best_check_count, storage.all_horce_num )
+        
+        for horce_num in omega_data.keys():
+            for horce_id in storage.current_horce_data.keys():
+                if storage.current_horce_data[horce_id].horce_num == horce_num:
+                    storage.current_horce_data[horce_id].omega = omega_data[horce_num]
+                    break
