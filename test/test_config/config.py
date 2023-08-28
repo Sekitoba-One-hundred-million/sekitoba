@@ -6,27 +6,10 @@ import datetime
 current_dir = os.getcwd()
 test_data_dir = "{}/test_data".format( current_dir )
 test_today_data_get_error_message = "test_today_data_get/data_get.py"
+test_race_id_list = [ "202302020401", "202302020402", "202302020403", "202302020404", "202302020405", "202302020406", "202302020407", "202302020406", "202302020409", "202302020410", "202302020411", "202302020412", "202303020401", "202303020402", "202303020403", "202303020404", "202303020405", "202303020406", "202303020407", "202303020408", "202303020409", "202303020410", "202303020411", "202303020412", "202307030401", "202307030402", "202307030403", "202307030404", "202307030405", "202307030405", "202307030407", "202307030408", "202307030409", "202307030410", "202307030411", "202307030412" ]
+
+test_today_data_race_id_list = [ "202302020401", "202307030401", "202302020402", "202307030402", "202303020402", "202302020403", "202307030403", "202303020403", "202302020404", "202307030404", "202303020404", "202302020405", "202307030405", "202303020405", "202302020406", "202307030406", "202303020406", "202302020407", "202307030407", "202303020407", "202302020408", "202307030408", "202303020408", "202302020409", "202307030409", "202303020409", "202302020410", "202307030410", "202303020410", "202302020411", "202307030411", "202303020411", "202302020412", "202307030412", "202303020412" ]
 
 def show_erroe_message( test_dir, message ):
     print( test_dir )
     print( message )
-
-def load_test_race_id_list():
-    test_race_id_list = []
-    f = open( "{}/race_id_list.txt".format( test_data_dir ), "r" )
-    all_data = f.readlines()
-
-    for str_data in all_data:
-        test_race_id_list.append( str_data.replace( "\n", "" ) )
-
-    return sorted( test_race_id_list )
-
-def load_today_data_race_id_list():
-    test_race_id_list = []
-    f = open( "{}/today_data_race_id_list.txt".format( test_data_dir ), "r" )
-    all_data = f.readlines()
-
-    for str_data in all_data:
-        test_race_id_list.append( str_data.replace( "\n", "" ) )
-
-    return test_race_id_list

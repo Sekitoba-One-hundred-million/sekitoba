@@ -9,7 +9,7 @@ class CurrentHorceData:
         self.trainer_id = None
         self.odds = None
         self.popular = None
-        self.id_weight = None
+        self.weight = None
         self.omega = None
 
     def before_data_check( self ):
@@ -35,7 +35,7 @@ class CurrentHorceData:
             return False
         elif self.popular == None:
             return False
-        elif self.id_weight == None:
+        elif self.weight == None:
             return False
 
         return True

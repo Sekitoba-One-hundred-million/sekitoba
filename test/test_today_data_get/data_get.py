@@ -18,9 +18,7 @@ def predict_race_id_get_test():
         show_erroe_message( error_func, "fail get race_id_list" )
         sys.exit( 1 )
 
-    test_race_id_list = []
     race_id_list = sorted( race_id_list )
-    test_race_id_list = load_test_race_id_list()
 
     if not len( race_id_list ) == len( test_race_id_list ):
         show_erroe_message( error_func, \
@@ -57,7 +55,6 @@ def today_data_test():
             break
 
     today_data_list = sorted( today_data_list, key = lambda x: x.race_timestamp )
-    test_today_data_race_id_list = load_today_data_race_id_list()
 
     if not len( today_data_list ) == len( test_today_data_race_id_list ):
         show_erroe_message( error_func, \

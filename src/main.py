@@ -12,11 +12,12 @@ dm.dl.prod_on()
 from today_data_get import today_data_list_create
 from data_manage import Storage
 from data_manage import TodayData
-
+from data_create import DataCreate
 #from config import data_name
 #import today_data_get
-import http_data_collect
-import driver_data_collect
+from data_collect import before_data_collect
+from data_collect import just_before_data_collect
+#import driver_data_collect
 #import before_data_collect
 #import data_analyze
 #import predict_and_buy
@@ -62,8 +63,12 @@ def stock_data_create( today_data_list: list[TodayData] ):
 
         #if not today_data_list[i].race_id in stock_data:
         storage = Storage( today_data_list[i] )
-        http_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
-        driver_data_collect.main( storage )
+        before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
+        just_before_data_collect.main( storage )
+        #driver_data_collect.main( storage )
+        data_create = DataCreate( storage )
+        data_create.create()
+        return False
         #driver_data_collect.main( storage ) # driverの必要な情報を取得
         #stock_data[today_data_list[i].url] = storage
         #logger.info( "stockdata create {} {}R".format( today_data_list[i].place, today_data_list[i].num ) )

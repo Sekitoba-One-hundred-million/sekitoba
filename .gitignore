@@ -1,13 +1,12 @@
 data/passward.txt
 src/config/__pycache__
-src/data_analyze/__pycache__
-src/data_analyze/data_create/__pycache__
+src/data_create/__pycache__
 src/data_manage/__pycache__
-src/driver_data_collect/__pycache__
-src/http_data_collect/__pycache__
+src/data_collect/__pycache__
+src/data_collect/driver_data_collect/__pycache__
+src/data_collect/http_data_collect/__pycache__
 src/predict_and_buy/__pycache__
 src/slack_lib/__pycache__
 src/today_data_get/__pycache__
-src/before_data_collect/__pycache__
 test/test_config/__pycache__
 test/test_today_data_get/__pycache__

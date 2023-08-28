@@ -9,7 +9,7 @@ class Storage:
         self.weather = None
         self.dist = None
         self.baba = None
-        self.race_kind = None
+        #self.race_kind = None
         self.all_horce_num = None
         self.race_money = None
         self.outside = None
@@ -21,13 +21,12 @@ class Storage:
         #self.users_data: UsersData = None
 
     def before_data_check( self ):
+        #print( self.weather, self.dist )
         if self.weather == None:
             return False
         elif self.dist == None:
             return False
         elif self.baba == None:
-            return False
-        elif self.race_kind == None:
             return False
         elif self.all_horce_num == None or self.all_horce_num == 0:
             return False
