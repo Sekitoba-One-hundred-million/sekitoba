@@ -2,7 +2,7 @@ import os
 import sys
 import inspect
 import datetime
-from today_data_get.data_get import TodayData
+from data_manage import TodayData
 from today_data_get.data_get import predict_race_id_get
 
 from test_config.config import *

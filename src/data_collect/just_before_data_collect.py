@@ -28,7 +28,7 @@ def main( storage: Storage ):
         race_data_get.main( storage, driver )
 
         for horce_id in storage.current_horce_data.keys():
-            if not storage.current_horce_data[horce_id].just_before_data_check:
+            if not storage.current_horce_data[horce_id].just_before_data_check():
                 continue
 
         break

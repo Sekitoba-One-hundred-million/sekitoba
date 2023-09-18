@@ -37,6 +37,22 @@ for data_info in `cat ${pickle_info}`; do
     fi
 done
 
+for pickle in `cat ${add_pickle_data}`; do
+    prod_data_hash=''
+    prod_data_path="${sekitoba_prod}/${pickle}"
+
+    if [ -e ${prod_data_path} ]; then
+        prod_data_hash=`md5sum ${prod_data_path} | awk -F ' ' '{ print $1 }'`
+    fi
+
+    data_path="${sekitoba_data}/${pickle}"
+    data_hash=`md5sum ${data_path} | awk -F ' ' '{ print $1 }'`
+
+    if [ -z ${prod_data_hash} ]  || [ ${data_hash} != ${prod_data_hash} ]; then
+        cp ${data_path} ${prod_data_path}
+    fi
+done
+
 #バージョンに合わせたcommit-idを取得
 recovery_commit=`commit_get ${recovery_analyze}`
 rank_commit=`commit_get ${rank_learn}`

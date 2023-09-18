@@ -7,7 +7,7 @@ volume='/Volumes/Gilgamesh'
 sekitoba_data="${volume}/sekitoba-data"
 sekitoba_prod="${volume}/sekitoba-prod"
 
-config_dir="${sekitoba_home}/config"
+config_dir="${sekitoba_home}/src/config"
 data_dir="${sekitoba_home}/data"
 data_name_py="${config_dir}/data_name.py"
 pickle_name_py="${config_dir}/pickle_name.py"
@@ -25,6 +25,7 @@ last_passing_rank='last_passing_rank'
 up3='up3'
 
 pickle_info="${sekitoba_home}/${version_manage}/data/pickle_info.txt"
+add_pickle_data="${sekitoba_home}/data/add_pickle_data.txt"
 score_data='common/rank_score_data.txt'
 rank_score_data="${sekitoba_prod}/rank_score_data.txt"
 race_pace_simulation_score_data="${sekitoba_prod}/race_pace_simulation_score_data.txt"

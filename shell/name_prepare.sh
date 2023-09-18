@@ -40,6 +40,11 @@ for data in `cat ${pickle_info}`; do
     echo "${self}${pickle_name} = \"${pickle_name}.pickle\"" >> ${pickle_name_py}
 done
 
+for data in `cat ${add_pickle_data}`; do
+    pickle_name=`echo ${data} | awk -F '.' '{ print $1 }'`
+    echo "${self}${pickle_name} = \"${pickle_name}.pickle\"" >> ${pickle_name_py}
+done
+
 IFS=${OLDIFS}
 
 rm ${instance_file}

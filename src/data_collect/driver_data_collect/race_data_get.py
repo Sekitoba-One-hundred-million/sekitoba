@@ -19,26 +19,21 @@ def horce_id_get( td_tag ):
             
     return horce_id
 
-def id_weight_get( td_tag ):
-    id_weight = None
+def weight_get( td_tag ):
+    weight = None
     
     for td in td_tag:
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and td_class_name[0] == "Weight":
             try:
-                text = td.find( "small" ).text
-                str_id_weight = lib.str_math_pull( lib.text_replace( text ) )
-                id_weight = int( lib.math_check( str_id_weight ) )
-
-                if "-" in text:
-                    id_weight *= -1
+                weight = lib.text_replace( td.text )
             except:
-                id_weight == -1000
-            
+                continue
+
             break
    
-    return id_weight
+    return weight
 
 def odds_get( td_tag ):
     odds = None
@@ -48,7 +43,7 @@ def odds_get( td_tag ):
 
         if not td_class_name == None and td_class_name[0] == "Txt_R" and td_class_name[1] == "Popular":
             str_odds = lib.text_replace( td.text )
-            odds = int( lib.math_check( str_odds ) )
+            odds = float( lib.math_check( str_odds ) )
             break
 
     return odds
@@ -70,7 +65,7 @@ def main( storage: Storage, driver ):
     best_check_count = 0
     best_data_dict = {}
     url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.today_data.race_id
-
+    
     for i in range( 0, 10 ):
         if best_check_count == storage.all_horce_num:
             break
@@ -90,7 +85,7 @@ def main( storage: Storage, driver ):
                 instance_current_horce_data = CurrentHorceData()
                 instance_current_horce_data.odds = odds_get( td_tag )
                 instance_current_horce_data.popular = popular_get( td_tag )
-                instance_current_horce_data.id_weight = id_weight_get( td_tag )
+                instance_current_horce_data.weight = weight_get( td_tag )
                 instance_dict[horce_id] = instance_current_horce_data
 
         check_count = 0
@@ -105,4 +100,4 @@ def main( storage: Storage, driver ):
             for horce_id in instance_dict.keys():
                 storage.current_horce_data[horce_id].odds = instance_dict[horce_id].odds
                 storage.current_horce_data[horce_id].popular = instance_dict[horce_id].popular
-                storage.current_horce_data[horce_id].id_weight = instance_dict[horce_id].id_weight
+                storage.current_horce_data[horce_id].weight = instance_dict[horce_id].weight

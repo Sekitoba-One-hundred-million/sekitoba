@@ -9,6 +9,7 @@ from sekitoba_logger import logger
 
 dm.dl.prod_on()
 
+import predict
 from today_data_get import today_data_list_create
 from data_manage import Storage
 from data_manage import TodayData
@@ -67,7 +68,8 @@ def stock_data_create( today_data_list: list[TodayData] ):
         just_before_data_collect.main( storage )
         #driver_data_collect.main( storage )
         data_create = DataCreate( storage )
-        data_create.create()
+        #data_create.create()
+        predict.main( data_create )
         return False
         #driver_data_collect.main( storage ) # driverの必要な情報を取得
         #stock_data[today_data_list[i].url] = storage
