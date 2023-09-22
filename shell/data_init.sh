@@ -74,6 +74,7 @@ git_clone ${up3} ${up3_commit}
 # 必要なデータをコピー
 cp ${sekitoba_home}/${recovery_analyze}/plus_score.json ${plus_score_json}
 cp ${sekitoba_home}/${recovery_analyze}/minus_score.json ${minus_score_json}
+cp ${sekitoba_home}/${recovery_analyze}/use_score_data.json ${use_score_json}
 cp ${sekitoba_home}/${recovery_analyze}/score_data_name.txt ${recovery_score_data_name}
 cp ${sekitoba_home}/${rank_learn}/${score_data} ${rank_score_data}
 cp ${sekitoba_home}/${race_pace_simulation}/${score_data} ${race_pace_simulation_score_data}

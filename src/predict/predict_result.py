@@ -8,6 +8,7 @@ from predict.first_passing_rank import FirstPassingRank
 from predict.last_passing_rank import LastPassingRank
 from predict.up3 import Up3
 from predict.rank_score import RankScore
+from predict.recovery_score import RecoveryScore
 
 def passing_rank_analyze( passing_data ):
     result = {}
@@ -93,3 +94,4 @@ def main( data_create: DataCreate ):
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3[horce_id]["stand"]
 
     rank_score = RankScore( data_create.analyze_data ).predict()
+    recovery_score = RecoveryScore( data_create.analyze_data ).predict()

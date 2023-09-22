@@ -13,6 +13,8 @@ def data_check( test_race_id, analyze_data ):
             for horce_id in rank_simu_data[race_id].keys():
                 t_data[horce_id] = rank_simu_data[race_id][horce_id]["data"]
 
+            break
+
     create_data = rank_score.create()
 
     for horce_id in create_data.keys():

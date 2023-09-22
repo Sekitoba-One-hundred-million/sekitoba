@@ -16,10 +16,11 @@ from test_predict import first_passing_rank
 from test_predict import last_passing_rank
 from test_predict import up3
 from test_predict import rank_score
+from test_predict import recovery_score
 
 def data_check():
-    test_race_id = test_today_data_race_id_list[0]
-    test_day = datetime.datetime( 2023, 7, 9 )
+    test_race_id = "202306040508"#test_today_data_race_id_list[0]
+    test_day = datetime.datetime( 2023, 9, 18 )#datetime.datetime( 2023, 7, 9 )
     today_data = TodayData( test_race_id, test_day )
     storage = Storage( today_data )
     before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
@@ -66,4 +67,5 @@ def data_check():
         data_create.analyze_data[horce_id][data_name.predict_up3_index] = up3_data[horce_id]["index"]
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3_data[horce_id]["stand"]
 
-    rank_score_data = rank_score.data_check( test_race_id, data_create.analyze_data )
+    rank_score.data_check( test_race_id, data_create.analyze_data )
+    recovery_score.data_check( test_race_id, data_create.analyze_data )

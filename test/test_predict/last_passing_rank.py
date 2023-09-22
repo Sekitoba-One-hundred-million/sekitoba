@@ -17,7 +17,6 @@ def data_check( test_race_id, analyze_data ):
 
     for horce_id in create_data.keys():
         for i in range( 0, len( last_passing_rank.score_key_list ) ):
-
             if "true_skill" in last_passing_rank.score_key_list[i] \
               or "predict" in last_passing_rank.score_key_list[i] \
               or "judgment" in last_passing_rank.score_key_list[i]:

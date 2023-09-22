@@ -35,6 +35,7 @@ last_passing_rank_score_data="${sekitoba_prod}/last_passing_rank_score_data.txt"
 up3_score_data="${sekitoba_prod}/up3_score_data.txt"
 plus_score_json="${sekitoba_prod}/plus_score.json"
 minus_score_json="${sekitoba_prod}/minus_score.json"
+use_score_json="${sekitoba_prod}/use_score_data.json"
 recovery_score_data_name="${sekitoba_prod}/recovery_score_data_name.txt"
 
 git_commit="${sekitoba_home}/${version_manage}/data/git-commit.txt"
