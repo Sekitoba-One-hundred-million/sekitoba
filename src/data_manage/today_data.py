@@ -1,5 +1,7 @@
-import sekitoba_library as lib
+import datetime
 from bs4 import BeautifulSoup
+
+import sekitoba_library as lib
 
 class TodayData:
     def __init__( self, race_id, race_date ):
@@ -53,13 +55,19 @@ class TodayData:
         if not len( split_time ) == 2:
             return -1
 
-        hour = 0
-        minute = 0
+        datetime.datetime( year = int( self.race_date.year ), \
+                          month = int( self.race_date.month ), \
+                          day = int( self.race_date.day ), \
+                          )
+        timestamp = -1
         
         try:
-            hour = int( split_time[0] )
-            minute = int( split_time[1] )
+            timestamp = datetime.datetime( year = int( self.race_date.year ), \
+                                          month = int( self.race_date.month ), \
+                                          day = int( self.race_date.day ), \
+                                          hour = int( split_time[0] ), \
+                                          minute = int( split_time[1] ) ).timestamp()
         except:
             return -1
 
-        return int( hour * 60 + minute )
+        return timestamp

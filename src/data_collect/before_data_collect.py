@@ -52,7 +52,3 @@ def base_collect( storage: Storage ):
 def main( storage: Storage ):
     base_collect( storage )
     train_collect( storage )
-
-    #driver = lib.driver_start()
-    #omega_get.main( storage, driver )
-    #driver.close()

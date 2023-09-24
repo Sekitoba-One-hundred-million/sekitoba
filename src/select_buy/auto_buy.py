@@ -101,7 +101,7 @@ def quinella_button_num_get( driver ):
 
 def one_buy( buy_data_list, today_data: TodayData ):
     have_money = None
-    driver = webdriver.Chrome( '/Users/kansei/Downloads/chromedriver_mac64/chromedriver' )
+    driver = webdriver.Chrome()
 
     for i in range( 0, 5 ):
         driver = login( driver )

@@ -25,6 +25,10 @@ class RacePaceSimulation:
     def create( self ):
         pace_key = "pace"
         learn_data = []
+
+        if len( self.analyze_data ) == 0:
+            return learn_data
+        
         horce_id = list( self.analyze_data.keys() )[-1]
         
         for score_key in self.score_key_list:

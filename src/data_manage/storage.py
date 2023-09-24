@@ -18,7 +18,8 @@ class Storage:
         self.current_horce_data: dict[ str, CurrentHorceData ] = {}
         self.train_data: dict[ str, TrainData ] = {}
         self.past_data: dict[ str, lib.past_data ] = {}
-        #self.users_data: UsersData = None
+        self.skip_horce_id_list = []
+        self.cansel_horce_id_list = []
 
     def before_data_check( self ):
         #print( self.weather, self.dist )

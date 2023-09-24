@@ -76,7 +76,6 @@ class DataCreate:
         self.waku_three_rate_data = dm.dl.data_get( pickle_name.waku_three_rate_data )
         self.up3_ave_data = dm.dl.data_get( pickle_name.up3_ave_data )
 
-        self.skip_horce_id_list = []
         self.waku_three_key_list = [ "place", "dist", "limb", "baba", "kind" ]
         self.score_key_list = []
         self.score_key_get()
@@ -118,7 +117,7 @@ class DataCreate:
         current_race_data[9] = str( self.storage.current_horce_data[horce_id].popular )
         current_race_data[10] = ''
         current_race_data[11] = ''
-        current_race_data[12] = str( int( self.storage.current_horce_data[horce_id].burden_weight ) )
+        current_race_data[12] = str( int( lib.math_check( self.storage.current_horce_data[horce_id].burden_weight ) ) )
         current_race_data[13] = self.storage.dist
         current_race_data[14] = self.storage.baba
         current_race_data[15] = ''
@@ -172,12 +171,12 @@ class DataCreate:
         return int( score )
     
     def create( self ):
+        race_id = self.storage.today_data.race_id
         str_year = str( self.storage.today_data.year )
         str_day = str( self.storage.today_data.day )
         str_num = str( self.storage.today_data.num )
         str_place_num = str( self.storage.today_data.place_num )
         key_money_class = str( int( lib.money_class_get( self.storage.race_money ) ) )
-        race_id = self.storage.today_data.race_id
         ymd = { "y": self.storage.today_data.year, \
                "m": self.storage.today_data.race_date.month, \
                "d": self.storage.today_data.race_date.day }
@@ -199,12 +198,19 @@ class DataCreate:
         horce_id_list = []
         
         for horce_id in self.storage.horce_id_list:
+            if horce_id in self.storage.cansel_horce_id_list:
+                continue
+            
             if not horce_id in self.horce_data_storage:
                 continue
             
-            _, past_data = lib.race_check( self.horce_data_storage[horce_id], \
-                                          str_year, str_day, str_num, str_place_num )
-            current_data = self.current_data_create( horce_id )
+            past_data = self.horce_data_storage[horce_id]
+
+            try:
+                current_data = self.current_data_create( horce_id )
+            except:
+                continue
+            
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
             jockey_id = self.storage.current_horce_data[horce_id].jockey_id
@@ -619,12 +625,19 @@ class DataCreate:
         self.analyze_data[self.pace_name][data_name.min_speed_index] = min_speed_index
 
         for i, horce_id in enumerate( horce_id_list ):
+            if horce_id in self.storage.cansel_horce_id_list:
+                continue
+
             if not horce_id in self.horce_data_storage:
                 continue
+
+            past_data = self.horce_data_storage[horce_id]
+
+            try:
+                current_data = self.current_data_create( horce_id )
+            except:
+                continue
             
-            _, past_data = lib.race_check( self.horce_data_storage[horce_id], \
-                                          str_year, str_day, str_num, str_place_num )
-            current_data = self.current_data_create( horce_id )
             cd = lib.current_data( current_data )
             pd = lib.past_data( past_data, current_data )
             before_cd = pd.before_cd()
@@ -642,7 +655,7 @@ class DataCreate:
                 before_first_passing_rank = -1000
                 before_last_passing_rank = -1000
                 up3_standard_value = -1000
-                self.skip_horce_id_list.append( horce_id )
+                self.storage.skip_horce_id_list.append( horce_id )
             else:
                 before_diff = max( before_cd.diff(), 0 ) * 10
                 before_first_last_diff = before_cd.first_last_diff()

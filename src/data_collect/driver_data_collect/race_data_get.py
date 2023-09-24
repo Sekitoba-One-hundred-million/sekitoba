@@ -79,7 +79,7 @@ def main( storage: Storage, driver ):
         for tr in tr_tag:
             tr_class_name = tr.get( "class" )
 
-            if not tr_class_name == None and tr_class_name[0] == "HorseList":
+            if not tr_class_name == None and tr_class_name[0] == "HorseList":                    
                 td_tag = tr.findAll( "td" )
                 horce_id = horce_id_get( td_tag )
                 instance_current_horce_data = CurrentHorceData()
@@ -88,9 +88,17 @@ def main( storage: Storage, driver ):
                 instance_current_horce_data.weight = weight_get( td_tag )
                 instance_dict[horce_id] = instance_current_horce_data
 
+                if len( tr_class_name ) == 2 and \
+                  tr_class_name[1] == "Cancel" and \
+                  not horce_id in storage.cansel_horce_id_list:
+                    storage.cansel_horce_id_list.append( horce_id )
+
         check_count = 0
         
         for horce_id in instance_dict.keys():
+            if horce_id in storage.cansel_horce_id_list:
+                continue
+            
             if instance_dict[horce_id].just_before_data_check():
                 check_count += 1
 

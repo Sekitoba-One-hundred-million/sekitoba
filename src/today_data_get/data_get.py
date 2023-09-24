@@ -78,8 +78,8 @@ def predict_race_id_get( today: datetime.datetime ):
 
 def today_data_list_create() -> list[TodayData]:
     today_data_list = []
-    #race_id_list, race_day = predict_race_id_get( datetime.datetime.now() )
-    race_id_list, race_day = predict_race_id_get( datetime.datetime( 2023, 7, 9 ) )
+    race_id_list, race_day = predict_race_id_get( datetime.datetime.now() )
+    #race_id_list, race_day = predict_race_id_get( datetime.datetime( 2023, 9, 23 ) )
 
     for race_id in race_id_list:
         today_data = TodayData( race_id, race_day )

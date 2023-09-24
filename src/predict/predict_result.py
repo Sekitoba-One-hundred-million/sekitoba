@@ -53,7 +53,10 @@ def passing_rank_analyze( passing_data ):
 
 def main( data_create: DataCreate ):
     data_create.create()
-    print( "start" )
+
+    if len( data_create.analyze_data ) < 5:
+        return None, None
+    
     race_pace_simulation = RacePaceSimulation( data_create.analyze_data ).predict()
 
     for horce_id in data_create.analyze_data.keys():
@@ -95,3 +98,5 @@ def main( data_create: DataCreate ):
 
     rank_score = RankScore( data_create.analyze_data ).predict()
     recovery_score = RecoveryScore( data_create.analyze_data ).predict()
+
+    return rank_score, recovery_score

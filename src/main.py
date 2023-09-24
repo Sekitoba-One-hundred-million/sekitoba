@@ -10,42 +10,44 @@ from sekitoba_logger import logger
 dm.dl.prod_on()
 
 import predict
+import select_buy
 from today_data_get import today_data_list_create
 from data_manage import Storage
 from data_manage import TodayData
 from data_create import DataCreate
-#from config import data_name
-#import today_data_get
 from data_collect import before_data_collect
 from data_collect import just_before_data_collect
-#import driver_data_collect
-#import before_data_collect
-#import data_analyze
-#import predict_and_buy
 
 def race_wait( today_data ): # :TodayData
     dt_now = datetime.datetime.now()
-    diff_hour = today_data.hour - dt_now.hour
-    diff_minute = today_data.minutue - dt_now.minute
+    diff_timestamp = today_data.race_timestamp - dt_now.timestamp()
     wait_time = 600
-    sleep_min = diff_hour * 3600 + diff_minute * 60 - wait_time
+    sleep_min = int( diff_timestamp - wait_time )
     
     if sleep_min > 0:
-        logger.info( "sleep:{}".format( sleep_min ) )
-        time.sleep( int( sleep_min ) )
+        #logger.info( "sleep:{}".format( sleep_min ) )
+        time.sleep( sleep_min )
     elif sleep_min < -wait_time:
         return False
     
     return True
 
+def bet_check( storage: Storage ):
+    check_all_horce_num = storage.all_horce_num - len( storage.cansel_horce_id_list )
+    
+    if storage.all_horce_num > 10:
+        return False
+
+    skip_horce_len = len( storage.skip_horce_id_list )
+    horce_len = len( storage.horce_id_list )
+
+    if horce_len - skip_horce_len < 5:
+        return False
+
+    return True
+
 def stock_data_create( today_data_list: list[TodayData] ):
-    #logger.info( "stock start" )
-
-    #stock_data = dm.pickle_load( name.stock_name, prod = True )
-    stock_data = dm.pickle_load( "stock_data.pickle", prod = True )
-
-    if stock_data == None:
-        stock_data: dict[Storage] = {}
+    stock_data: dict[Storage] = {}
 
     # 今回のレースで使用しないデータが入っている場合は削除
     use_key_list = []
@@ -61,29 +63,33 @@ def stock_data_create( today_data_list: list[TodayData] ):
     for i in range( 0, len( today_data_list ) ):
         print( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         #logger.info( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
-
-        #if not today_data_list[i].race_id in stock_data:
         storage = Storage( today_data_list[i] )
         before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
-        just_before_data_collect.main( storage )
-        #driver_data_collect.main( storage )
-        data_create = DataCreate( storage )
-        #data_create.create()
-        predict.main( data_create )
-        return False
-        #driver_data_collect.main( storage ) # driverの必要な情報を取得
-        #stock_data[today_data_list[i].url] = storage
-        #logger.info( "stockdata create {} {}R".format( today_data_list[i].place, today_data_list[i].num ) )
-        #dm.pickle_upload( "stock_data.pickle", stock_data, prod = True )
-        #else:
-        #    logger.info( "stockdata existing {} {}R".format( today_data_list[i].place, today_data_list[i].num ) )
+        stock_data[storage.today_data.race_id] = storage
 
-    #logger.info( "stock finish" )
     return stock_data
 
 def main():
     today_data_list: list[TodayData] = today_data_list_create()
-    stock_data_create( today_data_list )
+    stock_data = stock_data_create( today_data_list )
+
+    for i in range( 0, len( today_data_list ) ):
+        race_wait( today_data_list[i] )
+        race_id = today_data_list[i].race_id
+        just_before_data_collect.main( stock_data[race_id] )
+
+        print( "\nstart predict {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
+        data_create = DataCreate( stock_data[race_id] )
+        rank_score, recovery_score = predict.main( data_create )
+
+        if rank_score == None or \
+          recovery_score == None or \
+          not bet_check( stock_data[race_id] ):
+            print( "skip {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
+            continue
+
+        print( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
+        select_buy.main( stock_data[race_id], rank_score, recovery_score )
 
 if __name__ == "__main__":
     main()

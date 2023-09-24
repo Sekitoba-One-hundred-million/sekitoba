@@ -10,7 +10,6 @@ class CurrentHorceData:
         self.odds = None
         self.popular = None
         self.weight = None
-        self.omega = None
 
     def before_data_check( self ):
         if self.horce_num == None:
