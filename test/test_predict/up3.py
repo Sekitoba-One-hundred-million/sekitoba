@@ -4,6 +4,7 @@ import sekitoba_data_manage as dm
 from predict.up3 import Up3
 
 def data_check( test_race_id, analyze_data ):
+    print( "\ncheck up3" )
     up3 = Up3( analyze_data )
     up3_simu_data = dm.pickle_load( "up3_simu_data.pickle" )
     t_data = {}
@@ -18,9 +19,9 @@ def data_check( test_race_id, analyze_data ):
     for horce_id in create_data.keys():
         for i in range( 0, len( up3.score_key_list ) ):
 
-            if "true_skill" in up3.score_key_list[i] \
-              or "predict" in up3.score_key_list[i] \
-              or "judgment" in up3.score_key_list[i]:
+            if "predict" in up3.score_key_list[i]:
+              #or "true_skill" in up3.score_key_list[i] \
+              #or "judgment" in up3.score_key_list[i]:
                 continue
 
             if not create_data[horce_id][i] == t_data[horce_id][i]:

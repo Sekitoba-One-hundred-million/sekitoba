@@ -26,6 +26,7 @@ class FirstPassingRank:
 
     def create( self ):
         learn_data = {}
+        not_found = False
         
         for horce_id in self.analyze_data.keys():
             instance_data = []
@@ -36,13 +37,17 @@ class FirstPassingRank:
             for score_key in self.score_key_list:
                 if not score_key in self.analyze_data[horce_id]:
                     print( "not found {}".format( score_key ) )
-                    sys.exit( 1 )
+                    not_found = True
+                    continue
 
                 if self.analyze_data[horce_id][score_key] == None:
                     print( "score None {}".format( score_key ) )
                     sys.exit( 1 )
 
                 instance_data.append( self.analyze_data[horce_id][score_key] )
+
+            if not_found:
+                sys.exit( 1 )
 
             learn_data[horce_id] = instance_data
 
@@ -55,8 +60,19 @@ class FirstPassingRank:
             return None
 
         predict_data = {}
+        score_list = []
 
         for horce_id in learn_data.keys():
-            predict_data[horce_id] = self.model.predict( [ learn_data[horce_id] ] )[0]
+            lib.dic_append( predict_data, horce_id, {} )
+            score = self.model.predict( [ learn_data[horce_id] ] )[0]
+            predict_data[horce_id]["score"] = score
+            score_list.append( score )
+
+        stand_score_list = lib.standardization( score_list )
+        sort_score_list = sorted( score_list, reverse = True )
+
+        for i, horce_id in enumerate( learn_data.keys() ):
+            predict_data[horce_id]["index"] = sort_score_list.index( predict_data[horce_id]["score"] )
+            predict_data[horce_id]["stand"] = stand_score_list[i]
 
         return predict_data

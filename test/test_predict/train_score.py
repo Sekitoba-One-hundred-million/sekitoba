@@ -4,6 +4,7 @@ import sekitoba_data_manage as dm
 from predict.train_score import TrainScore
 
 def data_check( test_race_id, analyze_data ):
+    print( "\ncheck train_score" )
     train_score = TrainScore( analyze_data )
     train_simu_data = dm.pickle_load( "train_simu_data.pickle" )
     t_data = {}

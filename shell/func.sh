@@ -19,6 +19,7 @@ sekitoba_library='sekitoba_library'
 recovery_analyze='recovery_analyze'
 rank_learn='rank_learn'
 race_pace_simulation='race_pace_simulation'
+rough_race='rough_race'
 train_score='train_score'
 first_passing_rank='first_passing_rank'
 last_passing_rank='last_passing_rank'
@@ -29,6 +30,7 @@ add_pickle_data="${sekitoba_home}/data/add_pickle_data.txt"
 score_data='common/rank_score_data.txt'
 rank_score_data="${sekitoba_prod}/rank_score_data.txt"
 race_pace_simulation_score_data="${sekitoba_prod}/race_pace_simulation_score_data.txt"
+rough_race_score_data="${sekitoba_prod}/rough_race_score_data.txt"
 train_score_data="${sekitoba_prod}/train_score_score_data.txt"
 first_passing_rank_score_data="${sekitoba_prod}/first_passing_rank_score_data.txt"
 last_passing_rank_score_data="${sekitoba_prod}/last_passing_rank_score_data.txt"
@@ -86,6 +88,10 @@ function remove_not_need_data {
     
     if [ -d ${up3} ]; then
         rm -rf ${up3}
+    fi
+
+    if [ -d ${rough_race} ]; then
+        rm -rf ${rough_race}
     fi
 
     if [ -e ${instance_file} ]; then

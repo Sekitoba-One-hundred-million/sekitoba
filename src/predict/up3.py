@@ -26,6 +26,7 @@ class Up3:
 
     def create( self ):
         learn_data = {}
+        not_found = False
         
         for horce_id in self.analyze_data.keys():
             instance_data = []
@@ -36,7 +37,8 @@ class Up3:
             for score_key in self.score_key_list:
                 if not score_key in self.analyze_data[horce_id]:
                     print( "not found {}".format( score_key ) )
-                    sys.exit( 1 )
+                    not_found = True
+                    continue
 
                 if self.analyze_data[horce_id][score_key] == None:
                     print( "score None {}".format( score_key ) )
@@ -45,6 +47,9 @@ class Up3:
                 instance_data.append( self.analyze_data[horce_id][score_key] )
 
             learn_data[horce_id] = instance_data
+
+            if not_found:
+                sys.exit( 1 )
 
         return learn_data
 
@@ -59,15 +64,12 @@ class Up3:
 
         for horce_id in learn_data.keys():
             predict_data[horce_id] = {}
-            predict_lag = self.model.predict( [ learn_data[horce_id] ] )[0]
-            predict_data[horce_id]["score"] = ( 1 + predict_lag ) * self.analyze_data[horce_id]["ave_up3"]
+            predict_data[horce_id]["score"] = self.model.predict( [ learn_data[horce_id] ] )[0]
             score_list.append( predict_data[horce_id]["score"] )
 
-        sort_score_list = sorted( score_list )
         stand_score_list = lib.standardization( score_list )
 
         for i, horce_id in enumerate( predict_data.keys() ):
-            predict_data[horce_id]["index"] = sort_score_list.index( score_list[i] )
             predict_data[horce_id]["stand"] = stand_score_list[i]
 
         return predict_data

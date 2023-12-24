@@ -1,3 +1,4 @@
+import copy
 from bs4 import BeautifulSoup
 
 import sekitoba_library as lib
@@ -221,3 +222,60 @@ def race_money_get( soup ):
             break
 
     return money
+
+def predict_netkeiba_pace( soup ):
+    dl_tag = soup.findAll( 'dl' )
+
+    for dl in dl_tag:
+        class_name = dl.get( 'class' )
+
+        if not class_name == None and \
+          class_name[0] == 'RacePace':
+            try:
+                dd = dl.find( 'dd' )
+                result = lib.text_replace( dd.text )
+                break
+            except:
+                continue
+
+    return lib.netkeiba_pace( result )
+
+def predict_netkeiba_deployment( soup ):
+    result = []
+    div_tag = soup.findAll( 'div' )
+
+    for div in div_tag:
+        class_name = div.get( 'class' )
+        data_slick_index_name = div.get( 'data-slick-index' )
+        
+        if not class_name == None and \
+          class_name[0] == 'DeployRace_SlideBoxItem':
+            li_tag = div.findAll( "li" )
+            count = 0
+            key = ''
+            instance_list = []
+
+            for li in li_tag:
+                dt = li.find( "dt" )
+
+                if not dt == None:
+                    if not len( key ) == 0:
+                        result.append( copy.deepcopy( instance_list ) )
+                        instance_list = []
+
+                    key = lib.text_replace( dt.text )
+                    continue
+
+                try:
+                    instance_list.append( int( lib.text_replace( li.find( "span" ).text ) ) )
+                except:
+                    continue
+                
+            break
+
+    try:
+        result.append( copy.deepcopy( instance_list ) )
+    except:
+        pass
+        
+    return result

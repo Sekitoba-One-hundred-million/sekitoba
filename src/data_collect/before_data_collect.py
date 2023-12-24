@@ -16,6 +16,8 @@ def base_collect( storage: Storage ):
             storage.weather = weather_get( soup )
             storage.baba = baba_get( soup )
             storage.race_money = race_money_get( soup )
+            storage.predict_netkeiba_pace = predict_netkeiba_pace( soup )
+            storage.predict_netkeiba_deployment = predict_netkeiba_deployment( soup )
 
         tr_tag = soup.findAll( "tr" )
 
@@ -52,3 +54,4 @@ def base_collect( storage: Storage ):
 def main( storage: Storage ):
     base_collect( storage )
     train_collect( storage )
+    condition_devi_collect( storage )

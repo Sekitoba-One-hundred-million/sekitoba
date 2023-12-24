@@ -32,20 +32,6 @@ def race_wait( today_data ): # :TodayData
     
     return True
 
-def bet_check( storage: Storage ):
-    check_all_horce_num = storage.all_horce_num - len( storage.cansel_horce_id_list )
-    
-    if storage.all_horce_num > 10:
-        return False
-
-    skip_horce_len = len( storage.skip_horce_id_list )
-    horce_len = len( storage.horce_id_list )
-
-    if horce_len - skip_horce_len < 5:
-        return False
-
-    return True
-
 def stock_data_create( today_data_list: list[TodayData] ):
     stock_data: dict[Storage] = {}
 
@@ -80,16 +66,14 @@ def main():
 
         print( "\nstart predict {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         data_create = DataCreate( stock_data[race_id] )
-        rank_score, recovery_score = predict.main( data_create )
+        rank_score = predict.main( data_create )
 
-        if rank_score == None or \
-          recovery_score == None or \
-          not bet_check( stock_data[race_id] ):
+        if rank_score == None:
             print( "skip {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
             continue
 
         print( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
-        select_buy.main( stock_data[race_id], rank_score, recovery_score )
+        select_buy.main( stock_data[race_id], rank_score )
 
 if __name__ == "__main__":
     main()

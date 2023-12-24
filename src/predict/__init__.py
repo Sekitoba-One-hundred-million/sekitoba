@@ -6,3 +6,4 @@ from predict.last_passing_rank import LastPassingRank
 from predict.up3 import Up3
 from predict.rank_score import RankScore
 from predict.recovery_score import RecoveryScore
+from predict.rough_race import RoughRace

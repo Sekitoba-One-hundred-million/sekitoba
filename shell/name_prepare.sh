@@ -12,6 +12,7 @@ cat ${first_passing_rank_score_data} >> ${instance_file}
 cat ${last_passing_rank_score_data} >> ${instance_file}
 cat ${up3_score_data} >> ${instance_file}
 cat ${recovery_score_data_name} >> ${instance_file}
+cat ${rough_race_score_data} >> ${instance_file}
 
 sort ${instance_file} | uniq >> ${score_file}
 

@@ -6,17 +6,17 @@ import sekitoba_data_manage as dm
 from config import pickle_name
 from config import prod_dir
 
-dm.dl.file_set( pickle_name.pace_model )
+dm.dl.file_set( pickle_name.rough_race_model )
 
-class RacePaceSimulation:
+class RoughRace:
     def __init__( self, analyze_data ):
         self.analyze_data = analyze_data
-        self.model = dm.dl.data_get( pickle_name.pace_model )
+        self.model = dm.dl.data_get( pickle_name.rough_race_model )
         self.score_key_list = []
         self.score_key_get()
 
     def score_key_get( self ):
-        f = open( prod_dir + "/race_pace_simulation_score_data.txt" )
+        f = open( prod_dir + "/rough_race_score_data.txt" )
         all_data = f.readlines()
 
         for str_data in all_data:

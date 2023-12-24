@@ -10,4 +10,4 @@ remove_update_data
 
 remove_not_need_data
 
-python src/main.py
+#python src/main.py

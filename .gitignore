@@ -1,4 +1,3 @@
-chromedriver
 data/passward.txt
 src/config/__pycache__
 src/data_create/__pycache__

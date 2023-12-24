@@ -26,6 +26,7 @@ class RankScore:
 
     def create( self ):
         learn_data = {}
+        not_found = False
         
         for horce_id in self.analyze_data.keys():
             instance_data = []
@@ -36,13 +37,17 @@ class RankScore:
             for score_key in self.score_key_list:
                 if not score_key in self.analyze_data[horce_id]:
                     print( "not found {}".format( score_key ) )
-                    sys.exit( 1 )
+                    not_found = True
+                    continue
 
                 if self.analyze_data[horce_id][score_key] == None:
                     print( "score None {}".format( score_key ) )
                     sys.exit( 1 )
 
                 instance_data.append( self.analyze_data[horce_id][score_key] )
+
+            if not_found:
+                sys.exit( 1 )
 
             learn_data[horce_id] = instance_data
 

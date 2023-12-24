@@ -14,7 +14,7 @@ for data_info in `cat ${pickle_info}`; do
     data_path=''
 
     if [[ ${file_name} == 'None' ]]; then
-        data_path="${sekitoba_data}/${version}/${data}"
+        data_path="${sekitoba_data}/prod/${data}"
 
         if [ ! -e ${data_path} ]; then
             data_path="${sekitoba_data}/${data}"
@@ -57,6 +57,7 @@ done
 recovery_commit=`commit_get ${recovery_analyze}`
 rank_commit=`commit_get ${rank_learn}`
 race_pace_simulation_commit=`commit_get ${race_pace_simulation}`
+rough_race_commit=`commit_get ${rough_race}`
 train_score_commit=`commit_get ${train_score}`
 first_passing_rank_commit=`commit_get ${first_passing_rank}`
 last_passing_rank_commit=`commit_get ${last_passing_rank}`
@@ -64,6 +65,7 @@ up3_commit=`commit_get ${up3}`
 
 #必要なデータ取得のためにレポジトリをクローン
 git_clone ${recovery_analyze} ${recovery_commit}
+git_clone ${rough_race} ${rough_race_commit}
 git_clone ${rank_learn} ${rank_commit}
 git_clone ${race_pace_simulation} ${race_pace_simulation_commit}
 git_clone ${train_score} ${train_score_commit}
@@ -71,6 +73,7 @@ git_clone ${first_passing_rank} ${first_passing_rank_commit}
 git_clone ${last_passing_rank} ${last_passing_rank_commit}
 git_clone ${up3} ${up3_commit}
 
+echo ${rough_race_commit}
 # 必要なデータをコピー
 cp ${sekitoba_home}/${recovery_analyze}/plus_score.json ${plus_score_json}
 cp ${sekitoba_home}/${recovery_analyze}/minus_score.json ${minus_score_json}
@@ -78,6 +81,7 @@ cp ${sekitoba_home}/${recovery_analyze}/use_score_data.json ${use_score_json}
 cp ${sekitoba_home}/${recovery_analyze}/score_data_name.txt ${recovery_score_data_name}
 cp ${sekitoba_home}/${rank_learn}/${score_data} ${rank_score_data}
 cp ${sekitoba_home}/${race_pace_simulation}/${score_data} ${race_pace_simulation_score_data}
+cp ${sekitoba_home}/${rough_race}/${score_data} ${rough_race_score_data}
 cp ${sekitoba_home}/${train_score}/${score_data} ${train_score_data}
 cp ${sekitoba_home}/${first_passing_rank}/${score_data} ${first_passing_rank_score_data}
 cp ${sekitoba_home}/${last_passing_rank}/${score_data} ${last_passing_rank_score_data}

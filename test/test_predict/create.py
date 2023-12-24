@@ -16,7 +16,7 @@ from test_predict import first_passing_rank
 from test_predict import last_passing_rank
 from test_predict import up3
 from test_predict import rank_score
-from test_predict import recovery_score
+from test_predict import rough_race
 
 def data_check():
     test_race_id = "202306040508"#test_today_data_race_id_list[0]
@@ -33,6 +33,11 @@ def data_check():
     for horce_id in data_create.analyze_data.keys():
         data_create.analyze_data[horce_id][data_name.predict_pace] = race_pace_data
 
+    rough_race_data = rough_race.data_check( test_race_id, data_create.analyze_data )
+
+    for horce_id in data_create.analyze_data.keys():
+        data_create.analyze_data[horce_id][data_name.predict_rough_rate] = rough_race_data
+    
     train_score_data = train_score.data_check( test_race_id, data_create.analyze_data )
 
     for horce_id in train_score_data.keys():
@@ -41,7 +46,6 @@ def data_check():
         data_create.analyze_data[horce_id][data_name.predict_train_score_stand] = train_score_data[horce_id]["stand"]
 
     first_passing_rank_data = first_passing_rank.data_check( test_race_id, data_create.analyze_data )
-    first_passing_rank_data = passing_rank_analyze( first_passing_rank_data )
 
     for horce_id in first_passing_rank_data.keys():
         data_create.analyze_data[horce_id][data_name.predict_first_passing_rank] = first_passing_rank_data[horce_id]["score"]
@@ -49,11 +53,6 @@ def data_check():
         data_create.analyze_data[horce_id][data_name.predict_first_passing_rank_stand] = first_passing_rank_data[horce_id]["stand"]
 
     last_passing_rank_data = last_passing_rank.data_check( test_race_id, data_create.analyze_data )
-
-    for horce_id in last_passing_rank_data.keys():
-        last_passing_rank_data[horce_id] += data_create.analyze_data[horce_id][data_name.predict_first_passing_rank]
-
-    last_passing_rank_data = passing_rank_analyze( last_passing_rank_data )
 
     for horce_id in last_passing_rank_data.keys():
         data_create.analyze_data[horce_id][data_name.predict_last_passing_rank] = last_passing_rank_data[horce_id]["score"]
@@ -64,8 +63,6 @@ def data_check():
 
     for horce_id in up3_data.keys():
         data_create.analyze_data[horce_id][data_name.predict_up3] = up3_data[horce_id]["score"]
-        data_create.analyze_data[horce_id][data_name.predict_up3_index] = up3_data[horce_id]["index"]
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3_data[horce_id]["stand"]
 
     rank_score.data_check( test_race_id, data_create.analyze_data )
-    recovery_score.data_check( test_race_id, data_create.analyze_data )

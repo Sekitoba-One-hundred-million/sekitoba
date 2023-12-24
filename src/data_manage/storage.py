@@ -13,11 +13,14 @@ class Storage:
         self.all_horce_num = None
         self.race_money = None
         self.outside = None
+        self.predict_netkeiba_pace = None
+        self.predict_netkeiba_deployment: list = []
         self.today_data: TodayData = today_data
         self.horce_id_list = []
         self.current_horce_data: dict[ str, CurrentHorceData ] = {}
         self.train_data: dict[ str, TrainData ] = {}
         self.past_data: dict[ str, lib.past_data ] = {}
+        self.condition_devi: dict[ str, float ] = {}
         self.skip_horce_id_list = []
         self.cansel_horce_id_list = []
 

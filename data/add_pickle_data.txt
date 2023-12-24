@@ -1,3 +1,4 @@
+rough_race_model.pickle
 rank_model.pickle
 pace_model.pickle
 train_model.pickle

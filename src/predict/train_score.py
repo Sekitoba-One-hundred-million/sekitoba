@@ -32,10 +32,13 @@ class TrainScore:
             if horce_id == "pace":
                 continue
 
+            not_found = False
             for score_key in self.score_key_list:
                 if not score_key in self.analyze_data[horce_id]:
                     print( "not found {}".format( score_key ) )
-                    sys.exit( 1 )
+                    not_found = True
+                    continue
+                    #sys.exit( 1 )
 
                 if self.analyze_data[horce_id][score_key] == None:
                     print( "score None {}".format( score_key ) )
@@ -43,8 +46,11 @@ class TrainScore:
 
                 instance_data.append( self.analyze_data[horce_id][score_key] )
 
-            learn_data[horce_id] = instance_data
+            if not_found:
+                sys.exit( 1 )
 
+            learn_data[horce_id] = instance_data
+            
         return learn_data
 
     def predict( self ):
