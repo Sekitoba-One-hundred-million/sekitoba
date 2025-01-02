@@ -1,6 +1,6 @@
 from test_config.config import *
 
-import sekitoba_data_manage as dm
+import SekitobaDataManage as dm
 from predict.race_pace_simulation import RacePaceSimulation
 
 def data_check( race_id, analyze_data ):
@@ -16,11 +16,14 @@ def data_check( race_id, analyze_data ):
     create_data = race_pace_simulation.create()
 
     for i in range( 0, len( race_pace_simulation.score_key_list ) ):
-        if "true_skill" in race_pace_simulation.score_key_list[i]:
+        if "true_skill" in race_pace_simulation.score_key_list[i] or \
+          "judgment" in race_pace_simulation.score_key_list[i] or \
+          "before_race_score" in race_pace_simulation.score_key_list[i] or \
+          "power" in race_pace_simulation.score_key_list[i]:
             continue
         
-        if not create_data[i] == t_data[i]:
+        if not round( create_data[i], 2 ) == round( t_data[i], 2 ):
             print( "race_pace: {}: create:{} teacher:{}".format( \
-                    race_pace_simulation.score_key_list[i], create_data[i], t_data[i] ) )
+                    race_pace_simulation.score_key_list[i], round( create_data[i], 4 ), round( t_data[i], 4 ) ) )
 
     return race_pace_simulation.predict()

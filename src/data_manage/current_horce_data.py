@@ -10,6 +10,8 @@ class CurrentHorceData:
         self.odds = None
         self.popular = None
         self.weight = None
+        self.father_id = ""
+        self.mother_id = ""
 
     def before_data_check( self ):
         if self.horce_num == None:

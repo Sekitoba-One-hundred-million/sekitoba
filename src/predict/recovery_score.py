@@ -1,8 +1,8 @@
 import sys
 import json
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 from config import data_name
 from config import prod_dir

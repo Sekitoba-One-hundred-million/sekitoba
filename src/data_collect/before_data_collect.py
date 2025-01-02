@@ -1,4 +1,4 @@
-import sekitoba_library as lib
+import SekitobaLibrary as lib
 from data_manage import Storage
 from data_collect.http_data_collect import *
 from data_collect.driver_data_collect import *
@@ -26,19 +26,27 @@ def base_collect( storage: Storage ):
 
             if not tr_class_name == None and tr_class_name[0] == "HorseList":
                 td_tag = tr.findAll( "td" )
-                horce_id = horce_id_get( td_tag )
+                horce_id = horce_idGet( td_tag )
+                jockey_id = joceky_idGet( td_tag )
+                trainer_id = trainer_idGet( td_tag )
                 current_horce_data = CurrentHorceData()
                 current_horce_data.horce_num = horce_number_get( td_tag )
                 current_horce_data.waku_num = waku_number_get( td_tag )
                 current_horce_data.age = age_get( td_tag )
                 current_horce_data.sex = sex_get( td_tag )
                 current_horce_data.burden_weight = burden_weight_get( td_tag )
-                current_horce_data.jockey_id = joceky_id_get( td_tag )
-                current_horce_data.trainer_id = trainer_id_get( td_tag )
+                current_horce_data.jockey_id = jockey_id
+                current_horce_data.trainer_id = trainer_id
                 storage.current_horce_data[horce_id] = current_horce_data
 
                 if not horce_id in storage.horce_id_list:
                     storage.horce_id_list.append( horce_id )
+
+                if not jockey_id in storage.jockey_id_list:
+                    storage.jockey_id_list.append( jockey_id )
+
+                if not trainer_id in storage.trainer_id_list:
+                    storage.trainer_id_list.append( trainer_id )
                 
         storage.all_horce_num = len( storage.horce_id_list )
         current_horce_data_check = False
@@ -55,3 +63,9 @@ def main( storage: Storage ):
     base_collect( storage )
     train_collect( storage )
     condition_devi_collect( storage )
+    horce_data_collect( storage )
+
+    driver = lib.driverStart()
+    driver = lib.login( driver )
+    first_up3_collect( storage, driver )
+    driver.quit()

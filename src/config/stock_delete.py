@@ -3,7 +3,7 @@ sys.path.append( "/Users/kansei/ghq/github.com/Sekitoba-One-hundred-million/seki
 sys.path.append( "/Users/kansei/ghq/github.com/Sekitoba-One-hundred-million/sekitoba/storage" )
 
 from data_manage.storage import Storage
-import sekitoba_data_manage as dm
+import SekitobaDataManage as dm
 
 stock_data = dm.pickle_load( "stock_data.pickle", prod = True )
 args = sys.argv

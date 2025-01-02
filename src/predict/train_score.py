@@ -1,7 +1,8 @@
 import sys
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
+from SekitobaLogger import logger
 
 from config import pickle_name
 from config import prod_dir
@@ -13,6 +14,7 @@ class TrainScore:
         self.analyze_data = analyze_data
         self.model = dm.dl.data_get( pickle_name.train_model )
 
+        self.log_data = {}
         self.score_key_list = []
         self.score_key_get()
 
@@ -21,16 +23,13 @@ class TrainScore:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.text_replace( str_data ) )
+            self.score_key_list.append( lib.textReplace( str_data ) )
 
     def create( self ):
         learn_data = {}
         
         for horce_id in self.analyze_data.keys():
             instance_data = []
-            
-            if horce_id == "pace":
-                continue
 
             not_found = False
             for score_key in self.score_key_list:
@@ -45,12 +44,14 @@ class TrainScore:
                     sys.exit( 1 )
 
                 instance_data.append( self.analyze_data[horce_id][score_key] )
-
+                lib.dicAppend( self.log_data, horce_id, {} )
+                self.log_data[horce_id][score_key] = self.analyze_data[horce_id][score_key]
+                
             if not_found:
                 sys.exit( 1 )
 
             learn_data[horce_id] = instance_data
-            
+
         return learn_data
 
     def predict( self ):

@@ -1,7 +1,7 @@
 import sys
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 from config import pickle_name
 from config import prod_dir
@@ -20,7 +20,7 @@ class RacePaceSimulation:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.text_replace( str_data ) )
+            self.score_key_list.append( lib.textReplace( str_data ) )
 
     def create( self ):
         learn_data = []
@@ -36,7 +36,6 @@ class RacePaceSimulation:
                 print( "not found {}".format( score_key ) )
                 not_found = True
                 continue
-                #sys.exit( 1 )
 
             if self.analyze_data[horce_id][score_key] == None:
                 print( "score None {}".format( score_key ) )
@@ -53,5 +52,15 @@ class RacePaceSimulation:
         return learn_data
 
     def predict( self ):
+        result = {}
         learn_data = self.create()
-        return self.model.predict( [ learn_data ] )[0]
+
+        for key in self.model.keys():
+            score = 0
+            for m in self.model[key]:
+                score += m.predict( [ learn_data ] )[0]
+                
+            result[key] = score / len( self.model[key] )
+            print( key, result[key] )
+
+        return result

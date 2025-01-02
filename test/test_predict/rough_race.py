@@ -1,6 +1,6 @@
 from test_config.config import *
 
-import sekitoba_data_manage as dm
+import SekitobaDataManage as dm
 from predict.rough_race import RoughRace
 
 def data_check( race_id, analyze_data ):

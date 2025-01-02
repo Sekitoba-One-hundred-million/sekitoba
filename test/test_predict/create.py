@@ -19,8 +19,8 @@ from test_predict import rank_score
 from test_predict import rough_race
 
 def data_check():
-    test_race_id = "202306040508"#test_today_data_race_id_list[0]
-    test_day = datetime.datetime( 2023, 9, 18 )#datetime.datetime( 2023, 7, 9 )
+    test_race_id = "202406040904"#test_today_data_race_id_list[0]
+    test_day = datetime.datetime( 2024, 9, 29 )
     today_data = TodayData( test_race_id, test_day )
     storage = Storage( today_data )
     before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
@@ -31,19 +31,8 @@ def data_check():
     race_pace_data = race_pace_simulation.data_check( test_race_id, data_create.analyze_data )
 
     for horce_id in data_create.analyze_data.keys():
-        data_create.analyze_data[horce_id][data_name.predict_pace] = race_pace_data
-
-    rough_race_data = rough_race.data_check( test_race_id, data_create.analyze_data )
-
-    for horce_id in data_create.analyze_data.keys():
-        data_create.analyze_data[horce_id][data_name.predict_rough_rate] = rough_race_data
-    
-    train_score_data = train_score.data_check( test_race_id, data_create.analyze_data )
-
-    for horce_id in train_score_data.keys():
-        data_create.analyze_data[horce_id][data_name.predict_train_score] = train_score_data[horce_id]["score"]
-        data_create.analyze_data[horce_id][data_name.predict_train_score_index] = train_score_data[horce_id]["index"]
-        data_create.analyze_data[horce_id][data_name.predict_train_score_stand] = train_score_data[horce_id]["stand"]
+        for key in race_pace_data.keys():
+            data_create.analyze_data[horce_id]["predict_"+key] = race_pace_data[key]
 
     first_passing_rank_data = first_passing_rank.data_check( test_race_id, data_create.analyze_data )
 
@@ -66,3 +55,4 @@ def data_check():
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3_data[horce_id]["stand"]
 
     rank_score.data_check( test_race_id, data_create.analyze_data )
+    return

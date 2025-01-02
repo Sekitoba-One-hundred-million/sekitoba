@@ -1,5 +1,5 @@
-import sekitoba_library as lib
-from sekitoba_logger import logger
+import SekitobaLibrary as lib
+from SekitobaLogger import logger
 
 import config
 from data_manage import Storage
@@ -72,11 +72,11 @@ def place_button_num_get( soup, place ):
         if not class_name == None and len( class_name ) == 1 and class_name[0] == "place-name":
             place_num += 1
             
-            if place in lib.text_replace( div.text ):
+            if place in lib.textReplace( div.text ):
                 break
 
     return place_num
 
 def wide_buy( buy_data_list, storage: Storage ):
-    driver = lib.driver_start()
+    driver = lib.driverStart()
     driver = login( driver )

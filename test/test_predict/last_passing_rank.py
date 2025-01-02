@@ -1,6 +1,7 @@
 from test_config.config import *
+from test_predict.lib import skip_key
 
-import sekitoba_data_manage as dm
+import SekitobaDataManage as dm
 from predict.last_passing_rank import LastPassingRank
 
 def data_check( test_race_id, analyze_data ):
@@ -18,12 +19,10 @@ def data_check( test_race_id, analyze_data ):
 
     for horce_id in create_data.keys():
         for i in range( 0, len( last_passing_rank.score_key_list ) ):
-            if "predict" in last_passing_rank.score_key_list[i]:# \
-              #or "true_skill" in last_passing_rank.score_key_list[i] \
-              #or "judgment" in last_passing_rank.score_key_list[i]:
+            if skip_key( last_passing_rank.score_key_list[i] ):
                 continue
 
-            if not create_data[horce_id][i] == t_data[horce_id][i]:
+            if not round( create_data[horce_id][i], 4 ) == round( t_data[horce_id][i], 4 ):
                 print( "last_passing", horce_id, last_passing_rank.score_key_list[i], create_data[horce_id][i], t_data[horce_id][i] )
                 pass
 

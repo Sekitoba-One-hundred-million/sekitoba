@@ -14,7 +14,7 @@ for data_info in `cat ${pickle_info}`; do
     data_path=''
 
     if [[ ${file_name} == 'None' ]]; then
-        data_path="${sekitoba_data}/prod/${data}"
+        data_path="${sekitoba_data}/${version}/${data}"
 
         if [ ! -e ${data_path} ]; then
             data_path="${sekitoba_data}/${data}"
@@ -45,7 +45,12 @@ for pickle in `cat ${add_pickle_data}`; do
         prod_data_hash=`md5sum ${prod_data_path} | awk -F ' ' '{ print $1 }'`
     fi
 
-    data_path="${sekitoba_data}/${pickle}"
+    data_path="${sekitoba_data}/${version}/${pickle}"
+
+    if [ ! -f ${data_path} ]; then
+        continue
+    fi
+    
     data_hash=`md5sum ${data_path} | awk -F ' ' '{ print $1 }'`
 
     if [ -z ${prod_data_hash} ]  || [ ${data_hash} != ${prod_data_hash} ]; then

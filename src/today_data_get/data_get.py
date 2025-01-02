@@ -2,10 +2,10 @@ import datetime
 from bs4 import BeautifulSoup
 
 from data_manage import TodayData
-from sekitoba_logger import logger
-import sekitoba_library as lib
+from SekitobaLogger import logger
+import SekitobaLibrary as lib
 
-def race_base_id_get( soup ):
+def race_base_idGet( soup ):
     race_id_list = []
     p_tag = soup.findAll( "p" )
 
@@ -18,21 +18,21 @@ def race_base_id_get( soup ):
             try:
                 split_data = p.text.split( " " )
                 str_count = split_data[0].replace( "回", "" )
-                place_num = str( int( lib.place_num( split_data[1] ) ) )
+                place_num = str( int( lib.placeNum( split_data[1] ) ) )
                 str_day = split_data[2].replace( "日目", "" )
             except:
                 continue
 
-            base_id = lib.padding_str_math( place_num ) + lib.padding_str_math( str_count ) + lib.padding_str_math( str_day )
+            base_id = lib.paddingStrMath( place_num ) + lib.paddingStrMath( str_count ) + lib.paddingStrMath( str_day )
 
             for i in range( 1, 13 ):
-                race_id_list.append( base_id + lib.padding_str_math( str( i ) ) )
+                race_id_list.append( base_id + lib.paddingStrMath( str( i ) ) )
 
     return race_id_list
 
-def predict_race_id_get( today: datetime.datetime ):
+def predict_race_idGet( today: datetime.datetime ):
     race_id_list = []
-    driver = lib.driver_start()
+    driver = lib.driverStart()
     base_url = "https://race.netkeiba.com/top/?kaisai_date="
     race_day = None
     days = 0
@@ -43,14 +43,14 @@ def predict_race_id_get( today: datetime.datetime ):
     while 1:
         check_day = today + datetime.timedelta( days = days )
         data_id = str( check_day.year ) + \
-          lib.padding_str_math( str( check_day.month ) ) + \
-          lib.padding_str_math( str( check_day.day ) )
+          lib.paddingStrMath( str( check_day.month ) ) + \
+          lib.paddingStrMath( str( check_day.day ) )
 
         url = base_url + data_id
-        driver, _ = lib.driver_request( driver, url )
+        driver, _ = lib.driverRequest( driver, url )
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup( html, "html.parser" )
-        race_id_list = race_base_id_get( soup )
+        race_id_list = race_base_idGet( soup )
 
         if not len( race_id_list ) == 0:
             race_day = check_day
@@ -78,8 +78,8 @@ def predict_race_id_get( today: datetime.datetime ):
 
 def today_data_list_create() -> list[TodayData]:
     today_data_list = []
-    race_id_list, race_day = predict_race_id_get( datetime.datetime.now() )
-    #race_id_list, race_day = predict_race_id_get( datetime.datetime( 2023, 9, 23 ) )
+    race_id_list, race_day = predict_race_idGet( datetime.datetime.now() )
+    #race_id_list, race_day = predict_race_idGet( datetime.datetime( 2024, 1, 14 ) )
 
     for race_id in race_id_list:
         today_data = TodayData( race_id, race_day )

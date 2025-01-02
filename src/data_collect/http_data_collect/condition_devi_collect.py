@@ -2,8 +2,8 @@ import time
 import datetime
 from bs4 import BeautifulSoup
 
-from sekitoba_logger import logger
-import sekitoba_library as lib
+from SekitobaLogger import logger
+import SekitobaLibrary as lib
 import copy
 
 from data_manage import Storage
@@ -29,7 +29,7 @@ def condition_devi_collect( storage: Storage ):
                 a_tag = td_tag[2].find( "a" )
                 horce_id = a_tag.get( "href" ).split( "&" )[0].split( "horse_id=" )[-1]
                 span_tag = td_tag[3].findAll( "span" )
-                condition_devi = float( lib.text_replace( span_tag[0].text ) )
+                condition_devi = float( lib.textReplace( span_tag[0].text ) )
                 storage.condition_devi[horce_id] = condition_devi
             except:
                 continue

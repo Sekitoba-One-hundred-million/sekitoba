@@ -1,4 +1,4 @@
-import sekitoba_library as lib
+import SekitobaLibrary as lib
 from data_manage import Storage
 from data_collect.http_data_collect import *
 from data_collect.driver_data_collect import *
@@ -15,13 +15,15 @@ def base_collect( storage: Storage ):
 
         if not tr_class_name == None and tr_class_name[0] == "HorseList":
             td_tag = tr.findAll( "td" )
-            horce_id = horce_id_get( td_tag )
+            horce_id = horce_idGet( td_tag )
 
             if horce_id in storage.current_horce_data:
                 storage.current_horce_data[horce_id].weight = weight_get( td_tag )
 
 def main( storage: Storage ):
-    driver = lib.driver_start()
+    driver = lib.driverStart()
+    driver = lib.login( driver )
+    wide_odds_collect( storage, driver )
 
     for i in range( 0, 10 ):
         base_collect( storage )

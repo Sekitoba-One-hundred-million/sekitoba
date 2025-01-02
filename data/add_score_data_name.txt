@@ -1,0 +1,6 @@
+up_speed_index
+pace_speed_index
+first_up3_min
+first_up3_max
+first_up3_ave
+kinetic_energy

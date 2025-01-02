@@ -27,6 +27,10 @@ for name in `cat ${score_file}`; do
     echo "${self}${name} = \"${name}\"" >> ${data_name_py}
 done
 
+for name in `cat ${add_score_file}`; do
+    echo "${self}${name} = \"${name}\"" >> ${data_name_py}
+done
+
 echo 'class PickleName:' >> ${pickle_name_py}
 echo '    def __init__( self ):' >> ${pickle_name_py}
 

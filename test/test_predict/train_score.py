@@ -1,6 +1,6 @@
 from test_config.config import *
 
-import sekitoba_data_manage as dm
+import SekitobaDataManage as dm
 from predict.train_score import TrainScore
 
 def data_check( test_race_id, analyze_data ):
@@ -18,7 +18,7 @@ def data_check( test_race_id, analyze_data ):
 
     for horce_id in create_data.keys():
         for i in range( 0, len( train_score.score_key_list ) ):
-            if not create_data[horce_id][i] == t_data[horce_id][i]:
-                print( "train_score", horce_id, train_score.score_key_list[i], create_data[i], t_data[i] )
+            if not round( create_data[horce_id][i] ) == round( t_data[horce_id][i] ):
+                print( "train_score", horce_id, train_score.score_key_list[i], create_data[horce_id][i], t_data[horce_id][i] )
 
     return train_score.predict()

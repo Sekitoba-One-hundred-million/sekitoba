@@ -7,7 +7,7 @@ class ImportantData:
         self.password_read()
 
     def password_read( self ):
-        f = open( "config/passward.txt", "r" )
+        f = open( "data/passward.txt", "r" )
         str_data_list = f.readlines()
 
         for str_data in str_data_list:

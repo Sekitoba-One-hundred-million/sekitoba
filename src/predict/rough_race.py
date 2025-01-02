@@ -1,7 +1,7 @@
 import sys
 
-import sekitoba_library as lib
-import sekitoba_data_manage as dm
+import SekitobaLibrary as lib
+import SekitobaDataManage as dm
 
 from config import pickle_name
 from config import prod_dir
@@ -20,7 +20,7 @@ class RoughRace:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.text_replace( str_data ) )
+            self.score_key_list.append( lib.textReplace( str_data ) )
 
     def create( self ):
         learn_data = []

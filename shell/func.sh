@@ -12,6 +12,7 @@ data_dir="${sekitoba_home}/data"
 data_name_py="${config_dir}/data_name.py"
 pickle_name_py="${config_dir}/pickle_name.py"
 score_file="${data_dir}/score_data_name.txt"
+add_score_file="${data_dir}/add_score_data_name.txt"
 instance_file="${score_file}.instance"
 
 version_manage='version-manage'
