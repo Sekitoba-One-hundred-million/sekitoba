@@ -1,4 +1,6 @@
 import sys
+import json
+import requests
 import numpy as np
 
 import SekitobaLibrary as lib
@@ -8,13 +10,12 @@ from predict.lib import *
 from config import pickle_name
 from config import prod_dir
 
-dm.dl.file_set( pickle_name.first_passing_rank_model )
+dm.dl.file_set( "first_passing_rank_model.pickle" )
 
 class FirstPassingRank:
     def __init__( self, analyze_data ):
         self.analyze_data = analyze_data
-        self.model = dm.dl.data_get( pickle_name.first_passing_rank_model )
-
+        self.modelList = dm.dl.data_get( "first_passing_rank_model.pickle" )
         self.log_data = {}
         self.score_key_list = []
         self.score_key_get()
@@ -28,7 +29,7 @@ class FirstPassingRank:
 
     def create( self ):
         learn_data = {}
-        move_odds_rate = ramdom_odds_rate( list( self.analyze_data.keys() ) )
+        #move_odds_rate = ramdom_odds_rate( list( self.analyze_data.keys() ) )
         not_found = False
         
         for horce_id in self.analyze_data.keys():
@@ -45,10 +46,9 @@ class FirstPassingRank:
                     sys.exit( 1 )
 
                 score = self.analyze_data[horce_id][score_key]
-
-                if score_key == "odds":
-                    score += score * move_odds_rate[horce_id]
-                    score = round( score, 1 )
+                #if score_key == "odds":
+                #    score += score * move_odds_rate[horce_id]
+                #    score = round( score, 1 )
                 
                 instance_data.append( score )
                 lib.dicAppend( self.log_data, horce_id, {} )
@@ -63,24 +63,22 @@ class FirstPassingRank:
 
     def predict( self ):
         predict_data = {}
-
-        for i in range( roop_count ):
-            learn_data = self.create()
-        
-            if len( learn_data ) == 0:
-                return None
-
-            for horce_id in learn_data.keys():
-                lib.dicAppend( predict_data, horce_id, {} )
-                lib.dicAppend( predict_data[horce_id], "score", 0 )
-                predict_data[horce_id]["score"] += self.model.predict( [ learn_data[horce_id] ] )[0]
-
         score_list = []
+        learn_data = self.create()
         
-        for horce_id in predict_data.keys():
-            predict_data[horce_id]["score"] /= len( predict_data )
+        if len( learn_data ) == 0:
+            return None
+
+        for horce_id in learn_data.keys():
+            lib.dicAppend( predict_data, horce_id, {} )
+            score = 0
+
+            for model in self.modelList:
+                score += model.predict( [ learn_data[horce_id] ] )[0]
+
+            predict_data[horce_id]["score"] = ( score / len( self.modelList ) )
             score_list.append( predict_data[horce_id]["score"] )
-            
+
         stand_score_list = lib.standardization( score_list )
         sort_score_list = sorted( score_list, reverse = True )
 

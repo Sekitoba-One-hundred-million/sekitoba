@@ -1,2 +1,2 @@
-from today_data_get.data_get import today_data_list_create
+from today_data_get.data_get import today_data_listCreate
 from today_data_get.data_get import TodayData

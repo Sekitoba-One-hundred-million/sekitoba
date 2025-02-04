@@ -6,8 +6,8 @@ from SekitobaLogger import logger
 from data_manage import Storage
 from data_manage import CurrentHorceData
 
-def horce_idGet( td_tag ):
-    horce_id = None
+def horce_id_get( td_tag ):
+    horce_id = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -20,7 +20,7 @@ def horce_idGet( td_tag ):
     return horce_id
 
 def horce_number_get( td_tag ):
-    horce_num = None
+    horce_num = lib.escapeValue
 
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -33,7 +33,7 @@ def horce_number_get( td_tag ):
     return horce_num
 
 def waku_number_get( td_tag ):
-    waku_num = None
+    waku_num = lib.escapeValue
 
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -46,7 +46,7 @@ def waku_number_get( td_tag ):
     return waku_num
 
 def age_get( td_tag ):
-    age = None
+    age = lib.escapeValue
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -59,7 +59,7 @@ def age_get( td_tag ):
     return age
 
 def sex_get( td_tag ):
-    sex = None
+    sex = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -72,7 +72,7 @@ def sex_get( td_tag ):
     return sex
 
 def burden_weight_get( td_tag ):
-    burden_weight = None
+    burden_weight = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -84,8 +84,8 @@ def burden_weight_get( td_tag ):
 
     return burden_weight
 
-def joceky_idGet( td_tag ):
-    jockey_id = None
+def joceky_id_get( td_tag ):
+    jockey_id = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -97,8 +97,8 @@ def joceky_idGet( td_tag ):
             
     return jockey_id
 
-def trainer_idGet( td_tag ):
-    trainer_id = None
+def trainer_id_get( td_tag ):
+    trainer_id = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -111,7 +111,7 @@ def trainer_idGet( td_tag ):
     return trainer_id
 
 def weight_get( td_tag ):
-    weight = None
+    weight = lib.escapeValue
     
     for td in td_tag:
         td_class_name = td.get( "class" )
@@ -127,7 +127,7 @@ def weight_get( td_tag ):
     return weight
 
 def dist_race_kind_get( soup ):
-    dist_data = None
+    dist_data = ""
     div_tag = soup.findAll( "div" )
 
     for div in div_tag:
@@ -158,7 +158,7 @@ def outside_get( soup ):
     return outside
 
 def weather_get( soup ):
-    weather = None
+    weather = ""
     div_tag = soup.findAll( "div" )
 
     for div in div_tag:
@@ -176,7 +176,7 @@ def weather_get( soup ):
     return weather
 
 def baba_get( soup ):
-    baba = None
+    baba = ""
     div_tag = soup.findAll( "div" )
 
     for div in div_tag:
@@ -196,7 +196,7 @@ def baba_get( soup ):
     return baba
 
 def race_money_get( soup ):
-    money = None
+    money = lib.escapeValue
     div_tag = soup.findAll( "div" )
 
     for div in div_tag:
@@ -222,6 +222,7 @@ def race_money_get( soup ):
     return money
 
 def predict_netkeiba_pace( soup ):
+    result = ""
     dl_tag = soup.findAll( 'dl' )
 
     for dl in dl_tag:

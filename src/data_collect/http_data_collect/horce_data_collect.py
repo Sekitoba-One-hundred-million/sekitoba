@@ -32,8 +32,7 @@ def parent_id_collect( url ):
     return father_id, mother_id
 
 def horce_data_collect( storage: Storage ):
-    base_url = "https://db.netkeiba.com/horse/{}"
-
     for horce_id in storage.horce_id_list:
+        url = "https://db.netkeiba.com/horse/{}".format( horce_id )
         storage.current_horce_data[horce_id].father_id, storage.current_horce_data[horce_id].mother_id = \
-          parent_id_collect( base_url.format( horce_id ) )
+          parent_id_collect( url )

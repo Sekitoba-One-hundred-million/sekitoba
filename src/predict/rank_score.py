@@ -9,13 +9,12 @@ from predict.lib import *
 from config import pickle_name
 from config import prod_dir
 
-dm.dl.file_set( pickle_name.rank_model )
+dm.dl.file_set( "rank_model.pickle" )
 
 class RankScore:
     def __init__( self, analyze_data ):
         self.analyze_data = analyze_data
-        self.models = dm.dl.data_get( pickle_name.rank_model )
-
+        self.modelList = dm.dl.data_get( "rank_model.pickle" )
         self.log_data = {}
         self.score_key_list = []
         self.score_key_get()
@@ -29,7 +28,6 @@ class RankScore:
 
     def create( self ):
         learn_data = {}
-        move_odds_rate = ramdom_odds_rate( list( self.analyze_data.keys() ) )
         not_found = False
         
         for horce_id in self.analyze_data.keys():
@@ -46,11 +44,6 @@ class RankScore:
                     sys.exit( 1 )
 
                 score = self.analyze_data[horce_id][score_key]
-
-                if score_key == "odds":
-                    score += score * move_odds_rate[horce_id]
-                    score = round( score, 1 )
-                
                 instance_data.append( score )
                 lib.dicAppend( self.log_data, horce_id, {} )
                 self.log_data[horce_id][score_key] = score
@@ -64,21 +57,18 @@ class RankScore:
 
     def predict( self ):
         predict_data = {}
-        N = len( self.models )
-
-        for i in range( roop_count ):
-            learn_data = self.create()
+        learn_data = self.create()
         
-            if len( learn_data ) == 0:
-                return None
-
-            for horce_id in learn_data.keys():
-                lib.dicAppend( predict_data, horce_id, 0 )
-
-                for model in self.models:
-                    predict_data[horce_id] += model.predict( [ learn_data[horce_id] ] )[0]
-
-        for horce_id in predict_data.keys():
-            predict_data[horce_id] /= N
+        if len( learn_data ) == 0:
+            return None
             
+        for horce_id in learn_data.keys():
+            lib.dicAppend( predict_data, horce_id, 0 )
+            score = 0
+                
+            for model in self.modelList:
+                score += model.predict( [ learn_data[horce_id] ] )[0]
+
+            predict_data[horce_id] = score / len( self.modelList )
+
         return predict_data

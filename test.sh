@@ -5,6 +5,7 @@ predictServerName='predict-server'
 proxyServerName='proxy-server'
 
 function startPredictServer {
+  echo "start PredictServer"
   ssh -t "${ATHENA_HOST}" << EOC
   source ~/.zshrc
   cd /home/athena/ghq/github.com/Sekitoba-One-hundred-million/predict-server
@@ -20,6 +21,7 @@ EOC
 }
 
 function startSekitobaProxy {
+  echo "start SekitobaProxy"
   ssh -t "${ATHENA_HOST}" << EOC
   source ~/.zshrc
   cd /home/athena/ghq/github.com/Sekitoba-One-hundred-million/proxy-manage
@@ -29,11 +31,11 @@ EOC
 }
 
 function stopServer {
+  echo "stop SekitobaProxy"
   ssh -t "${ATHENA_HOST}" << EOC
   source ~/.zshrc
   pgrep sekitoba-proxy | xargs kill
   sleep 20
-  pgrep -f "${predictServerName}" | xargs kill
 EOC
   echo "Stop Server"
 }

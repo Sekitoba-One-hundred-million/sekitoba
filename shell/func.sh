@@ -7,6 +7,9 @@ volume='/Volumes/Gilgamesh'
 sekitoba_data="${volume}/sekitoba-data"
 sekitoba_prod="${volume}/sekitoba-prod"
 
+ATHENA_HOST='Athena'
+proxyServerName='proxy-server'
+
 config_dir="${sekitoba_home}/src/config"
 data_dir="${sekitoba_home}/data"
 data_name_py="${config_dir}/data_name.py"
@@ -112,4 +115,24 @@ function remove_update_data {
     if [ -e ${pickle_name_py} ]; then
         rm ${pickle_name_py}
     fi
+}
+
+function startSekitobaProxy {
+  echo "start SekitobaProxy"
+  ssh -t "${ATHENA_HOST}" << EOC
+  source ~/.zshrc
+  cd /home/athena/ghq/github.com/Sekitoba-One-hundred-million/proxy-manage
+  go build
+  tmux new-session -d -s "${proxyServerName}" './sekitoba-proxy-manage'
+EOC
+}
+
+function stopServer {
+  echo "stop SekitobaProxy"
+  ssh -t "${ATHENA_HOST}" << EOC
+  source ~/.zshrc
+  pgrep sekitoba-proxy | xargs kill
+  sleep 20
+EOC
+  echo "Stop Server"
 }

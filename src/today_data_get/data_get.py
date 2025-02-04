@@ -5,62 +5,64 @@ from data_manage import TodayData
 from SekitobaLogger import logger
 import SekitobaLibrary as lib
 
-def race_base_idGet( soup ):
-    race_id_list = []
-    p_tag = soup.findAll( "p" )
+def raceBaseIdGet( soup ):
+    race_idList = []
+    pTag = soup.findAll( "p" )
 
-    for p in p_tag:
-        class_name = p.get( "class" )
+    for p in pTag:
+        className = p.get( "class" )
 
-        if not class_name == None \
-          and class_name[0] == "RaceList_DataTitle":
+        if not className == None \
+          and 0 < len( className ) \
+          and className[0] == "RaceList_DataTitle":
 
-            try:
-                split_data = p.text.split( " " )
-                str_count = split_data[0].replace( "回", "" )
-                place_num = str( int( lib.placeNum( split_data[1] ) ) )
-                str_day = split_data[2].replace( "日目", "" )
-            except:
+            splitData = p.text.split( " " )
+
+            if len( splitData ) < 2:
                 continue
+            
+            strCount = splitData[0].replace( "回", "" )
+            strPlaceNum = str( int( lib.placeNum( splitData[1] ) ) )
+            strDay = splitData[2].replace( "日目", "" )
 
-            base_id = lib.paddingStrMath( place_num ) + lib.paddingStrMath( str_count ) + lib.paddingStrMath( str_day )
+            baseId = lib.paddingStrMath( strPlaceNum ) + lib.paddingStrMath( strCount ) + lib.paddingStrMath( strDay )
 
             for i in range( 1, 13 ):
-                race_id_list.append( base_id + lib.paddingStrMath( str( i ) ) )
+                race_idList.append( baseId + lib.paddingStrMath( str( i ) ) )
 
-    return race_id_list
+    return race_idList
 
-def predict_race_idGet( today: datetime.datetime ):
-    race_id_list = []
+def predictRaceIdGet( today: datetime.datetime ):
+    race_idList = []
     driver = lib.driverStart()
-    base_url = "https://race.netkeiba.com/top/?kaisai_date="
-    race_day = None
+    baseUrl = "https://race.netkeiba.com/top/?kaisai_date="
+    raceDay = ""
     days = 0
 
     if today.hour > 16:
         days = 1
 
     while 1:
-        check_day = today + datetime.timedelta( days = days )
-        data_id = str( check_day.year ) + \
-          lib.paddingStrMath( str( check_day.month ) ) + \
-          lib.paddingStrMath( str( check_day.day ) )
+        checkDay = today + datetime.timedelta( days = days )
+        dataId = str( checkDay.year ) + \
+          lib.paddingStrMath( str( checkDay.month ) ) + \
+          lib.paddingStrMath( str( checkDay.day ) )
 
-        url = base_url + data_id
+        url = baseUrl + dataId
         driver, _ = lib.driverRequest( driver, url )
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup( html, "html.parser" )
-        race_id_list = race_base_idGet( soup )
+        race_idList = raceBaseIdGet( soup )
 
-        if not len( race_id_list ) == 0:
-            race_day = check_day
+        if not len( race_idList ) == 0:
+            raceDay = checkDay
             break
 
-        week_num = check_day.weekday()
+        weekNum = check_day.weekday()
 
         # 土日なのに取得できていない場合は失敗なのでもう一回
-        if week_num == 5 or \
-          week_num == 6:
+        if weekNum == 5 or \
+          weekNum == 6:
             continue
         
         days += 1
@@ -71,28 +73,27 @@ def predict_race_idGet( today: datetime.datetime ):
 
     str_year = str( today.year )
 
-    for i in range( 0, len( race_id_list ) ):
-        race_id_list[i] = str_year + race_id_list[i]
+    for i in range( 0, len( race_idList ) ):
+        race_idList[i] = str_year + race_idList[i]
 
-    return race_id_list, race_day
+    return race_idList, raceDay
 
-def today_data_list_create() -> list[TodayData]:
+def today_data_listCreate() -> list[TodayData]:
     today_data_list = []
-    race_id_list, race_day = predict_race_idGet( datetime.datetime.now() )
-    #race_id_list, race_day = predict_race_idGet( datetime.datetime( 2024, 1, 14 ) )
+    race_idList, raceDay = predictRaceIdGet( datetime.datetime.now() )
 
-    for race_id in race_id_list:
-        today_data = TodayData( race_id, race_day )
+    for race_id in race_idList:
+        todayData = TodayData( race_id, raceDay )
 
         # htmlがきちんと取得できない可能性があるので
         for i in range( 0, 5 ):
-            today_data.race_time_get()
+            todayData.race_time_get()
 
-            if today_data.race_timestamp == -1:
+            if todayData.race_timestamp == -1:
                 continue
 
-            if today_data.bet_race:
-                today_data_list.append( today_data )
+            if todayData.bet_race:
+                today_data_list.append( todayData )
                 
             break
 

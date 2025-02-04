@@ -13,9 +13,11 @@ def base_collect( storage: Storage ):
     for tr in tr_tag:
         tr_class_name = tr.get( "class" )
 
-        if not tr_class_name == None and tr_class_name[0] == "HorseList":
+        if not tr_class_name == None \
+          and 0 < len( tr_class_name ) \
+          and tr_class_name[0] == "HorseList":
             td_tag = tr.findAll( "td" )
-            horce_id = horce_idGet( td_tag )
+            horce_id = horce_id_get( td_tag )
 
             if horce_id in storage.current_horce_data:
                 storage.current_horce_data[horce_id].weight = weight_get( td_tag )

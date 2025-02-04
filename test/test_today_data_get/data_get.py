@@ -3,16 +3,16 @@ import sys
 import inspect
 import datetime
 from data_manage import TodayData
-from today_data_get.data_get import predict_race_idGet
+from today_data_get.data_get import predict_race_id_get
 
 from test_config.config import *
 
-def predict_race_idGet_test():
+def predict_race_id_get_test():
     error_func = "{}:{}".format( test_today_data_get_error_message, \
                                           inspect.currentframe().f_code.co_name )
 
     test_day = datetime.datetime( 2023, 7, 9 )
-    race_id_list = predict_race_idGet( test_day )
+    race_id_list = predict_race_id_get( test_day )
 
     if len( race_id_list ) == 0:
         show_erroe_message( error_func, "fail get race_id_list" )
@@ -35,7 +35,7 @@ def today_data_test():
     error_func = "{}:{}".format( test_today_data_get_error_message, \
                                           inspect.currentframe().f_code.co_name )
     test_day = datetime.datetime( 2023, 7, 9 )
-    race_id_list, race_day = predict_race_idGet( test_day )
+    race_id_list, race_day = predict_race_id_get( test_day )
 
     today_data_list = []
     #test_race_id_list = load_test_race_id_list()

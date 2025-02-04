@@ -1,4 +1,6 @@
 import sys
+import json
+import requests
 
 import SekitobaLibrary as lib
 import SekitobaDataManage as dm
@@ -6,12 +8,14 @@ import SekitobaDataManage as dm
 from config import pickle_name
 from config import prod_dir
 
-dm.dl.file_set( pickle_name.pace_model )
+dm.dl.file_set( "pace_model.pickle" )
+dm.dl.file_set( "race_pace_analyze_data.pickle" )
 
 class RacePaceSimulation:
     def __init__( self, analyze_data ):
         self.analyze_data = analyze_data
-        self.model = dm.dl.data_get( pickle_name.pace_model )
+        self.modelList = dm.dl.data_get( "pace_model.pickle" )
+        self.race_pace_analyze_data = dm.dl.data_get( "race_pace_analyze_data.pickle" )
         self.score_key_list = []
         self.score_key_get()
 
@@ -54,13 +58,16 @@ class RacePaceSimulation:
     def predict( self ):
         result = {}
         learn_data = self.create()
+        horce_id = list( self.analyze_data.keys() )[-1]
+        keyKind = str( int( self.analyze_data[horce_id]["kind"] ) )
+        keyDist = str( int( self.analyze_data[horce_id]["dist"] ) )
 
-        for key in self.model.keys():
+        for key in self.modelList.keys():
             score = 0
-            for m in self.model[key]:
-                score += m.predict( [ learn_data ] )[0]
-                
-            result[key] = score / len( self.model[key] )
-            print( key, result[key] )
+            
+            for model in self.modelList[key]:
+                score += model.predict( [ learn_data ] )[0]
+
+            result[key] = ( score / len( self.modelList[key] ) ) + self.race_pace_analyze_data[keyKind][keyDist][key]
 
         return result

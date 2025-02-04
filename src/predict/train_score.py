@@ -7,12 +7,9 @@ from SekitobaLogger import logger
 from config import pickle_name
 from config import prod_dir
 
-dm.dl.file_set( pickle_name.train_model )
-
 class TrainScore:
     def __init__( self, analyze_data ):
         self.analyze_data = analyze_data
-        self.model = dm.dl.data_get( pickle_name.train_model )
 
         self.log_data = {}
         self.score_key_list = []

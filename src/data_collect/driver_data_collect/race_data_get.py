@@ -1,4 +1,5 @@
 import time
+import copy
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 
@@ -9,42 +10,45 @@ from data_manage import CurrentHorceData
 from data_collect.http_data_collect import baba_get
 from data_collect.http_data_collect import weather_get
 
-def horce_idGet( td_tag ):
+def horce_id_get( td_tag ):
     horce_id = ""
     
     for td in td_tag:
         td_class_name = td.get( "class" )
 
-        if not td_class_name == None and td_class_name[0] == "HorseInfo":
+        if not td_class_name == None \
+          and 0 < len( td_class_name ) \
+          and td_class_name[0] == "HorseInfo":
             horce_url = td.find( "a" ).get( "href" )
             horce_id = horce_url.split( "/" )[-1]
             break
-            
+
     return horce_id
 
 def weight_get( td_tag ):
-    weight = None
+    weight = lib.escapeValue
     
     for td in td_tag:
         td_class_name = td.get( "class" )
 
-        if not td_class_name == None and td_class_name[0] == "Weight":
-            try:
-                weight = lib.textReplace( td.text )
-            except:
-                continue
-
+        if not td_class_name == None \
+          and 0 < len( td_class_name ) \
+          and td_class_name[0] == "Weight":
+            weight = lib.textReplace( td.text )
             break
    
     return weight
 
 def odds_get( td_tag ):
-    odds = None
+    odds = lib.escapeValue
     
     for td in td_tag:
         td_class_name = td.get( "class" )
 
-        if not td_class_name == None and td_class_name[0] == "Txt_R" and td_class_name[1] == "Popular":
+        if not td_class_name == None \
+          and 1 < len( td_class_name ) \
+          and td_class_name[0] == "Txt_R" \
+          and td_class_name[1] == "Popular":
             str_odds = lib.textReplace( td.text )
             odds = float( lib.mathCheck( str_odds ) )
             break
@@ -52,12 +56,15 @@ def odds_get( td_tag ):
     return odds
 
 def popular_get( td_tag ):
-    popular = None
+    popular = lib.escapeValue
     
     for td in td_tag:
         td_class_name = td.get( "class" )
 
-        if not td_class_name == None and td_class_name[0] == "Popular" and td_class_name[1] == "Popular_Ninki":
+        if not td_class_name == None \
+          and 1 < len( td_class_name ) \
+          and td_class_name[0] == "Popular" \
+          and td_class_name[1] == "Popular_Ninki":
             str_popular = lib.textReplace( td.text )
             popular = int( lib.mathCheck( str_popular ) )
             break
@@ -66,8 +73,7 @@ def popular_get( td_tag ):
 
 def main( storage: Storage, driver ):
     best_check_count = 0
-    best_data_dict = {}
-    odd_update_xpath = "/html/body/div[1]/div[3]/div[2]/table/thead/tr[1]/th[10]/div/div/button"
+    odds_update_xpath = "/html/body/div[1]/div[3]/div[2]/table/thead/tr[1]/th[10]/div/div/button"
     url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.today_data.race_id
     
     for i in range( 0, 10 ):
@@ -79,12 +85,12 @@ def main( storage: Storage, driver ):
         time.sleep( 2 )
 
         try:
-            driver.find_element( By.XPATH, odd_update_xpath ).click()
+            driver.find_element( By.XPATH, odds_update_xpath ).click()
         except:
             pass
         
         time.sleep( 2 )
-        html = driver.page_source.encode('utf-8')
+        html = driver.page_source.encode( "utf-8" )
         soup = BeautifulSoup( html, "html.parser" )
         storage.baba = baba_get( soup )
         storage.weather = weather_get( soup )
@@ -95,12 +101,16 @@ def main( storage: Storage, driver ):
 
             if not tr_class_name == None and tr_class_name[0] == "HorseList":                    
                 td_tag = tr.findAll( "td" )
-                horce_id = horce_idGet( td_tag )
+                horce_id = horce_id_get( td_tag )
+
+                if len( horce_id ) == 0:
+                    continue
+
                 instance_current_horce_data = CurrentHorceData()
                 instance_current_horce_data.odds = odds_get( td_tag )
                 instance_current_horce_data.popular = popular_get( td_tag )
                 instance_current_horce_data.weight = weight_get( td_tag )
-                instance_dict[horce_id] = instance_current_horce_data
+                instance_dict[horce_id] = copy.deepcopy( instance_current_horce_data )
 
                 if len( tr_class_name ) == 2 and \
                   tr_class_name[1] == "Cancel" and \
@@ -123,3 +133,5 @@ def main( storage: Storage, driver ):
                 storage.current_horce_data[horce_id].odds = instance_dict[horce_id].odds
                 storage.current_horce_data[horce_id].popular = instance_dict[horce_id].popular
                 storage.current_horce_data[horce_id].weight = instance_dict[horce_id].weight
+
+    return True

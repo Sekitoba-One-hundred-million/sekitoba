@@ -11,7 +11,7 @@ dm.dl.prod_on()
 
 import predict
 import select_buy
-from today_data_get import today_data_list_create
+from today_data_get import today_data_listCreate
 from data_manage import Storage
 from data_manage import TodayData
 from data_create import DataCreate
@@ -20,21 +20,20 @@ from data_collect import just_before_data_collect
 
 STOCK_DATA = "stock_data.pickle"
 
-def race_wait( today_data ): # :TodayData
-    dt_now = datetime.datetime.now()
-    diff_timestamp = today_data.race_timestamp - dt_now.timestamp()
-    wait_time = 120
-    sleep_min = int( diff_timestamp - wait_time )
+def race_wait( todayData: TodayData ):
+    WAIT_SECONDS = 120
+    dtNow = datetime.datetime.now()
+    diff_timestamp = todayData.race_timestamp - dtNow.timestamp()
+    sleep_seconds = int( diff_timestamp - WAIT_SECONDS )
     
-    if sleep_min > 0:
-        #logger.info( "sleep:{}".format( sleep_min ) )
-        time.sleep( sleep_min )
-    elif sleep_min < -wait_time:
+    if sleep_seconds > 0:
+        time.sleep( sleep_seconds )
+    elif sleep_seconds < -WAIT_SECONDS:
         return False
     
     return True
 
-def stock_data_create( today_data_list: list[TodayData] ):
+def stock_dataCreate( today_data_list: list[TodayData] ):
     stock_data: dict[Storage] = dm.pickle_load( STOCK_DATA )
 
     if stock_data == None:
@@ -56,17 +55,16 @@ def stock_data_create( today_data_list: list[TodayData] ):
             continue
         
         print( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
-        #logger.info( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         storage = Storage( today_data_list[i] )
-        before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
+        before_data_collecta.main( storage ) # http通信のスクレイピングで入手するデータ
         stock_data[storage.today_data.race_id] = storage
         dm.pickle_upload( STOCK_DATA, stock_data )
 
     return stock_data
 
 def main():
-    today_data_list: list[TodayData] = today_data_list_create()
-    stock_data = stock_data_create( today_data_list )
+    today_data_list: list[TodayData] = today_data_listCreate()
+    stock_data = stock_dataCreate( today_data_list )
 
     for i in range( 0, len( today_data_list ) ):
         if not race_wait( today_data_list[i] ):
@@ -87,6 +85,7 @@ def main():
         print( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         logger.info( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         select_buy.main( stock_data[race_id], rank_score )
+        return
 
 if __name__ == "__main__":
     main()

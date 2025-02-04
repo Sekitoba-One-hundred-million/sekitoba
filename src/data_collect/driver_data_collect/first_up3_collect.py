@@ -6,13 +6,14 @@ import SekitobaLibrary as lib
 import SekitobaDataManage as dm
 
 def first_time_get( soup, storage: Storage ):
-    race_id = storage.today_data.race_id
     div_tag = soup.find( "body" ).findAll( "div" )
 
     for div in div_tag:
         div_class_name = div.get( "class" )
 
-        if div_class_name == None or len( div_class_name ) == 0 or not div_class_name[0] == "HorseList_Wrapper":
+        if div_class_name == None \
+          or len( div_class_name ) == 0 \
+          or not div_class_name[0] == "HorseList_Wrapper":
             continue
         
         dl_tag = div.findAll( "dl" )
@@ -23,20 +24,24 @@ def first_time_get( soup, storage: Storage ):
             if dl_class_name == None or len( dl_class_name ) == 0 or not dl_class_name[0] == "HorseList":
                 continue
 
-            dt_tag = dl.findAll( "dt" )
+            dtTag = dl.findAll( "dt" )
+            str_horce_num = ""
 
-            try:
-                horce_num = str( int( dt_tag[1].text ) )
-            except:
+            if 1 < len( dtTag ) \
+              and  dtTag[1].text.isdecimal():
+                str_horce_num = str( int( dtTag[1].text ) )
+            else:
                 continue
-
-            lib.dicAppend( storage.first_up3, horce_num, {} )
+            
+            lib.dicAppend( storage.first_up3, str_horce_num, {} )
             ul_tag = dl.findAll( "ul" )
 
             for ul in ul_tag:
                 ul_class_name = ul.get( "class" )
 
-                if ul_class_name == None or len( ul_class_name ) == 0 or not ul_class_name[0] == "Past_Direction":
+                if ul_class_name == None or \
+                  len( ul_class_name ) == 0 or \
+                  not ul_class_name[0] == "Past_Direction":
                     continue
 
                 li_tag = ul.findAll( "li" )
@@ -46,11 +51,17 @@ def first_time_get( soup, storage: Storage ):
 
                     try:
                         past_race_id = past_div_tag[2].find( "a" ).get( "href" ).split( "/" )[-2]
+                    except:
+                        continue
+
+                    try:
                         first_up3 = float( past_div_tag[6].text.split( " " )[1].replace( "前", "" ) )
                     except:
                         continue
 
-                    storage.first_up3[horce_num][past_race_id] = first_up3
+                    storage.first_up3[str_horce_num][past_race_id] = first_up3
+
+    return True
 
 def first_up3_collect( storage: Storage, driver ):
     url = "https://race.netkeiba.com/race/newspaper.html?race_id={}".format( storage.today_data.race_id )

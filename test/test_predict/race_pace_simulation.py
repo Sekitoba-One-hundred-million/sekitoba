@@ -1,4 +1,5 @@
 from test_config.config import *
+from test_predict.lib import skip_key
 
 import SekitobaDataManage as dm
 from predict.race_pace_simulation import RacePaceSimulation
@@ -16,11 +17,8 @@ def data_check( race_id, analyze_data ):
     create_data = race_pace_simulation.create()
 
     for i in range( 0, len( race_pace_simulation.score_key_list ) ):
-        if "true_skill" in race_pace_simulation.score_key_list[i] or \
-          "judgment" in race_pace_simulation.score_key_list[i] or \
-          "before_race_score" in race_pace_simulation.score_key_list[i] or \
-          "power" in race_pace_simulation.score_key_list[i]:
-            continue
+        if skip_key( race_pace_simulation.score_key_list[i]):
+                continue
         
         if not round( create_data[i], 2 ) == round( t_data[i], 2 ):
             print( "race_pace: {}: create:{} teacher:{}".format( \
