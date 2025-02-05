@@ -33,7 +33,7 @@ def first_time_get( soup, storage: Storage ):
             else:
                 continue
             
-            lib.dicAppend( storage.first_up3, str_horce_num, {} )
+            lib.dic_append( storage.first_up3, str_horce_num, {} )
             ul_tag = dl.findAll( "ul" )
 
             for ul in ul_tag:
@@ -65,7 +65,7 @@ def first_time_get( soup, storage: Storage ):
 
 def first_up3_collect( storage: Storage, driver ):
     url = "https://race.netkeiba.com/race/newspaper.html?race_id={}".format( storage.today_data.race_id )
-    driver, _ = lib.driverRequest( driver, url )
+    driver, _ = lib.driver_request( driver, url )
     time.sleep( 10 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )        

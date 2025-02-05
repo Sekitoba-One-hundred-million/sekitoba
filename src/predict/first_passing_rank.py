@@ -25,7 +25,7 @@ class FirstPassingRank:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.textReplace( str_data ) )
+            self.score_key_list.append( lib.text_replace( str_data ) )
 
     def create( self ):
         learn_data = {}
@@ -51,7 +51,7 @@ class FirstPassingRank:
                 #    score = round( score, 1 )
                 
                 instance_data.append( score )
-                lib.dicAppend( self.log_data, horce_id, {} )
+                lib.dic_append( self.log_data, horce_id, {} )
                 self.log_data[horce_id][score_key] = score
 
             if not_found:
@@ -70,7 +70,7 @@ class FirstPassingRank:
             return None
 
         for horce_id in learn_data.keys():
-            lib.dicAppend( predict_data, horce_id, {} )
+            lib.dic_append( predict_data, horce_id, {} )
             score = 0
 
             for model in self.modelList:

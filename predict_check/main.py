@@ -53,7 +53,7 @@ def get_log_data( log_name, check_race_id ):
             log_horce_id = split_data[5].split( ":" )[1]
             score_name = split_data[6].split( ":" )[0]
             score = float( split_data[6].split( ":" )[1] )
-            lib.dicAppend( log_predict_data, log_horce_id, {} )
+            lib.dic_append( log_predict_data, log_horce_id, {} )
             log_predict_data[log_horce_id][score_name] = score
 
     return log_predict_data

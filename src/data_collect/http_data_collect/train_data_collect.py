@@ -13,7 +13,7 @@ def train_collect( storage: Storage ):
     best_check_count = 0
     continue_count = 0
     instance_train_data_dict = {}
-    cookie = lib.netkeibaLogin()
+    cookie = lib.netkeiba_login()
     url = "https://race.netkeiba.com/race/oikiri.html?race_id=" + storage.today_data.race_id
 
     for i in range( 0, 10 ):
@@ -36,10 +36,10 @@ def train_collect( storage: Storage ):
                 if len( td_tag ) < 13:
                     continue
 
-                key_horce_num = lib.textReplace( td_tag[1].text )
+                key_horce_num = lib.text_replace( td_tag[1].text )
                 li_tag = td_tag[8].findAll( "li" )
                 train_data = TrainData()
-                train_data.cource = lib.textReplace( td_tag[5].text )
+                train_data.cource = lib.text_replace( td_tag[5].text )
                 train_data.load = td_tag[10].text
                 train_data.critic = td_tag[11].text
                 train_data.rank = td_tag[12].text

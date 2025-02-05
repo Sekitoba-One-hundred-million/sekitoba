@@ -20,7 +20,7 @@ class TrainScore:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.textReplace( str_data ) )
+            self.score_key_list.append( lib.text_replace( str_data ) )
 
     def create( self ):
         learn_data = {}
@@ -41,7 +41,7 @@ class TrainScore:
                     sys.exit( 1 )
 
                 instance_data.append( self.analyze_data[horce_id][score_key] )
-                lib.dicAppend( self.log_data, horce_id, {} )
+                lib.dic_append( self.log_data, horce_id, {} )
                 self.log_data[horce_id][score_key] = self.analyze_data[horce_id][score_key]
                 
             if not_found:

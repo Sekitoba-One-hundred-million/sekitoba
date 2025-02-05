@@ -22,7 +22,7 @@ def raceBaseIdGet( soup ):
                 continue
             
             strCount = splitData[0].replace( "回", "" )
-            strPlaceNum = str( int( lib.placeNum( splitData[1] ) ) )
+            strPlaceNum = str( int( lib.place_num( splitData[1] ) ) )
             strDay = splitData[2].replace( "日目", "" )
 
             baseId = lib.paddingStrMath( strPlaceNum ) + lib.paddingStrMath( strCount ) + lib.paddingStrMath( strDay )
@@ -34,7 +34,7 @@ def raceBaseIdGet( soup ):
 
 def predictRaceIdGet( today: datetime.datetime ):
     race_idList = []
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     baseUrl = "https://race.netkeiba.com/top/?kaisai_date="
     raceDay = ""
     days = 0
@@ -49,7 +49,7 @@ def predictRaceIdGet( today: datetime.datetime ):
           lib.paddingStrMath( str( checkDay.day ) )
 
         url = baseUrl + dataId
-        driver, _ = lib.driverRequest( driver, url )
+        driver, _ = lib.driver_request( driver, url )
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup( html, "html.parser" )
         race_idList = raceBaseIdGet( soup )

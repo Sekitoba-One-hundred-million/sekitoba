@@ -39,7 +39,7 @@ def wideSelect( driver, bd ):
     return driver
 
 def autoBuy( storage: Storage, buyData ):
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     haveMoney, driver = loginGetMoney( driver )
 
     if haveMoney == lib.escapeValue:

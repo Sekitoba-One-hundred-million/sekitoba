@@ -34,7 +34,7 @@ def weight_get( td_tag ):
         if not td_class_name == None \
           and 0 < len( td_class_name ) \
           and td_class_name[0] == "Weight":
-            weight = lib.textReplace( td.text )
+            weight = lib.text_replace( td.text )
             break
    
     return weight
@@ -49,8 +49,8 @@ def odds_get( td_tag ):
           and 1 < len( td_class_name ) \
           and td_class_name[0] == "Txt_R" \
           and td_class_name[1] == "Popular":
-            str_odds = lib.textReplace( td.text )
-            odds = float( lib.mathCheck( str_odds ) )
+            str_odds = lib.text_replace( td.text )
+            odds = float( lib.math_check( str_odds ) )
             break
 
     return odds
@@ -65,8 +65,8 @@ def popular_get( td_tag ):
           and 1 < len( td_class_name ) \
           and td_class_name[0] == "Popular" \
           and td_class_name[1] == "Popular_Ninki":
-            str_popular = lib.textReplace( td.text )
-            popular = int( lib.mathCheck( str_popular ) )
+            str_popular = lib.text_replace( td.text )
+            popular = int( lib.math_check( str_popular ) )
             break
 
     return popular
@@ -81,7 +81,7 @@ def main( storage: Storage, driver ):
             break
         
         instance_dict = {}
-        driver, _ = lib.driverRequest( driver, url )
+        driver, _ = lib.driver_request( driver, url )
         time.sleep( 2 )
 
         try:

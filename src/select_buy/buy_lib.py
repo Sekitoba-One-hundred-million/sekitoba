@@ -40,7 +40,7 @@ def afterLogin( driver ):
 
     return driver
 
-def getMoney( driver ):
+def get_money( driver ):
     money = 0
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )
@@ -79,7 +79,7 @@ def place_button_num_get( soup, place ):
         if not class_name == None and len( class_name ) == 1 and class_name[0] == "place-name":
             place_num += 1
             
-            if place in lib.textReplace( div.text ):
+            if place in lib.text_replace( div.text ):
                 break
 
     return place_num
@@ -103,7 +103,7 @@ def loginGetMoney( driver ):
         except:
             time.sleep( 1 )
 
-        money = getMoney( driver )
+        money = get_money( driver )
         
         if not money == lib.escapeValue:
             break

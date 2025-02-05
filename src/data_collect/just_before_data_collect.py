@@ -23,7 +23,7 @@ def base_collect( storage: Storage ):
                 storage.current_horce_data[horce_id].weight = weight_get( td_tag )
 
 def main( storage: Storage ):
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     driver = lib.login( driver )
     wide_odds_collect( storage, driver )
 

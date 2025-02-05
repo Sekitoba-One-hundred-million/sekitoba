@@ -8,7 +8,7 @@ import SekitobaDataManage as dm
 
 def wide_odds_collect( storage: Storage, driver ):
     url = "https://race.netkeiba.com/odds/index.html?type=b5&race_id={}&housiki=c0".format( storage.today_data.race_id )
-    driver, _ = lib.driverRequest( driver, url )
+    driver, _ = lib.driver_request( driver, url )
     time.sleep( 3 )
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )      
@@ -33,13 +33,13 @@ def wide_odds_collect( storage: Storage, driver ):
 
             if len( class_name ) == 1 and class_name[0] == "Waku_Normal":
                 try:
-                    before_num = int( lib.textReplace( td.text ) )
+                    before_num = int( lib.text_replace( td.text ) )
                 except:
                     continue
 
             if len( class_name ) == 2 and class_name[0] == "Odds" and class_name[1] == "Popular":
                 try:
-                    odds_text = lib.textReplace( td.text )
+                    odds_text = lib.text_replace( td.text )
                     min_odds = ""
                     max_odds = ""
                     max_flag = False

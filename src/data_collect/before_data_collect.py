@@ -57,12 +57,12 @@ def base_collect( storage: Storage ):
                     storage.trainer_id_list.append( trainer_id )
                 
         storage.all_horce_num = len( storage.horce_id_list )
-        current_horce_dataCheck = False
+        current_horce_data_check = False
 
         for horce_id in storage.current_horce_data.keys():
-            current_horce_dataCheck = storage.current_horce_data[horce_id].before_data_check()
+            current_horce_data_check = storage.current_horce_data[horce_id].before_data_check()
 
-        if storage.before_data_check() and current_horce_dataCheck:
+        if storage.before_data_check() and current_horce_data_check:
             break
 
     return True
@@ -73,7 +73,7 @@ def main( storage: Storage ):
     condition_devi_collect( storage )
     horce_data_collect( storage )
 
-    driver = lib.driverStart()
+    driver = lib.driver_start()
     driver = lib.login( driver )
     first_up3_collect( storage, driver )
     driver.quit()

@@ -24,7 +24,7 @@ class RacePaceSimulation:
         all_data = f.readlines()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.textReplace( str_data ) )
+            self.score_key_list.append( lib.text_replace( str_data ) )
 
     def create( self ):
         learn_data = []

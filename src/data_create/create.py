@@ -72,7 +72,7 @@ class DataCreate:
         f.close()
 
         for str_data in all_data:
-            self.score_key_list.append( lib.textReplace( str_data ) )
+            self.score_key_list.append( lib.text_replace( str_data ) )
 
     def train_data_create( self ):
         result = {}
@@ -104,7 +104,7 @@ class DataCreate:
         current_race_data[9] = str( self.storage.current_horce_data[horce_id].popular )
         current_race_data[10] = ''
         current_race_data[11] = ''
-        current_race_data[12] = str( int( lib.mathCheck( self.storage.current_horce_data[horce_id].burden_weight ) ) )
+        current_race_data[12] = str( int( lib.math_check( self.storage.current_horce_data[horce_id].burden_weight ) ) )
         current_race_data[13] = self.storage.dist
         current_race_data[14] = self.storage.baba
         current_race_data[15] = ''
@@ -117,22 +117,22 @@ class DataCreate:
 
         return current_race_data
 
-    def matchRankScore( self, cd: lib.CurrentData, target_id ):
+    def match_rankScore( self, cd: lib.CurrentData, target_id ):
         target_past_data = self.horce_data.get_past_data( target_id )
         target_pd = lib.PastData( target_past_data, [], self.race_data )
         count = 0
         score = 0
 
-        for target_cd in target_pd.pastCdList():
+        for target_cd in target_pd.past_cd_list():
             c = 0
                 
             if target_cd.place() == cd.place():
                 c += 1
                 
-            if target_cd.babaStatus() == cd.babaStatus():
+            if target_cd.baba_status() == cd.baba_status():
                 c += 1
 
-            if lib.distCheck( target_cd.dist() * 1000 ) == lib.distCheck( cd.dist() * 1000 ):
+            if lib.dist_check( target_cd.dist() * 1000 ) == lib.dist_check( cd.dist() * 1000 ):
                 c += 1
 
             count += c
@@ -199,7 +199,7 @@ class DataCreate:
         str_day = str( self.storage.today_data.day )
         str_num = str( self.storage.today_data.num )
         str_place_num = str( self.storage.today_data.place_num )
-        key_money_class = str( int( lib.moneyClassGet( self.storage.race_money ) ) )
+        key_money_class = str( int( lib.money_class_get( self.storage.race_money ) ) )
         current_race_data = {}
 
         for score_key in self.score_key_list:
@@ -233,22 +233,22 @@ class DataCreate:
             past_data = []
 
             if horce_id in self.horce_data.data:
-                _, past_data = lib.raceCheck( self.horce_data.data[horce_id]["past_data"], today_data )
+                _, past_data = lib.race_check( self.horce_data.data[horce_id]["past_data"], today_data )
 
             cd = lib.CurrentData( current_data )
             pd = lib.PastData( past_data, current_data, self.race_data )
             getHorceData = GetHorceData( cd, pd )
-            pd.setUp3AnalyzeData( self.prod_data.data["up3_analyze"] )
+            pd.set_up3_analyze_data( self.prod_data.data["up3_analyze"] )
             self.race_data.data["dist"] = int( cd.dist() * 1000 )
-            self.race_data.data["kind"] = cd.raceKind()
-            self.race_data.data["baba"] = cd.babaStatus()
+            self.race_data.data["kind"] = cd.race_kind()
+            self.race_data.data["baba"] = cd.baba_status()
             self.race_data.data["place"] = cd.place()
 
-            before_cd = pd.beforeCd()
-            horce_num = cd.horceNumber()
+            before_cd = pd.before_cd()
+            horce_num = cd.horce_number()
             popular = cd.popular()
             odds = cd.odds()
-            limb_math = lib.limbSearch( pd )
+            limb_math = lib.limb_search( pd )
             key_limb = str( int( limb_math ) )
             jockey_id = self.storage.current_horce_data[horce_id].jockey_id
             trainer_id = self.storage.current_horce_data[horce_id].trainer_id
@@ -282,7 +282,7 @@ class DataCreate:
             elif getHorceData.limb_math == 3 or getHorceData.limb_math == 4:
                 insert_limb_count += 1
 
-            lib.dicAppend( my_limb_count, getHorceData.limb_math, 0 )
+            lib.dic_append( my_limb_count, getHorceData.limb_math, 0 )
             my_limb_count[getHorceData.limb_math] += 1
 
             if popular == 1:
@@ -323,7 +323,7 @@ class DataCreate:
                 horce_last_passing_true_skill = self.horce_data.data[horce_id]["last_passing_true_skill"]
                 up3_horce_true_skill = self.horce_data.data[horce_id]["up3_true_skill"]
                 corner_true_skill = self.horce_data.data[horce_id]["corner_true_skill"]
-                speed, up_speed, pace_speed = pd.speedIndex( self.horce_data.data[horce_id]["baba_index"] )
+                speed, up_speed, pace_speed = pd.speed_index( self.horce_data.data[horce_id]["baba_index"] )
 
             if jockey_id in self.jockey_data.data:
                 jockey_true_skill = self.jockey_data.data[jockey_id]["true_skill"]
@@ -337,7 +337,7 @@ class DataCreate:
                 trainer_last_passing_true_skill = self.trainer_data.data[trainer_id]["last_passing_true_skill"]
                 up3_trainer_true_skill = self.trainer_data.data[trainer_id]["up3_true_skill"]
                 
-            current_time_index = self.time_index.main( horce_id, pd.pastDayList() )
+            current_time_index = self.time_index.main( horce_id, pd.past_day_list() )
             stride_ablity_data = self.stride_ablity.ablity_create( cd, pd )
             pace_up_rate = pd.pace_up_rate()
 
@@ -345,7 +345,7 @@ class DataCreate:
                 current_race_data[stride_data_key].append( stride_ablity_data[stride_data_key] )
 
             first_wrap = self.train_index.first_wrap( race_id, horce_num )
-            final_wrap = self.train_index.final_wrap( race_id, cd.horceNumber() )
+            final_wrap = self.train_index.final_wrap( race_id, cd.horce_number() )
             train_time_slope, train_time_slice = self.train_index.train_time_slope_slice( race_id, horce_num )
             wrap_slope, wrap_slice = self.train_index.wrap_slope_slice( race_id, horce_num )
             wrap_diff = first_wrap - final_wrap
@@ -356,7 +356,7 @@ class DataCreate:
             race_first_up3_max = -1000
 
             try:
-                horce_first_up3_halon = self.race_data.data["first_up3_halon"][str(int(cd.horceNumber()))]
+                horce_first_up3_halon = self.race_data.data["first_up3_halon"][str(int(cd.horce_number()))]
             except:
                 pass
 
@@ -375,10 +375,10 @@ class DataCreate:
             judgment_key_data = {}
             judgment_key_data["limb"] = str( int( limb_math ) )
             judgment_key_data["popular"] = str( int( cd.popular() ) )
-            judgment_key_data["flame_num"] = str( int( cd.flameNumber() ) )
-            judgment_key_data["dist"] = str( int( cd.distKind() ) )
-            judgment_key_data["kind"] = str( int( cd.raceKind() ) )
-            judgment_key_data["baba"] = str( int( cd.babaStatus() ) )
+            judgment_key_data["flame_num"] = str( int( cd.flame_number() ) )
+            judgment_key_data["dist"] = str( int( cd.dist_kind() ) )
+            judgment_key_data["kind"] = str( int( cd.race_kind() ) )
+            judgment_key_data["baba"] = str( int( cd.baba_status() ) )
             judgment_key_data["place"] = str( int( cd.place()) )
             judgment_rate_key_list = [ "0", "1", "2" ]
 
@@ -455,7 +455,7 @@ class DataCreate:
             current_race_data[data_name.diff_pace_time].append( pd.diff_pace_time() )
             current_race_data[data_name.first_result_rank_diff].append( pd.first_result_rank_diff() )
             current_race_data[data_name.last_result_rank_diff].append( pd.last_result_rank_diff() )
-            current_race_data[data_name.burden_weight].append( cd.burdenWeight() )
+            current_race_data[data_name.burden_weight].append( cd.burden_weight() )
             current_race_data[data_name.diff_load_weight].append( diff_load_weight )
             current_race_data[data_name.escape_within_rank].append( escape_within_rank )
             current_race_data[data_name.past_ave_first_horce_body].append( past_ave_first_horce_body )
@@ -481,7 +481,7 @@ class DataCreate:
             current_race_data[data_name.up3_jockey_true_skill].append( up3_jockey_true_skill )
             current_race_data[data_name.up3_trainer_true_skill].append( up3_trainer_true_skill )
             current_race_data[data_name.up3_standard_value].append( up3_standard_value )
-            current_race_data[data_name.speed_index].append( lib.maxCheck( speed ) + current_time_index["max"] )
+            current_race_data[data_name.speed_index].append( lib.max_check( speed ) + current_time_index["max"] )
             current_race_data[data_name.up_rate].append( pd.up_rate( key_money_class, self.prod_data.data["up_kind_ave"] ) )
             current_race_data[data_name.corner_diff_rank_ave].append( pd.corner_diff_rank() )
             current_race_data[data_name.corner_true_skill].append( corner_true_skill )
@@ -497,15 +497,15 @@ class DataCreate:
             current_race_data[data_name.wrap_std].append( self.train_index.wrap_std( race_id, horce_num ) )
             current_race_data[data_name.foot_used].append( self.race_type.foot_used_score_get( cd, pd ) )
             current_race_data[data_name.level_score].append( pd.level_score( self.prod_data.data["money_class_true_skill"] ) )
-            current_race_data[data_name.min_up3].append( pd.minUp3() )
-            current_race_data[data_name.up_index].append( lib.maxCheck( up_speed ) )
-            current_race_data[data_name.up_speed_index].append( lib.maxCheck( up_speed ) )
-            current_race_data[data_name.pace_speed_index].append( lib.maxCheck( pace_speed ) )
-            current_race_data[data_name.match_rank].append( pd.matchRank() )
-            current_race_data[data_name.match_up3].append( pd.matchUp3() )
-            current_race_data[data_name.max_time_point].append( pd.maxTimePoint( self.prod_data.data["race_time_analyze"] ) )
-            current_race_data[data_name.max_up3].append( pd.maxUp3() )
-            current_race_data[data_name.max_up3_time_point].append( pd.maxUp3TimePoint( str( int( limb_math ) ) ) )
+            current_race_data[data_name.min_up3].append( pd.min_up3() )
+            current_race_data[data_name.up_index].append( lib.max_check( up_speed ) )
+            current_race_data[data_name.up_speed_index].append( lib.max_check( up_speed ) )
+            current_race_data[data_name.pace_speed_index].append( lib.max_check( pace_speed ) )
+            current_race_data[data_name.match_rank].append( pd.match_rank() )
+            current_race_data[data_name.match_up3].append( pd.match_up3() )
+            current_race_data[data_name.max_time_point].append( pd.max_time_point( self.prod_data.data["race_time_analyze"] ) )
+            current_race_data[data_name.max_up3].append( pd.max_up3() )
+            current_race_data[data_name.max_up3_time_point].append( pd.max_up3TimePoint( str( int( limb_math ) ) ) )
             current_race_data[data_name.level_up3].append( pd.level_up3( self.prod_data.data["money_class_true_skill"] ) )
             current_race_data[data_name.stamina].append( pd.stamina_create( key_limb) )
             current_race_data[data_name.first_up3_ave].append( race_first_up3_ave )
@@ -538,7 +538,7 @@ class DataCreate:
             current_race_data["race_"+data_key] = current_race_data[data_key]
             current_race_data[data_key+"_index"] = sorted( current_race_data[data_key], reverse = True )
             current_race_data[data_key+"_stand"] = lib.standardization( current_race_data[data_key] )
-            current_race_data[data_key+"_devi"] = lib.deviationValue( current_race_data[data_key] )
+            current_race_data[data_key+"_devi"] = lib.deviation_value( current_race_data[data_key] )
             current_race_data["ave_"+data_key] = lib.average( current_race_data[data_key] )
             current_race_data["max_"+data_key] = max( current_race_data[data_key] )
             current_race_data["min_"+data_key] = lib.minimum( current_race_data[data_key] )
@@ -561,22 +561,22 @@ class DataCreate:
             past_data = []
 
             if horce_id in self.horce_data.data:
-                _, past_data = lib.raceCheck( self.horce_data.data[horce_id]["past_data"], today_data )
+                _, past_data = lib.race_check( self.horce_data.data[horce_id]["past_data"], today_data )
 
             cd = lib.CurrentData( current_data )
             pd = lib.PastData( past_data, current_data, self.race_data )
-            pd.setUp3AnalyzeData( self.prod_data.data["up3_analyze"] )
+            pd.set_up3_analyze_data( self.prod_data.data["up3_analyze"] )
             getHorceData = GetHorceData( cd, pd )
 
-            limb_math = lib.limbSearch( pd )
-            horce_num = cd.horceNumber()
+            limb_math = lib.limb_search( pd )
+            horce_num = cd.horce_number()
             key_before_year = str( int( int( str_year ) - 1 ) )
             horce_sex = self.storage.current_horce_data[horce_id].sex
             horce_sex_month = int( self.storage.today_data.race_date.month * 10 + horce_sex )
             escape_within_rank = -1
 
             if limb_math == 1 or limb_math == 2:
-                escape_within_rank = current_race_data[data_name.escape_within_rank+"_index"].index( int( cd.horceNumber() ) )
+                escape_within_rank = current_race_data[data_name.escape_within_rank+"_index"].index( int( cd.horce_number() ) )
 
             predict_netkeiba_deployment = -1
 
@@ -606,7 +606,7 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.odds_cluster_4] = cluster_data[3]
 
             self.analyze_data[horce_id][data_name.insert_limb_count] = insert_limb_count
-            self.analyze_data[horce_id][data_name.all_horce_num] = cd.allHorceNum()
+            self.analyze_data[horce_id][data_name.all_horce_num] = cd.all_horce_num()
             self.analyze_data[horce_id][data_name.ave_burden_weight_diff] = \
               lib.minus( current_race_data[STR_AVE+"race_"+data_name.burden_weight], current_race_data[data_name.burden_weight][i] )
             self.analyze_data[horce_id][data_name.burden_weight] = current_race_data[data_name.burden_weight][i]
@@ -630,16 +630,16 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.std_race_speed_index] = current_race_data[data_name.std_race_speed_index]
             self.analyze_data[horce_id][data_name.max_stand_race_speed_index] = current_race_data[data_name.max_stand_race_speed_index]
             self.analyze_data[horce_id][data_name.average_speed] = pd.average_speed()
-            self.analyze_data[horce_id][data_name.baba] = cd.babaStatus()
+            self.analyze_data[horce_id][data_name.baba] = cd.baba_status()
             self.analyze_data[horce_id][data_name.before_continue_not_three_rank] = pd.before_continue_not_three_rank()
             self.analyze_data[horce_id][data_name.best_first_passing_rank] = pd.best_first_passing_rank()
             self.analyze_data[horce_id][data_name.best_second_passing_rank] = pd.best_second_passing_rank()
-            self.analyze_data[horce_id][data_name.best_weight] = pd.bestWeight()
+            self.analyze_data[horce_id][data_name.best_weight] = pd.best_weight()
             self.analyze_data[horce_id][data_name.diff_pace_first_passing] = pd.diff_pace_first_passing()
             self.analyze_data[horce_id][data_name.diff_pace_time] = pd.diff_pace_time()
             self.analyze_data[horce_id][data_name.dist] = cd.dist() * 1000
-            self.analyze_data[horce_id][data_name.dist_kind] = cd.distKind()
-            self.analyze_data[horce_id][data_name.dist_kind_count] = pd.distKindCount()
+            self.analyze_data[horce_id][data_name.dist_kind] = cd.dist_kind()
+            self.analyze_data[horce_id][data_name.dist_kind_count] = pd.dist_kind_count()
             self.analyze_data[horce_id][data_name.escape_limb_count] = escape_limb_count
             self.analyze_data[horce_id][data_name.escape_limb1_count] = escape_limb1_count
             self.analyze_data[horce_id][data_name.escape_limb2_count] = escape_limb2_count
@@ -654,9 +654,9 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.horce_sex_month] = horce_sex_month
             self.analyze_data[horce_id][data_name.jockey_rank] = self.jockey_analyze.rank( race_id, horce_id )
             self.analyze_data[horce_id][data_name.jockey_year_rank] = self.jockey_analyze.year_rank( horce_id, key_before_year )
-            self.analyze_data[horce_id][data_name.kind] = cd.raceKind()
+            self.analyze_data[horce_id][data_name.kind] = cd.race_kind()
             self.analyze_data[horce_id][data_name.limb] = limb_math
-            self.analyze_data[horce_id][data_name.limb_horce_number] = int( limb_math * 100 + int( cd.horceNumber() / 2 ) )
+            self.analyze_data[horce_id][data_name.limb_horce_number] = int( limb_math * 100 + int( cd.horce_number() / 2 ) )
             self.analyze_data[horce_id][data_name.max_past_ave_first_horce_body] = \
               lib.minus( current_race_data[STR_MAX+data_name.past_ave_first_horce_body], current_race_data[data_name.past_ave_first_horce_body][i] )
             self.analyze_data[horce_id][data_name.max_past_ave_last_horce_body] = \
@@ -687,14 +687,14 @@ class DataCreate:
               lib.minus( current_race_data[STR_MIN+data_name.past_min_last_horce_body], current_race_data[data_name.past_min_last_horce_body][i] )
             self.analyze_data[horce_id][data_name.min_speed_index] = \
               lib.minus( current_race_data[STR_MIN+data_name.speed_index], current_race_data[data_name.speed_index][i] )
-            self.analyze_data[horce_id][data_name.min_up3] = pd.minUp3()
-            self.analyze_data[horce_id][data_name.money] = pd.getMoney()
-            self.analyze_data[horce_id][data_name.money_class] = lib.moneyClassGet( self.storage.race_money )
+            self.analyze_data[horce_id][data_name.min_up3] = pd.min_up3()
+            self.analyze_data[horce_id][data_name.money] = pd.get_money()
+            self.analyze_data[horce_id][data_name.money_class] = lib.money_class_get( self.storage.race_money )
             self.analyze_data[horce_id][data_name.my_limb_count] = my_limb_count[limb_math]
             self.analyze_data[horce_id][data_name.odds] = cd.odds()
             self.analyze_data[horce_id][data_name.one_popular_odds] = one_popular_odds
             self.analyze_data[horce_id][data_name.one_popular_limb] = one_popular_limb
-            self.analyze_data[horce_id][data_name.one_rate] = pd.oneRate()
+            self.analyze_data[horce_id][data_name.one_rate] = pd.one_rate()
             self.analyze_data[horce_id][data_name.pace_up] = pd.pace_up_check( self.prod_data.data["up_pace_regressin"] )
             self.analyze_data[horce_id][data_name.passing_regression] = pd.passing_regression()
             self.analyze_data[horce_id][data_name.place] = cd.place()
@@ -709,7 +709,7 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.predict_up3] = None
             self.analyze_data[horce_id][data_name.predict_up3_stand] = None
             self.analyze_data[horce_id][data_name.race_interval] = min( max( pd.race_interval(), 0 ), 20 )
-            self.analyze_data[horce_id][data_name.race_num] = cd.raceNum()
+            self.analyze_data[horce_id][data_name.race_num] = cd.race_num()
             self.analyze_data[horce_id][data_name.ave_race_speed_index] = current_race_data[data_name.ave_race_speed_index]
             self.analyze_data[horce_id][data_name.min_race_speed_index] = current_race_data[data_name.min_race_speed_index]
             self.analyze_data[horce_id][data_name.max_race_speed_index] = current_race_data[data_name.max_race_speed_index]
@@ -722,16 +722,16 @@ class DataCreate:
               current_race_data[data_name.up_index_index].index( current_race_data[data_name.up_index][i] )
             self.analyze_data[horce_id][data_name.up_index_stand] = current_race_data[data_name.up_index_stand][i]
             self.analyze_data[horce_id][data_name.std_speed_index] = current_race_data[data_name.std_speed_index]
-            self.analyze_data[horce_id][data_name.straight_slope] = self.race_type.strightSlope( cd, pd )
-            self.analyze_data[horce_id][data_name.three_average] = pd.threeAverage()
-            self.analyze_data[horce_id][data_name.three_difference] = pd.threeDifference()
+            self.analyze_data[horce_id][data_name.straight_slope] = self.race_type.stright_slope( cd, pd )
+            self.analyze_data[horce_id][data_name.three_average] = pd.three_average()
+            self.analyze_data[horce_id][data_name.three_difference] = pd.three_difference()
             self.analyze_data[horce_id][data_name.three_popular_limb] = three_popular_limb
             self.analyze_data[horce_id][data_name.three_popular_odds] = three_popular_odds
-            self.analyze_data[horce_id][data_name.three_rate] = pd.threeRate()
+            self.analyze_data[horce_id][data_name.three_rate] = pd.three_rate()
             self.analyze_data[horce_id][data_name.trainer_rank] = self.trainer_analyze.rank( race_id, horce_id )
             self.analyze_data[horce_id][data_name.two_popular_limb] = two_popular_limb
             self.analyze_data[horce_id][data_name.two_popular_odds] = two_popular_odds
-            self.analyze_data[horce_id][data_name.two_rate] = pd.twoRate()
+            self.analyze_data[horce_id][data_name.two_rate] = pd.two_rate()
             self.analyze_data[horce_id][data_name.waku_three_rate] = getHorceData.getKindScore( self.prod_data.data["waku_three_rate"] )
             self.analyze_data[horce_id][data_name.weather] = cd.weather()
             self.analyze_data[horce_id][data_name.weight] = cd.weight() / 10
@@ -748,5 +748,5 @@ class DataCreate:
             for wrap_key in self.last_wrap.horce_wrap_score[horce_id].keys():
                 self.analyze_data[horce_id][wrap_key] = self.last_wrap.horce_wrap_score[horce_id][wrap_key]
 
-            self.analyze_data[horce_id].update( lib.paceTeacherAnalyze( current_race_data, t_instance = self.analyze_data[horce_id] ) )
-            self.analyze_data[horce_id].update( lib.horceTeacherAnalyze( current_race_data, self.analyze_data[horce_id], i ) )
+            self.analyze_data[horce_id].update( lib.pace_teacher_analyze( current_race_data, t_instance = self.analyze_data[horce_id] ) )
+            self.analyze_data[horce_id].update( lib.horce_teacher_analyze( current_race_data, self.analyze_data[horce_id], i ) )

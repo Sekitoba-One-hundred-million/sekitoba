@@ -26,8 +26,8 @@ def horce_number_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and "Umaban" in td_class_name[0]:
-            str_horce_num = lib.textReplace( td.text )
-            horce_num = int( lib.mathCheck( str_horce_num ) )
+            str_horce_num = lib.text_replace( td.text )
+            horce_num = int( lib.math_check( str_horce_num ) )
             break
 
     return horce_num
@@ -39,8 +39,8 @@ def waku_number_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and "Waku" in td_class_name[0]:
-            str_waku_num = lib.textReplace( td.text )
-            waku_num = int( lib.mathCheck( str_waku_num ) )
+            str_waku_num = lib.text_replace( td.text )
+            waku_num = int( lib.math_check( str_waku_num ) )
             break
 
     return waku_num
@@ -52,8 +52,8 @@ def age_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and td_class_name[0] == "Barei":
-            str_age = lib.strMathPull( lib.textReplace( td.text ) )
-            age = int( lib.mathCheck( str_age ) )
+            str_age = lib.strMathPull( lib.text_replace( td.text ) )
+            age = int( lib.math_check( str_age ) )
             break
 
     return age
@@ -65,8 +65,8 @@ def sex_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and td_class_name[0] == "Barei":
-            str_sex = lib.textReplace( td.text )[0]
-            sex = lib.sexNum( str_sex )
+            str_sex = lib.text_replace( td.text )[0]
+            sex = lib.sex_num( str_sex )
             break
 
     return sex
@@ -78,8 +78,8 @@ def burden_weight_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and td_class_name[0] == "Txt_C":
-            str_burden_weight = lib.textReplace( td.text )
-            burden_weight = lib.mathCheck( str_burden_weight )
+            str_burden_weight = lib.text_replace( td.text )
+            burden_weight = lib.math_check( str_burden_weight )
             break
 
     return burden_weight
@@ -118,7 +118,7 @@ def weight_get( td_tag ):
 
         if not td_class_name == None and td_class_name[0] == "Weight":
             try:
-                weight = lib.textReplace( td.text )
+                weight = lib.text_replace( td.text )
             except:
                 continue
 
@@ -137,7 +137,7 @@ def dist_race_kind_get( soup ):
             span_tag = div.findAll( "span" )
 
             try:
-                dist_data = lib.textReplace( span_tag[0].text ).replace( "m", "" )
+                dist_data = lib.text_replace( span_tag[0].text ).replace( "m", "" )
             except:
                 continue
 
@@ -166,7 +166,7 @@ def weather_get( soup ):
         
         if not class_name == None and class_name[0] == "RaceData01":
             try:
-                str_weather = lib.textReplace( div.text ).split( "/" )[2][-1]
+                str_weather = lib.text_replace( div.text ).split( "/" )[2][-1]
             except:
                 continue
             
@@ -232,12 +232,12 @@ def predict_netkeiba_pace( soup ):
           class_name[0] == 'RacePace':
             try:
                 dd = dl.find( 'dd' )
-                result = lib.textReplace( dd.text )
+                result = lib.text_replace( dd.text )
                 break
             except:
                 continue
 
-    return lib.netkeibaPace( result )
+    return lib.netkeiba_pace( result )
 
 def predict_netkeiba_deployment( soup ):
     result = []
@@ -262,11 +262,11 @@ def predict_netkeiba_deployment( soup ):
                         result.append( copy.deepcopy( instance_list ) )
                         instance_list = []
 
-                    key = lib.textReplace( dt.text )
+                    key = lib.text_replace( dt.text )
                     continue
 
                 try:
-                    instance_list.append( int( lib.textReplace( li.find( "span" ).text ) ) )
+                    instance_list.append( int( lib.text_replace( li.find( "span" ).text ) ) )
                 except:
                     continue
                 
