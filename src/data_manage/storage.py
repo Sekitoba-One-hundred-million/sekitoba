@@ -26,6 +26,7 @@ class Storage:
         self.condition_devi: dict[ str, float ] = {}
         self.first_up3: dict[ str, dict[ int, dict[ str, float ] ] ] = {}
         self.wide_odds: dict[ int, dict[ int, float ] ] = {}
+        self.blood_type_data: dict[ dict[ int ] ] = {}
         self.skip_horce_id_list = []
         self.cansel_horce_id_list = []
 

@@ -22,9 +22,7 @@ def base_collect( storage: Storage ):
             if horce_id in storage.current_horce_data:
                 storage.current_horce_data[horce_id].weight = weight_get( td_tag )
 
-def main( storage: Storage ):
-    driver = lib.driver_start()
-    driver = lib.login( driver )
+def main( storage: Storage, driver ):
     wide_odds_collect( storage, driver )
 
     for i in range( 0, 10 ):
@@ -36,5 +34,3 @@ def main( storage: Storage ):
                 continue
 
         break
-    
-    driver.quit()

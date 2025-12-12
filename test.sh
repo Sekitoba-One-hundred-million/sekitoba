@@ -40,11 +40,30 @@ EOC
   echo "Stop Server"
 }
 
-startPredictServer
+function checkProxy {
+  sleep 10
+  domain_file="/Volumes/Gilgamesh/proxy/domain"
+  while true; do
+    if [ -f "${domain_file}" ]; then
+      domain=`cat "${domain_file}"`
+      status="$(curl -m 3 http://${domain}/ -H 'Host: race.netkeiba.com' -o /dev/null -w '%{http_code}\n' -s)"
+
+      if [ "${status}" == '200' ]; then
+        break
+      fi
+    fi
+
+    sleep 10
+  done
+}
+#startPredictServer
 startSekitobaProxy
 
 trap stopServer 2
 
-sleep 1200
+#sleep 300
+checkProxy
+
+python test/main.py
 
 stopServer

@@ -25,16 +25,15 @@ def raceBaseIdGet( soup ):
             strPlaceNum = str( int( lib.place_num( splitData[1] ) ) )
             strDay = splitData[2].replace( "日目", "" )
 
-            baseId = lib.paddingStrMath( strPlaceNum ) + lib.paddingStrMath( strCount ) + lib.paddingStrMath( strDay )
+            baseId = lib.padding_str_math( strPlaceNum ) + lib.padding_str_math( strCount ) + lib.padding_str_math( strDay )
 
             for i in range( 1, 13 ):
-                race_idList.append( baseId + lib.paddingStrMath( str( i ) ) )
+                race_idList.append( baseId + lib.padding_str_math( str( i ) ) )
 
     return race_idList
 
-def predictRaceIdGet( today: datetime.datetime ):
+def predict_race_id_get( today: datetime.datetime, driver ):
     race_idList = []
-    driver = lib.driver_start()
     baseUrl = "https://race.netkeiba.com/top/?kaisai_date="
     raceDay = ""
     days = 0
@@ -45,8 +44,8 @@ def predictRaceIdGet( today: datetime.datetime ):
     while 1:
         checkDay = today + datetime.timedelta( days = days )
         dataId = str( checkDay.year ) + \
-          lib.paddingStrMath( str( checkDay.month ) ) + \
-          lib.paddingStrMath( str( checkDay.day ) )
+          lib.padding_str_math( str( checkDay.month ) ) + \
+          lib.padding_str_math( str( checkDay.day ) )
 
         url = baseUrl + dataId
         driver, _ = lib.driver_request( driver, url )
@@ -58,7 +57,7 @@ def predictRaceIdGet( today: datetime.datetime ):
             raceDay = checkDay
             break
 
-        weekNum = check_day.weekday()
+        weekNum = checkDay.weekday()
 
         # 土日なのに取得できていない場合は失敗なのでもう一回
         if weekNum == 5 or \
@@ -78,10 +77,11 @@ def predictRaceIdGet( today: datetime.datetime ):
 
     return race_idList, raceDay
 
-def today_data_listCreate() -> list[TodayData]:
+def today_data_listCreate( driver ) -> list[TodayData]:
     today_data_list = []
-    race_idList, raceDay = predictRaceIdGet( datetime.datetime.now() )
-
+    #race_idList, raceDay = predict_race_id_get( datetime.datetime( 2024, 9, 7 ), driver )
+    race_idList, raceDay = predict_race_id_get( datetime.datetime.now(), driver )
+    
     for race_id in race_idList:
         todayData = TodayData( race_id, raceDay )
 

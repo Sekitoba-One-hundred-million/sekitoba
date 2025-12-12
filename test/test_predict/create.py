@@ -17,6 +17,7 @@ from test_predict import last_passing_rank
 from test_predict import up3
 from test_predict import rank_score
 from test_predict import rough_race
+from test_predict import recovery_score
 
 def data_check():
     test_race_id = "202406040904"#test_today_data_race_id_list[0]
@@ -55,4 +56,5 @@ def data_check():
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3_data[horce_id]["stand"]
 
     rank_score.data_check( test_race_id, data_create.analyze_data )
+    recovery_score.data_check( test_race_id, data_create.analyze_data )
     return

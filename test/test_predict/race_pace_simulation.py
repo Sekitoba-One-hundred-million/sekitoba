@@ -19,7 +19,7 @@ def data_check( race_id, analyze_data ):
     for i in range( 0, len( race_pace_simulation.score_key_list ) ):
         if skip_key( race_pace_simulation.score_key_list[i]):
                 continue
-        
+
         if not round( create_data[i], 2 ) == round( t_data[i], 2 ):
             print( "race_pace: {}: create:{} teacher:{}".format( \
                     race_pace_simulation.score_key_list[i], round( create_data[i], 4 ), round( t_data[i], 4 ) ) )

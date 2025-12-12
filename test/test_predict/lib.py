@@ -17,6 +17,7 @@ def skip_key( key ):
       or "before_race_score" in key \
       or "power" in key \
       or "kinetic_energy" in key \
+      or "blood_type_score" in key \
       or key == "odds":
         return True
 

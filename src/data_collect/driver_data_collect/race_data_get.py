@@ -75,7 +75,7 @@ def main( storage: Storage, driver ):
     best_check_count = 0
     odds_update_xpath = "/html/body/div[1]/div[3]/div[2]/table/thead/tr[1]/th[10]/div/div/button"
     url = "https://race.netkeiba.com/race/shutuba.html?race_id=" + storage.today_data.race_id
-    
+
     for i in range( 0, 10 ):
         if best_check_count == storage.all_horce_num:
             break

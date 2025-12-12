@@ -52,7 +52,7 @@ def age_get( td_tag ):
         td_class_name = td.get( "class" )
 
         if not td_class_name == None and td_class_name[0] == "Barei":
-            str_age = lib.strMathPull( lib.text_replace( td.text ) )
+            str_age = lib.str_math_pull( lib.text_replace( td.text ) )
             age = int( lib.math_check( str_age ) )
             break
 

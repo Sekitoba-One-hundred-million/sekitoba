@@ -20,6 +20,7 @@ from SekitobaDataCreate.last_wrap import LastWrap
 from SekitobaDataCreate.get_horce_data import GetHorceData
 from SekitobaDataCreate.odds_cluster import OddsCluster
 from SekitobaDataCreate.kinetic_energy import KineticEnergy
+from SekitobaDataCreate.blood_type_score import BloodTypeScore
 
 STR_AVE = "ave_"
 STR_MAX = "max_"
@@ -61,6 +62,7 @@ class DataCreate:
         self.race_type.set_race_money( { self.storage.today_data.race_id: self.storage.race_money } )
         self.last_wrap = LastWrap( self.race_data, self.horce_data, self.race_horce_data )
         self.kinetic_energy = KineticEnergy( self.race_data )
+        self.blood_type_score = BloodTypeScore( self.race_data, self.horce_data )
 
         self.readScoreFile( sekitoba_dir + "/data/score_data_name.txt" )
         self.readScoreFile( sekitoba_dir + "/data/add_score_data_name.txt" )
@@ -88,9 +90,9 @@ class DataCreate:
 
     def current_data_create( self, horce_id ):
         current_race_data = [ '' ] * 22
-        current_race_data[0] = lib.paddingStrMath( str( self.storage.today_data.year ) ) + "/" + \
-          lib.paddingStrMath( str( self.storage.today_data.race_date.month ) ) + "/" + \
-          lib.paddingStrMath( str( self.storage.today_data.race_date.day ) )
+        current_race_data[0] = lib.padding_str_math( str( self.storage.today_data.year ) ) + "/" + \
+          lib.padding_str_math( str( self.storage.today_data.race_date.month ) ) + "/" + \
+          lib.padding_str_math( str( self.storage.today_data.race_date.day ) )
         current_race_data[1] = str( self.storage.today_data.num ) + \
           self.storage.today_data.place + \
           str( self.storage.today_data.day )
@@ -189,8 +191,10 @@ class DataCreate:
         # Memo; 以下はsekitoba_updateで追加が必要
         self.race_data.data["before_pace"] = self.prod_data.data["before_pace"]
         self.race_data.data["up3_analyze"] = self.prod_data.data["up3_analyze"]
-        self.prod_data.data["waku_three_rate"] = self.prod_data.data["waku_three_rate"]
-        self.prod_data.data["flame_evaluation"] = self.prod_flame_evaluation( self.prod_data.data["flame_evaluation"] )
+        self.race_data.data["waku_three_rate"] = self.prod_data.data["waku_three_rate"]
+        self.race_data.data["blood_type_score"] = self.prod_data.data["blood_type_score"]
+        self.race_data.data["blood_type"] = self.storage.blood_type_data
+        self.race_data.data["flame_evaluation"] = self.prod_flame_evaluation( self.prod_data.data["flame_evaluation"] )
         
         today_data = { "year": self.storage.today_data.race_date.year, \
                       "month": self.storage.today_data.race_date.month, \
@@ -225,6 +229,7 @@ class DataCreate:
             if horce_id in self.storage.cansel_horce_id_list:
                 continue
 
+            current_data = self.current_data_create( horce_id )
             try:
                 current_data = self.current_data_create( horce_id )
             except:
@@ -307,7 +312,7 @@ class DataCreate:
             jockey_first_passing_true_skill = 25
             trainer_first_passing_true_skill = 25
             horce_last_passing_true_skill = 25
-            jockey_last_passing_true_skill = 24
+            jockey_last_passing_true_skill = 25
             trainer_last_passing_true_skill = 25
             up3_horce_true_skill = 25
             up3_jockey_true_skill = 25
@@ -359,7 +364,7 @@ class DataCreate:
                 horce_first_up3_halon = self.race_data.data["first_up3_halon"][str(int(cd.horce_number()))]
             except:
                 pass
-
+            
             if not len( horce_first_up3_halon ) == 0:
                 race_first_up3_ave = 0
                 race_first_up3_min = 1000
@@ -512,10 +517,13 @@ class DataCreate:
             current_race_data[data_name.first_up3_min].append( race_first_up3_min )
             current_race_data[data_name.first_up3_max].append( race_first_up3_max )
             current_race_data[data_name.kinetic_energy].append( self.kinetic_energy.create( cd, pd ) )
+            current_race_data[data_name.run_circle_speed].append( pd.run_circle_speed() )
+            current_race_data[data_name.blood_type_score].append(
+                self.blood_type_score.score_get( horce_id, cd, pd, getHorceData, sex = self.storage.current_horce_data[horce_id].sex ) )
             horce_odds_list.append( { "horce_id": horce_id, "odds": odds } )
 
-            for pace_up_rate_key in pace_up_rate.keys():
-                current_race_data["pace_up_rate_"+pace_up_rate_key].append( pace_up_rate[pace_up_rate_key] )
+            #for pace_up_rate_key in pace_up_rate.keys():
+            #    current_race_data["pace_up_rate_"+pace_up_rate_key].append( pace_up_rate[pace_up_rate_key] )
 
             horce_id_list.append( horce_id )
 
@@ -572,7 +580,7 @@ class DataCreate:
             horce_num = cd.horce_number()
             key_before_year = str( int( int( str_year ) - 1 ) )
             horce_sex = self.storage.current_horce_data[horce_id].sex
-            horce_sex_month = int( self.storage.today_data.race_date.month * 10 + horce_sex )
+            #horce_sex_month = int( self.storage.today_data.race_date.month * 10 + horce_sex )
             escape_within_rank = -1
 
             if limb_math == 1 or limb_math == 2:
@@ -651,12 +659,12 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.high_level_score] = self.race_high_level.data_get( cd, pd, today_data )
             self.analyze_data[horce_id][data_name.horce_num] = horce_num
             self.analyze_data[horce_id][data_name.horce_sex] = horce_sex
-            self.analyze_data[horce_id][data_name.horce_sex_month] = horce_sex_month
+            #self.analyze_data[horce_id][data_name.horce_sex_month] = horce_sex_month
             self.analyze_data[horce_id][data_name.jockey_rank] = self.jockey_analyze.rank( race_id, horce_id )
             self.analyze_data[horce_id][data_name.jockey_year_rank] = self.jockey_analyze.year_rank( horce_id, key_before_year )
             self.analyze_data[horce_id][data_name.kind] = cd.race_kind()
             self.analyze_data[horce_id][data_name.limb] = limb_math
-            self.analyze_data[horce_id][data_name.limb_horce_number] = int( limb_math * 100 + int( cd.horce_number() / 2 ) )
+            #self.analyze_data[horce_id][data_name.limb_horce_number] = int( limb_math * 100 + int( cd.horce_number() / 2 ) )
             self.analyze_data[horce_id][data_name.max_past_ave_first_horce_body] = \
               lib.minus( current_race_data[STR_MAX+data_name.past_ave_first_horce_body], current_race_data[data_name.past_ave_first_horce_body][i] )
             self.analyze_data[horce_id][data_name.max_past_ave_last_horce_body] = \
@@ -695,7 +703,7 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.one_popular_odds] = one_popular_odds
             self.analyze_data[horce_id][data_name.one_popular_limb] = one_popular_limb
             self.analyze_data[horce_id][data_name.one_rate] = pd.one_rate()
-            self.analyze_data[horce_id][data_name.pace_up] = pd.pace_up_check( self.prod_data.data["up_pace_regressin"] )
+            #self.analyze_data[horce_id][data_name.pace_up] = pd.pace_up_check( self.prod_data.data["up_pace_regressin"] )
             self.analyze_data[horce_id][data_name.passing_regression] = pd.passing_regression()
             self.analyze_data[horce_id][data_name.place] = cd.place()
             self.analyze_data[horce_id][data_name.popular] = cd.popular()
@@ -709,7 +717,7 @@ class DataCreate:
             self.analyze_data[horce_id][data_name.predict_up3] = None
             self.analyze_data[horce_id][data_name.predict_up3_stand] = None
             self.analyze_data[horce_id][data_name.race_interval] = min( max( pd.race_interval(), 0 ), 20 )
-            self.analyze_data[horce_id][data_name.race_num] = cd.race_num()
+            #self.analyze_data[horce_id][data_name.race_num] = cd.race_num()
             self.analyze_data[horce_id][data_name.ave_race_speed_index] = current_race_data[data_name.ave_race_speed_index]
             self.analyze_data[horce_id][data_name.min_race_speed_index] = current_race_data[data_name.min_race_speed_index]
             self.analyze_data[horce_id][data_name.max_race_speed_index] = current_race_data[data_name.max_race_speed_index]
@@ -722,7 +730,7 @@ class DataCreate:
               current_race_data[data_name.up_index_index].index( current_race_data[data_name.up_index][i] )
             self.analyze_data[horce_id][data_name.up_index_stand] = current_race_data[data_name.up_index_stand][i]
             self.analyze_data[horce_id][data_name.std_speed_index] = current_race_data[data_name.std_speed_index]
-            self.analyze_data[horce_id][data_name.straight_slope] = self.race_type.stright_slope( cd, pd )
+            #self.analyze_data[horce_id][data_name.straight_slope] = self.race_type.stright_slope( cd, pd )
             self.analyze_data[horce_id][data_name.three_average] = pd.three_average()
             self.analyze_data[horce_id][data_name.three_difference] = pd.three_difference()
             self.analyze_data[horce_id][data_name.three_popular_limb] = three_popular_limb
@@ -750,3 +758,7 @@ class DataCreate:
 
             self.analyze_data[horce_id].update( lib.pace_teacher_analyze( current_race_data, t_instance = self.analyze_data[horce_id] ) )
             self.analyze_data[horce_id].update( lib.horce_teacher_analyze( current_race_data, self.analyze_data[horce_id], i ) )
+
+            for key in self.analyze_data[horce_id].keys():
+                if not self.analyze_data[horce_id][key] == None:
+                    self.analyze_data[horce_id][key] = round( self.analyze_data[horce_id][key], 3 )

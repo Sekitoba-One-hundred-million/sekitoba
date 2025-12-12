@@ -6,6 +6,7 @@ from predict.up3 import Up3
 
 def data_check( test_race_id, analyze_data ):
     print( "\ncheck up3" )
+    odds_index = 0
     up3 = Up3( analyze_data )
     up3_simu_data = dm.pickle_load( "up3_simu_data.pickle" )
     t_data = {}
@@ -13,7 +14,7 @@ def data_check( test_race_id, analyze_data ):
     for race_id in up3_simu_data.keys():
         if race_id == test_race_id:
             for horce_id in up3_simu_data[race_id].keys():
-                t_data[horce_id] = up3_simu_data[race_id][horce_id]["data"]
+                t_data[horce_id] = up3_simu_data[race_id][horce_id][odds_index]["data"]
 
     create_data = up3.create()
 

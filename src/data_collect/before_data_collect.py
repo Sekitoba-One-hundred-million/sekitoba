@@ -27,8 +27,8 @@ def base_collect( storage: Storage ):
             tr_class_name = tr.get( "class" )
 
             if not tr_class_name == None \
-              and 0 < len( tr_class_name )
-              and tr_class_name[0] == "HorseList":
+               and 0 < len( tr_class_name ) \
+               and tr_class_name[0] == "HorseList":
                 td_tag = tr.findAll( "td" )
                 horce_id = horce_id_get( td_tag )
 
@@ -67,13 +67,11 @@ def base_collect( storage: Storage ):
 
     return True
 
-def main( storage: Storage ):
+def main( storage: Storage, driver ):
     base_collect( storage )
     train_collect( storage )
     condition_devi_collect( storage )
-    horce_data_collect( storage )
+    #horce_data_collect( storage )
+    blood_type_collect( storage )
 
-    driver = lib.driver_start()
-    driver = lib.login( driver )
     first_up3_collect( storage, driver )
-    driver.quit()

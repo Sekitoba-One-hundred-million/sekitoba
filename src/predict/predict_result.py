@@ -69,29 +69,29 @@ def main( data_create: DataCreate ):
         return None
 
     race_id = data_create.storage.today_data.race_id
-    race_pace_simulation = RacePaceSimulation( data_create.analyze_data ).predict()    
+    race_pace_simulation_data = RacePaceSimulation( data_create.analyze_data ).predict()    
 
     for horce_id in data_create.analyze_data.keys():
-        for key in race_pace_simulation.keys():
-            data_create.analyze_data[horce_id]["predict_"+key] = race_pace_simulation[key]
+        for key in race_pace_simulation_data.keys():
+            data_create.analyze_data[horce_id]["predict_"+key] = race_pace_simulation_data[key]
 
     fp = FirstPassingRank( data_create.analyze_data )
-    first_passing_rank = fp.predict()
+    first_passing_rank_data = fp.predict()
     log_write( race_id, "first_passing_rank", fp.log_data )
     
-    for horce_id in first_passing_rank.keys():
-        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank] = first_passing_rank[horce_id]["score"]
-        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank_index] = first_passing_rank[horce_id]["index"]
-        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank_stand] = first_passing_rank[horce_id]["stand"]
+    for horce_id in first_passing_rank_data.keys():
+        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank] = first_passing_rank_data[horce_id]["score"]
+        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank_index] = first_passing_rank_data[horce_id]["index"]
+        data_create.analyze_data[horce_id][data_name.predict_first_passing_rank_stand] = first_passing_rank_data[horce_id]["stand"]
 
     lp = LastPassingRank( data_create.analyze_data )
-    last_passing_rank = LastPassingRank( data_create.analyze_data ).predict()
+    last_passing_rank_data = lp.predict()
     log_write( race_id, "last_passing_rank", lp.log_data )
 
-    for horce_id in last_passing_rank.keys():
-        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank] = last_passing_rank[horce_id]["score"]
-        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank_index] = last_passing_rank[horce_id]["index"]
-        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank_stand] = last_passing_rank[horce_id]["stand"]
+    for horce_id in last_passing_rank_data.keys():
+        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank] = last_passing_rank_data[horce_id]["score"]
+        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank_index] = last_passing_rank_data[horce_id]["index"]
+        data_create.analyze_data[horce_id][data_name.predict_last_passing_rank_stand] = last_passing_rank_data[horce_id]["stand"]
 
     up3 = Up3( data_create.analyze_data )
     up3_data = up3.predict()
@@ -102,7 +102,11 @@ def main( data_create: DataCreate ):
         data_create.analyze_data[horce_id][data_name.predict_up3_stand] = up3_data[horce_id]["stand"]
 
     rs = RankScore( data_create.analyze_data )
-    rank_score = rs.predict()
-    log_write( race_id, "rank_score", rs.log_data )
+    rank_data = rs.predict()
+    log_write( race_id, "rank", rs.log_data )
 
-    return rank_score
+    rs = RecoveryScore( data_create.analyze_data )
+    recovery_data = rs.predict()
+    log_write( race_id, "recovery", rs.log_data )
+
+    return rank_data, recovery_data
