@@ -1,3 +1,4 @@
 from data_collect.driver_data_collect.race_data_get import *
 from data_collect.driver_data_collect.first_up3_collect import first_up3_collect
 from data_collect.driver_data_collect.wide_odds_collect import wide_odds_collect
+from data_collect.driver_data_collect.quinella_odds_collect import quinella_odds_collect

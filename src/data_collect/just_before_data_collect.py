@@ -24,6 +24,7 @@ def base_collect( storage: Storage ):
 
 def main( storage: Storage, driver ):
     wide_odds_collect( storage, driver )
+    quinella_odds_collect( storage, driver )
 
     for i in range( 0, 10 ):
         base_collect( storage )

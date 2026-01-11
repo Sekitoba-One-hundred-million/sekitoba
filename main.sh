@@ -8,7 +8,7 @@ function checkProxy {
   while true; do
     if [ -f "${domain_file}" ]; then
       domain=`cat "${domain_file}"`
-      status="$(curl -m 3 http://${domain}/ -H 'Host: race.netkeiba.com' -o /dev/null -w '%{http_code}\n' -s)"
+      status="$(curl -k -m 3 https://${domain}/ -H 'Host: race.netkeiba.com' -o /dev/null -w '%{http_code}\n' -s)"
       echo $status $domain
       if [ "${status}" == '200' ]; then
         break
@@ -18,10 +18,6 @@ function checkProxy {
     sleep 10
   done
 }
-
-startSekitobaProxy
-#sleep 300
-checkProxy
 
 echo "start remove_not_need_data"
 remove_not_need_data
@@ -37,6 +33,11 @@ echo "start name_prepare.sh"
 
 echo "start remove_not_need_data"
 remove_not_need_data
+
+startSekitobaProxy
+trap stopServer 2
+#sleep 300
+checkProxy
 
 python src/main.py
 

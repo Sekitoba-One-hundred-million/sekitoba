@@ -119,20 +119,16 @@ function remove_update_data {
 
 function startSekitobaProxy {
   echo "start SekitobaProxy"
-  ssh -t "${ATHENA_HOST}" << EOC
-  source ~/.zshrc
   cd /home/athena/ghq/github.com/Sekitoba-One-hundred-million/proxy-manage
   go build
   tmux new-session -d -s "${proxyServerName}" './sekitoba-proxy-manage'
-EOC
+  cd -
 }
 
 function stopServer {
   echo "stop SekitobaProxy"
-  ssh -t "${ATHENA_HOST}" << EOC
-  source ~/.zshrc
   pgrep sekitoba-proxy | xargs kill
   sleep 20
-EOC
   echo "Stop Server"
+  exit 0
 }

@@ -1,5 +1,6 @@
 import sys
 import time
+import pytz
 import datetime
 from bs4 import BeautifulSoup
 
@@ -22,9 +23,11 @@ STOCK_DATA = "stock_data.pickle"
 
 def race_wait( todayData: TodayData ):
     WAIT_SECONDS = 120
-    dtNow = datetime.datetime.now()
+    jst = pytz.timezone('Asia/Tokyo')
+    dtNow = datetime.datetime.now( jst )
     diff_timestamp = todayData.race_timestamp - dtNow.timestamp()
     sleep_seconds = int( diff_timestamp - WAIT_SECONDS )
+    print( "sleep:{}".format( sleep_seconds ) )
     
     if sleep_seconds > 0:
         time.sleep( sleep_seconds )
@@ -51,8 +54,8 @@ def stock_dataCreate( today_data_list: list[TodayData], driver ):
             stock_data.pop( dk, None )
 
     for i in range( 0, len( today_data_list ) ):
-        #if today_data_list[i].race_id in stock_data:
-        #    continue
+        if today_data_list[i].race_id in stock_data:
+            continue
         
         print( "stock {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         storage = Storage( today_data_list[i] )
@@ -86,7 +89,7 @@ def main():
 
         #print( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
         #logger.info( "bet {} {}R".format( today_data_list[i].place, today_data_list[i].race_num ) )
-        select_buy.main( stock_data[race_id], rank_score, recovery_score )
+        select_buy.main( stock_data[race_id], rank_score, recovery_score, driver )
         #return
 
     driver.quit()

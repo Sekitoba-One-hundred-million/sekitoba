@@ -6,7 +6,6 @@ from predict.last_passing_rank import LastPassingRank
 
 def data_check( test_race_id, analyze_data ):
     print( "\ncheck last_passing_rank" )
-    odds_index = 0
     last_passing_rank = LastPassingRank( analyze_data )
     last_passing_rank_simu_data = dm.pickle_load( "last_passing_rank_simu_data.pickle" )
     t_data = {}
@@ -14,7 +13,7 @@ def data_check( test_race_id, analyze_data ):
     for race_id in last_passing_rank_simu_data.keys():
         if race_id == test_race_id:
             for horce_id in last_passing_rank_simu_data[race_id].keys():
-                t_data[horce_id] = last_passing_rank_simu_data[race_id][horce_id][odds_index]["data"]
+                t_data[horce_id] = last_passing_rank_simu_data[race_id][horce_id]["data"]
 
     create_data = last_passing_rank.create()
 

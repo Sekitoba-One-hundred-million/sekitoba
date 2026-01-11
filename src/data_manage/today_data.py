@@ -55,18 +55,16 @@ class TodayData:
         if not len( split_time ) == 2:
             return -1
 
-        datetime.datetime( year = int( self.race_date.year ), \
-                          month = int( self.race_date.month ), \
-                          day = int( self.race_date.day ), \
-                          )
+        tokyo_tz = datetime.timezone( datetime.timedelta( hours = 9 ) )
         timestamp = -1
-        
+
         try:
             timestamp = datetime.datetime( year = int( self.race_date.year ), \
-                                          month = int( self.race_date.month ), \
-                                          day = int( self.race_date.day ), \
-                                          hour = int( split_time[0] ), \
-                                          minute = int( split_time[1] ) ).timestamp()
+                                           month = int( self.race_date.month ), \
+                                           day = int( self.race_date.day ), \
+                                           hour = int( split_time[0] ), \
+                                           minute = int( split_time[1] ), \
+                                           tzinfo = tokyo_tz ).timestamp()
         except:
             return -1
 

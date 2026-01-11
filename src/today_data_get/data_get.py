@@ -1,3 +1,4 @@
+import pytz
 import datetime
 from bs4 import BeautifulSoup
 
@@ -20,7 +21,7 @@ def raceBaseIdGet( soup ):
 
             if len( splitData ) < 2:
                 continue
-            
+
             strCount = splitData[0].replace( "回", "" )
             strPlaceNum = str( int( lib.place_num( splitData[1] ) ) )
             strDay = splitData[2].replace( "日目", "" )
@@ -46,7 +47,6 @@ def predict_race_id_get( today: datetime.datetime, driver ):
         dataId = str( checkDay.year ) + \
           lib.padding_str_math( str( checkDay.month ) ) + \
           lib.padding_str_math( str( checkDay.day ) )
-
         url = baseUrl + dataId
         driver, _ = lib.driver_request( driver, url )
         html = driver.page_source.encode('utf-8')
@@ -63,7 +63,7 @@ def predict_race_id_get( today: datetime.datetime, driver ):
         if weekNum == 5 or \
           weekNum == 6:
             continue
-        
+
         days += 1
 
         if days == 10:
@@ -80,7 +80,8 @@ def predict_race_id_get( today: datetime.datetime, driver ):
 def today_data_listCreate( driver ) -> list[TodayData]:
     today_data_list = []
     #race_idList, raceDay = predict_race_id_get( datetime.datetime( 2024, 9, 7 ), driver )
-    race_idList, raceDay = predict_race_id_get( datetime.datetime.now(), driver )
+    jst = pytz.timezone('Asia/Tokyo')
+    race_idList, raceDay = predict_race_id_get( datetime.datetime.now( jst ), driver )
     
     for race_id in race_idList:
         todayData = TodayData( race_id, raceDay )
@@ -94,7 +95,7 @@ def today_data_listCreate( driver ) -> list[TodayData]:
 
             if todayData.bet_race:
                 today_data_list.append( todayData )
-                
+
             break
 
     return sorted( today_data_list, key = lambda x: x.race_timestamp )

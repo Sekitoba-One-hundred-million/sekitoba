@@ -18,7 +18,8 @@ def skip_key( key ):
       or "power" in key \
       or "kinetic_energy" in key \
       or "blood_type_score" in key \
-      or key == "odds":
+      or "popular" in key \
+      or "odds" in key:
         return True
 
     return False

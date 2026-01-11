@@ -38,25 +38,37 @@ def wideSelect( driver, bd ):
 
     return driver
 
-def autoBuy( storage: Storage, buyData ):
-    driver = lib.driver_start()
+def quinella_buy( driver, bd ):
+    all_money = 0
+    money_table = { "7": "21", "8": "22", "9": "23", "4": "31", "5": "32", "6": "33", "1": "41", "2": "42", "3": "43", "0": "51" }
+
+    betMoney = bd["count"] * 100
+
+    for horceNum in bd["horce_num"]:
+        #馬の選択
+        horce_xpath = '/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/div/div/span/div/span/bet-basic-quinella-basic/table/tbody/tr[' + str( horce_num ) + ']/td[2]/label'
+        driver.find_element( By.XPATH, horce_xpath ).click()
+        time.sleep( 1 )
+
+    driver = setMoney( driver, betMoney )
+
+    return driver
+
+def autoBuy( storage: Storage, betData, driver ):
     haveMoney, driver = loginGetMoney( driver )
 
     if haveMoney == lib.escapeValue:
         logger.fatal( "not get have_money" )
         return
 
+    bet_money = 0
+    driver = selectTicket( driver, "quinella" )
     driver = moveVotePage( storage, driver )
 
-    for bd in buyData:
-        kind = bd["kind"]
-        driver = selectTicket( driver, kind )
+    for bd in betData:
+        driver = quinella_buy( driver, bd )
+        bet_money += bd["count"]
 
-        if kind == "one":
-            driver = oneSelect( driver, bd )
-        elif kind == "wide":
-            driver = wideSelect( driver, bd )
-    
-    time.sleep( 300 )
-    driver.quit()
-    return
+    bet_money = int( bet_money * 100 )
+    finishClick( driver )
+    return driver

@@ -1,3 +1,5 @@
+import SekitobaLibrary as lib
+
 from config import data_name
 
 from test_config.config import *
@@ -24,8 +26,10 @@ def data_check():
     test_day = datetime.datetime( 2024, 9, 29 )
     today_data = TodayData( test_race_id, test_day )
     storage = Storage( today_data )
-    before_data_collect.main( storage ) # http通信のスクレイピングで入手するデータ
-    just_before_data_collect.main( storage )
+    driver = lib.driver_start()
+    driver = lib.login( driver )
+    before_data_collect.main( storage, driver ) # http通信のスクレイピングで入手するデータ
+    just_before_data_collect.main( storage, driver )
     data_create = DataCreate( storage )
     data_create.create()
 

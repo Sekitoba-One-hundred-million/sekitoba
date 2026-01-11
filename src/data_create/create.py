@@ -608,10 +608,10 @@ class DataCreate:
                 cluster_data[int(cl-1)] += 1
 
             self.analyze_data[horce_id] = {}
-            self.analyze_data[horce_id][data_name.odds_cluster_1] = cluster_data[0]
-            self.analyze_data[horce_id][data_name.odds_cluster_2] = cluster_data[1]
-            self.analyze_data[horce_id][data_name.odds_cluster_3] = cluster_data[2]
-            self.analyze_data[horce_id][data_name.odds_cluster_4] = cluster_data[3]
+            #self.analyze_data[horce_id][data_name.odds_cluster_1] = cluster_data[0]
+            #self.analyze_data[horce_id][data_name.odds_cluster_2] = cluster_data[1]
+            #self.analyze_data[horce_id][data_name.odds_cluster_3] = cluster_data[2]
+            #self.analyze_data[horce_id][data_name.odds_cluster_4] = cluster_data[3]
 
             self.analyze_data[horce_id][data_name.insert_limb_count] = insert_limb_count
             self.analyze_data[horce_id][data_name.all_horce_num] = cd.all_horce_num()

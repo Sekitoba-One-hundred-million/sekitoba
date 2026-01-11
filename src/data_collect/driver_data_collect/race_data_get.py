@@ -133,5 +133,5 @@ def main( storage: Storage, driver ):
                 storage.current_horce_data[horce_id].odds = instance_dict[horce_id].odds
                 storage.current_horce_data[horce_id].popular = instance_dict[horce_id].popular
                 storage.current_horce_data[horce_id].weight = instance_dict[horce_id].weight
-
+                
     return True

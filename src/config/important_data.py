@@ -7,7 +7,7 @@ class ImportantData:
         self.password_read()
 
     def password_read( self ):
-        f = open( "data/passward.txt", "r" )
+        f = open( "/Volumes/Gilgamesh/.import/jra_pass.txt", "r" )
         str_data_list = f.readlines()
 
         for str_data in str_data_list:

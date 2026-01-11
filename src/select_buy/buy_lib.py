@@ -89,7 +89,7 @@ def loginGetMoney( driver ):
 
     for i in range( 0, 5 ):
         driver = login( driver )
-        driver = afterLogin( driver )
+        #driver = afterLogin( driver )
 
         try:
             driver.find_element( By.XPATH, '/html/body/div[1]/ui-view/div[2]/div[2]/button' ).click()
@@ -140,7 +140,7 @@ def moveVotePage( storage: Storage, driver ):
     return driver
 
 def selectTicket( driver, key ):
-    indexKey = { "one": 0, "wide": 4 }
+    indexKey = { "one": 0, "quinella": 3, "wide": 4 }
     ticketSelectXpath = "/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[2]/select"
     Select( driver.find_element( By.XPATH, ticketSelectXpath ) ).select_by_index( indexKey[key] )
     time.sleep( 1 )
@@ -168,7 +168,7 @@ def setMoney( driver , betMoney ):
 
     return driver
 
-def finishClick( driver ):
+def finishClick( driver, bet_money ):
     finish_button = driver.find_element( By.XPATH, '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[4]/button[3]' )
     finish_button.click()
     
@@ -182,8 +182,8 @@ def finishClick( driver ):
     driver.find_element( By.XPATH, buy_button_xpath ).click()
     time.sleep( 5 )
     
-    #ok_button = driver.find_element( By.XPATH, '/html/body/error-window/div/div/div[3]/button[1]' )
-    #ok_button.click()
+    ok_button = driver.find_element( By.XPATH, '/html/body/error-window/div/div/div[3]/button[1]' )
+    ok_button.click()
     
     time.sleep( 5 )
 

@@ -29,6 +29,7 @@ class Storage:
         self.blood_type_data: dict[ dict[ int ] ] = {}
         self.skip_horce_id_list = []
         self.cansel_horce_id_list = []
+        self.quinella_odds_data = {}
 
     def before_data_check( self ):
         if self.weather == None:
