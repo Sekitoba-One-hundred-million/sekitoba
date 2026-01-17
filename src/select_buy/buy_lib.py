@@ -116,7 +116,7 @@ def moveVotePage( storage: Storage, driver ):
     time.sleep( 5 )
 
     place = storage.today_data.place
-    race_num = str( storage.today_data.num ) + "R"
+    race_num = str( storage.today_data.race_num ) + "R"
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup( html, "html.parser" )
     number = place_button_num_get( soup, place )

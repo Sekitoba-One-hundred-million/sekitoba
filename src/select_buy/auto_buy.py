@@ -44,9 +44,14 @@ def quinella_buy( driver, bd ):
 
     betMoney = bd["count"] * 100
 
-    for horceNum in bd["horce_num"]:
+    for horce_num in bd["horce_num"]:
         #馬の選択
         horce_xpath = '/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/div/div/span/div/span/bet-basic-quinella-basic/table/tbody/tr[' + str( horce_num ) + ']/td[2]/label'
+        element = driver.find_element( By.XPATH, horce_xpath )
+
+        if horce_num < 5:
+            driver.execute_script("window.scrollTo(0, 0);")
+            
         driver.find_element( By.XPATH, horce_xpath ).click()
         time.sleep( 1 )
 
@@ -62,8 +67,8 @@ def autoBuy( storage: Storage, betData, driver ):
         return
 
     bet_money = 0
-    driver = selectTicket( driver, "quinella" )
     driver = moveVotePage( storage, driver )
+    driver = selectTicket( driver, "quinella" )
 
     for bd in betData:
         driver = quinella_buy( driver, bd )
