@@ -68,6 +68,12 @@ def stock_dataCreate( today_data_list: list[TodayData], driver ):
 def main():
     driver = lib.driver_start()
     driver = lib.login( driver )
+    haveMoney, driver = select_buy.auto_buy.loginGetMoney( driver )
+
+    if haveMoney <= 0:
+        print( "not setting " )
+        return
+    
     today_data_list: list[TodayData] = today_data_listCreate( driver )
     stock_data = stock_dataCreate( today_data_list, driver )
 

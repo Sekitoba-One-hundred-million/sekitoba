@@ -49,10 +49,10 @@ def quinella_buy( driver, bd ):
         horce_xpath = '/html/body/div[1]/ui-view/div[2]/ui-view/main/div/div[3]/div/div/span/div/span/bet-basic-quinella-basic/table/tbody/tr[' + str( horce_num ) + ']/td[2]/label'
         element = driver.find_element( By.XPATH, horce_xpath )
 
-        if horce_num < 5:
-            driver.execute_script("window.scrollTo(0, 0);")
-            
-        driver.find_element( By.XPATH, horce_xpath ).click()
+        #if horce_num < 5:
+        #    driver.execute_script("window.scrollTo(0, 0);")
+
+        driver.execute_script( "arguments[0].click();", element )
         time.sleep( 1 )
 
     driver = setMoney( driver, betMoney )
@@ -75,5 +75,5 @@ def autoBuy( storage: Storage, betData, driver ):
         bet_money += bd["count"]
 
     bet_money = int( bet_money * 100 )
-    finishClick( driver )
+    finishClick( driver, bet_money )
     return driver

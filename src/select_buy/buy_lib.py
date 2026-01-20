@@ -11,14 +11,14 @@ from bs4 import BeautifulSoup
 
 def login( driver ):
     driver.get('https://www.ipat.jra.go.jp/')
-    
+
     time.sleep(2)
     id_box = driver.find_element( By.NAME, "inetid")
     id_box.send_keys( config.im_data.id )
     #time.sleep(5)
     id_box.submit()
     time.sleep(3)
-    
+
     member_box = driver.find_element( By.NAME, "i" )
     member_box.send_keys( config.im_data.member )
 
@@ -30,7 +30,7 @@ def login( driver ):
 
     driver.find_element( By.CLASS_NAME, "buttonModern" ).click()
     time.sleep( 2 )
-    
+
     return driver
 
 def afterLogin( driver ):
@@ -78,7 +78,7 @@ def place_button_num_get( soup, place ):
 
         if not class_name == None and len( class_name ) == 1 and class_name[0] == "place-name":
             place_num += 1
-            
+
             if place in lib.text_replace( div.text ):
                 break
 
@@ -171,7 +171,7 @@ def setMoney( driver , betMoney ):
 def finishClick( driver, bet_money ):
     finish_button = driver.find_element( By.XPATH, '//*[@id="main"]/ui-view/div[2]/ui-view/main/div/div[3]/select-list/div/div/div[3]/div[4]/button[3]' )
     finish_button.click()
-    
+
     time.sleep( 3 )
     #all_money_form = driver.find_element_by_xpath( '//*[@id="bet-list-top"]/div[4]/table/tbody/tr[4]/td/input' )
     all_money_form_xpath = '/html/body/div[1]/ui-view/navbar/div/div/ng-transclude/bet-list/div[1]/bet-list-cart/div/sticky-scroll/div/div[5]/table/tbody/tr[{}]/td/input'.format( 4 )
@@ -181,9 +181,8 @@ def finishClick( driver, bet_money ):
     buy_button_xpath = '//*[@id="bet-list-top"]/div[5]/table/tbody/tr[{}]/td/button'.format( 5 )
     driver.find_element( By.XPATH, buy_button_xpath ).click()
     time.sleep( 5 )
-    
+
     ok_button = driver.find_element( By.XPATH, '/html/body/error-window/div/div/div[3]/button[1]' )
     ok_button.click()
-    
-    time.sleep( 5 )
 
+    time.sleep( 5 )
